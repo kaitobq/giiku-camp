@@ -9,6 +9,10 @@ package app
 import (
 	"giiku-camp/internal/app/config"
 	"giiku-camp/internal/app/container"
+	"giiku-camp/internal/controller"
+	"giiku-camp/internal/infra/firestore"
+	"giiku-camp/internal/usecase"
+	"giiku-camp/pkg/firestore"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,8 +20,13 @@ import (
 
 func New() (*container.App, error) {
 	engine := provideGinEngine()
+	client := firestore.New()
+	userRepo := repository.NewUserRepo(client)
+	userUsecase := usecase.NewUserUsecase(userRepo)
+	userCtrl := controller.NewUserCtrl(userUsecase)
+	containerContainer := container.NewCtrl(userCtrl)
 	configConfig := config.New()
-	app := container.NewApp(engine, configConfig)
+	app := container.NewApp(engine, containerContainer, configConfig, client)
 	return app, nil
 }
 

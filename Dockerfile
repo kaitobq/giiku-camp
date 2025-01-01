@@ -13,5 +13,7 @@ WORKDIR /root/
 
 COPY --from=builder /bin/server /bin/
 
+COPY giiku-camp-*.json /root/
+
 EXPOSE 8080
 ENTRYPOINT [ "/bin/server" ]
