@@ -9,12 +9,12 @@ import (
 )
 
 type User struct {
-	ID        string    `json:"id"`
-	UserName  string    `json:"user_name"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID        string
+	Name      string
+	Email     string
+	Password  string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 var (
@@ -33,7 +33,7 @@ func NewUser(userName, email, password string) (*User, error) {
 
 	return &User{
 		ID:       genUUID(),
-		UserName: userName,
+		Name:     userName,
 		Email:    email,
 		Password: hashedPassword,
 	}, nil

@@ -19,7 +19,7 @@ func NewUserUsecase(userRepo repository.UserRepo) UserUsecase {
 }
 
 func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
-	user, err := entity.NewUser(req.Email, req.Name, req.Password)
+	user, err := entity.NewUser(req.Name, req.Email, req.Password)
 	if err != nil {
 		return nil, err
 	}

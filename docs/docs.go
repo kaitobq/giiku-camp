@@ -24,28 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/ping": {
-            "get": {
-                "description": "Returns \"pong\" if server is working",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Ping the server",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
-        "/signup": {
+        "/auth/signup": {
             "post": {
                 "description": "ユーザー登録",
                 "consumes": [
@@ -65,7 +44,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.CreateUserRequest"
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.SignUpReq"
                         }
                     }
                 ],
@@ -73,7 +52,7 @@ const docTemplate = `{
                     "200": {
                         "description": "User created",
                         "schema": {
-                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.CreateUserResponse"
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.SignUpRes"
                         }
                     },
                     "400": {
@@ -85,41 +64,19 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
-            "post": {
-                "description": "Create new user by providing user details",
-                "consumes": [
-                    "application/json"
-                ],
+        "/ping": {
+            "get": {
+                "description": "Returns \"pong\" if server is working",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "Health"
                 ],
-                "summary": "Create user",
-                "parameters": [
-                    {
-                        "description": "User details",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                ],
+                "summary": "Ping the server",
                 "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
@@ -144,21 +101,40 @@ const docTemplate = `{
                 }
             }
         },
-        "giiku-camp_internal_usecase_request.CreateUserRequest": {
+        "giiku-camp_internal_usecase_request.SignUpReq": {
             "type": "object",
             "properties": {
                 "email": {
                     "type": "string"
                 },
-                "password": {
+                "name": {
                     "type": "string"
                 },
-                "user_name": {
+                "password": {
                     "type": "string"
                 }
             }
         },
-        "giiku-camp_internal_usecase_response.CreateUserResponse": {
+        "giiku-camp_internal_usecase_response.SignUpRes": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "object",
+                    "properties": {
+                        "access_token": {
+                            "type": "string"
+                        },
+                        "refresh_token": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "user": {
+                    "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserRes"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.UserRes": {
             "type": "object",
             "properties": {
                 "created_at": {

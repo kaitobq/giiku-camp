@@ -9,16 +9,28 @@ definitions:
       status:
         type: integer
     type: object
-  giiku-camp_internal_usecase_request.CreateUserRequest:
+  giiku-camp_internal_usecase_request.SignUpReq:
     properties:
       email:
         type: string
+      name:
+        type: string
       password:
         type: string
-      user_name:
-        type: string
     type: object
-  giiku-camp_internal_usecase_response.CreateUserResponse:
+  giiku-camp_internal_usecase_response.SignUpRes:
+    properties:
+      token:
+        properties:
+          access_token:
+            type: string
+          refresh_token:
+            type: string
+        type: object
+      user:
+        $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
+    type: object
+  giiku-camp_internal_usecase_response.UserRes:
     properties:
       created_at:
         type: string
@@ -43,6 +55,32 @@ info:
   title: Giiku Camp API
   version: "1.0"
 paths:
+  /auth/signup:
+    post:
+      consumes:
+      - application/json
+      description: ユーザー登録
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.SignUpReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User created
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.SignUpRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      summary: ユーザー登録
+      tags:
+      - User
   /ping:
     get:
       description: Returns "pong" if server is working
@@ -57,61 +95,6 @@ paths:
       summary: Ping the server
       tags:
       - Health
-  /signup:
-    post:
-      consumes:
-      - application/json
-      description: ユーザー登録
-      parameters:
-      - description: User details
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/giiku-camp_internal_usecase_request.CreateUserRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: User created
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_usecase_response.CreateUserResponse'
-        "400":
-          description: Bad request
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
-      summary: ユーザー登録
-      tags:
-      - User
-  /users:
-    post:
-      consumes:
-      - application/json
-      description: Create new user by providing user details
-      parameters:
-      - description: User details
-        in: body
-        name: user
-        required: true
-        schema:
-          additionalProperties: true
-          type: object
-      produces:
-      - application/json
-      responses:
-        "201":
-          description: Created
-          schema:
-            additionalProperties: true
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Create user
-      tags:
-      - User
 securityDefinitions:
   BasicAuth:
     type: basic

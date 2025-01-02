@@ -15,7 +15,7 @@ type UserRes struct {
 func NewUserRes(user *entity.User) (*UserRes, error) {
 	return &UserRes{
 		Email:     user.Email,
-		UserName:  user.UserName,
+		UserName:  user.Name,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}, nil
