@@ -35,6 +35,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 	if err != nil {
 		logging.Errorf(c, "NewSignUpReq %v", err)
 		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	res, err := ct.UserUsecase.SignUp(c, *req)
@@ -46,6 +47,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 			logging.Errorf(c, "SignUp %v", err)
 			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		}
+		return
 	}
 
 	render.JSON(c, res)
