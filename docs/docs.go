@@ -143,10 +143,10 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
-                "updated_at": {
+                "name": {
                     "type": "string"
                 },
-                "user_name": {
+                "updated_at": {
                     "type": "string"
                 }
             }

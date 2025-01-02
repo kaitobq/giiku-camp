@@ -24,15 +24,20 @@ func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 		return nil, err
 	}
 
-	existingUser, err := u.userRepo.FindByEmail(c.Request.Context(), user.Email)
+	ctx := c.Request.Context()
+	existingUser, err := u.userRepo.FindByEmail(ctx, user.Email)
 	if err != nil {
-		return nil, err
+		switch err {
+		case entity.ErrUserNotFound:
+			// ユーザーが見つからなかった場合はそのまま処理を続ける
+		default:
+			return nil, err
+		}
 	}
 	if existingUser != nil {
 		return nil, entity.ErrEmailAlreadyUsed
 	}
 
-	ctx := c.Request.Context()
 	if err := u.userRepo.Create(ctx, user); err != nil {
 		return nil, err
 	}

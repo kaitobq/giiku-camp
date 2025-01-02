@@ -7,7 +7,7 @@ import (
 
 type UserRes struct {
 	Email     string    `json:"email"`
-	UserName  string    `json:"user_name"`
+	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -15,7 +15,7 @@ type UserRes struct {
 func NewUserRes(user *entity.User) (*UserRes, error) {
 	return &UserRes{
 		Email:     user.Email,
-		UserName:  user.Name,
+		Name:      user.Name,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}, nil

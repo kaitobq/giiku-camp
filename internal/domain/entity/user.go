@@ -19,10 +19,12 @@ type User struct {
 
 var (
 	ErrEmailAlreadyUsed = errors.New("email is already used")
+	ErrUserNotFound     = errors.New("user not found")
 )
 
 var (
 	CodeEmailAlreadyUsed = 10000
+	CodeUserNotFound     = 10001
 )
 
 func NewUser(userName, email, password string) (*User, error) {

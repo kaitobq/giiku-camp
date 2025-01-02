@@ -28,11 +28,11 @@ func (r *userRepo) Create(ctx context.Context, user *entity.User) error {
 }
 
 func (r *userRepo) FindByEmail(ctx context.Context, email string) (*entity.User, error) {
-	iter := r.db.Collection("users").Where("email", "==", email).Limit(1).Documents(ctx)
+	iter := r.db.Collection("users").Where("Email", "==", email).Limit(1).Documents(ctx)
 	doc, err := iter.Next()
 	if err == iterator.Done {
 		// ドキュメントが見つからなかった場合
-		return nil, nil
+		return nil, entity.ErrUserNotFound
 	}
 	if err != nil {
 		return nil, err
