@@ -42,6 +42,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 	if err != nil {
 		switch err {
 		case entity.ErrEmailAlreadyUsed:
+			logging.Infof(c, "SignUp %v", err)
 			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeEmailAlreadyUsed)
 		default:
 			logging.Errorf(c, "SignUp %v", err)
@@ -50,5 +51,6 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 		return
 	}
 
+	logging.Infof(c, "SignUp %v", res)
 	render.JSON(c, res)
 }

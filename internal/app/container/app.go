@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"giiku-camp/internal/app/config"
 	"giiku-camp/internal/controller"
+	"giiku-camp/internal/infra/logging"
 
 	"cloud.google.com/go/firestore"
 	"github.com/gin-gonic/gin"
@@ -26,6 +27,8 @@ type App struct {
 }
 
 func NewApp(r *gin.Engine, container container, cfg *config.Config, db *firestore.Client) *App {
+	logging.Init()
+
 	controller.SetUpRoutes(r, container.userCtrl)
 
 	return &App{
