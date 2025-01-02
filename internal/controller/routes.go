@@ -22,8 +22,6 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl) {
 
 	r.GET("/ping", Ping)
 
-	r.POST("/users", userCtrl.CreateUser)
-
 	auth := r.Group("/auth")
 	{
 		auth.POST("/signup", userCtrl.SignUp)

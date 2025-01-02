@@ -2,14 +2,14 @@ package request
 
 import "github.com/gin-gonic/gin"
 
-type CreateUserRequest struct {
+type SignUpReq struct {
 	Email    string `json:"email"`
-	UserName string `json:"user_name"`
+	Name     string `json:"name"`
 	Password string `json:"password"`
 }
 
-func NewCreateUserRequest(c *gin.Context) (*CreateUserRequest, error) {
-	var req CreateUserRequest
+func NewSignUpReq(c *gin.Context) (*SignUpReq, error) {
+	var req SignUpReq
 	if err := c.ShouldBindJSON(&req); err != nil {
 		return nil, err
 	}

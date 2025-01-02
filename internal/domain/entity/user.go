@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,6 +16,14 @@ type User struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+var (
+	ErrEmailAlreadyUsed = errors.New("email is already used")
+)
+
+var (
+	CodeEmailAlreadyUsed = 10000
+)
 
 func NewUser(userName, email, password string) (*User, error) {
 	hashedPassword, err := hashPassword(password)

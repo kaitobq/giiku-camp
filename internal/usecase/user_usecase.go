@@ -5,6 +5,7 @@ import (
 	"giiku-camp/internal/domain/repository"
 	"giiku-camp/internal/usecase/request"
 	"giiku-camp/internal/usecase/response"
+	"giiku-camp/pkg/jwt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -17,10 +18,18 @@ func NewUserUsecase(userRepo repository.UserRepo) UserUsecase {
 	return UserUsecase{userRepo: userRepo}
 }
 
-func (u *UserUsecase) CreateUser(c *gin.Context, req request.CreateUserRequest) (*response.CreateUserResponse, error) {
-	user, err := entity.NewUser(req.Email, req.UserName, req.Password)
+func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
+	user, err := entity.NewUser(req.Email, req.Name, req.Password)
 	if err != nil {
 		return nil, err
+	}
+
+	existingUser, err := u.userRepo.FindByEmail(c.Request.Context(), user.Email)
+	if err != nil {
+		return nil, err
+	}
+	if existingUser != nil {
+		return nil, entity.ErrEmailAlreadyUsed
 	}
 
 	ctx := c.Request.Context()
@@ -28,5 +37,14 @@ func (u *UserUsecase) CreateUser(c *gin.Context, req request.CreateUserRequest) 
 		return nil, err
 	}
 
-	return response.NewCreateUserResponse(user)
+	accessToken, err := jwt.GenerateAccessToken(user.ID)
+	if err != nil {
+		return nil, err
+	}
+	refreshToken, err := jwt.GenerateRefreshToken(user.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return response.NewSignUpRes(user, accessToken, refreshToken)
 }
