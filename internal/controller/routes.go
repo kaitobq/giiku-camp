@@ -22,14 +22,10 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl) {
 
 	r.GET("/ping", Ping)
 
-	// @Summary Create a user
-	// @Description Create new user by providing user details
-	// @Tags User
-	// @Accept json
-	// @Produce json
-	// @Param user body map[string]interface{} true "User details"
-	// @Success 201 {object} map[string]interface{}
-	// @Failure 400 {object} map[string]interface{}
-	// @Router /users [post]
 	r.POST("/users", userCtrl.CreateUser)
+
+	auth := r.Group("/auth")
+	{
+		auth.POST("/signup", userCtrl.SignUp)
+	}
 }
