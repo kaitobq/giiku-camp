@@ -17,6 +17,16 @@ func NewUserCtrl(userUsecase usecase.UserUsecase) UserCtrl {
 	return UserCtrl{UserUsecase: userUsecase}
 }
 
+// CreateUser godoc
+// @Summary Create a user
+// @Description Create new user by providing user details
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body map[string]interface{} true "User details"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Router /users [post]
 func (ct *UserCtrl) CreateUser(c *gin.Context) {
 	req, err := request.NewCreateUserRequest(c)
 	if err != nil {
