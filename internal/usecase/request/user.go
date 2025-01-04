@@ -15,3 +15,16 @@ func NewSignUpReq(c *gin.Context) (*SignUpReq, error) {
 	}
 	return &req, nil
 }
+
+type SignInReq struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func NewSignInReq(c *gin.Context) (*SignInReq, error) {
+	var req SignInReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}

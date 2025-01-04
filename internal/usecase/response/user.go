@@ -40,3 +40,23 @@ func NewSignUpRes(user *entity.User, accessToken, refreshToken string) (*SignUpR
 	res.Token.RefreshToken = refreshToken
 	return &res, nil
 }
+
+type SignInRes struct {
+	User  UserRes `json:"user"`
+	Token struct {
+		AccessToken  string `json:"access_token"`
+		RefreshToken string `json:"refresh_token"`
+	} `json:"token"`
+}
+
+func NewSignInRes(user *entity.User, accessToken, refreshToken string) (*SignInRes, error) {
+	res := SignInRes{}
+	userRes, err := NewUserRes(user)
+	if err != nil {
+		return nil, err
+	}
+	res.User = *userRes
+	res.Token.AccessToken = accessToken
+	res.Token.RefreshToken = refreshToken
+	return &res, nil
+}

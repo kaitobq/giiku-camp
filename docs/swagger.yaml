@@ -9,6 +9,13 @@ definitions:
       status:
         type: integer
     type: object
+  giiku-camp_internal_usecase_request.SignInReq:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
   giiku-camp_internal_usecase_request.SignUpReq:
     properties:
       email:
@@ -17,6 +24,18 @@ definitions:
         type: string
       password:
         type: string
+    type: object
+  giiku-camp_internal_usecase_response.SignInRes:
+    properties:
+      token:
+        properties:
+          access_token:
+            type: string
+          refresh_token:
+            type: string
+        type: object
+      user:
+        $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
     type: object
   giiku-camp_internal_usecase_response.SignUpRes:
     properties:
@@ -55,6 +74,32 @@ info:
   title: Giiku Camp API
   version: "1.0"
 paths:
+  /auth/signin:
+    post:
+      consumes:
+      - application/json
+      description: ユーザー認証
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.SignInReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User authenticated
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.SignInRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      summary: ユーザー認証
+      tags:
+      - User
   /auth/signup:
     post:
       consumes:

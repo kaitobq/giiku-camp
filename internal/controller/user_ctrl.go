@@ -54,3 +54,41 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 	logging.Infof(c, "SignUp %v", res)
 	render.JSON(c, res)
 }
+
+// SignIn godoc
+// @Summary ユーザー認証
+// @Description ユーザー認証
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body request.SignInReq true "User details"
+// @Success 200 {object} response.SignInRes "User authenticated"
+// @Failure 400 {object} render.Error "Bad request"
+// @Router /auth/signin [post]
+func (ct *UserCtrl) SignIn(c *gin.Context) {
+	req, err := request.NewSignInReq(c)
+	if err != nil {
+		logging.Errorf(c, "NewSignInReq %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	res, err := ct.UserUsecase.SignIn(c, *req)
+	if err != nil {
+		switch err {
+		case entity.ErrUserNotFound:
+			logging.Infof(c, "SignIn %v", err)
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeUserNotFound)
+		case entity.ErrPasswordIncorrect:
+			logging.Infof(c, "SignIn %v", err)
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodePasswordIncorrect)
+		default:
+			logging.Errorf(c, "SignIn %v", err)
+			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	logging.Infof(c, "SignIn %v", res)
+	render.JSON(c, res)
+}

@@ -53,3 +53,32 @@ func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 
 	return response.NewSignUpRes(user, accessToken, refreshToken)
 }
+
+func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error) {
+	ctx := c.Request.Context()
+	user, err := u.userRepo.FindByEmail(ctx, req.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := user.VerifyPassword(req.Password); err != nil {
+		switch err {
+		case entity.ErrPasswordIncorrect:
+			return nil, entity.ErrPasswordIncorrect
+		default:
+			return nil, err
+		}
+	}
+
+	accessToken, err := jwt.GenerateAccessToken(user.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	refreshToken, err := jwt.GenerateRefreshToken(user.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return response.NewSignInRes(user, accessToken, refreshToken)
+}
