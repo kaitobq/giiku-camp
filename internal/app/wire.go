@@ -7,6 +7,7 @@ import (
 	"giiku-camp/internal/app/container"
 	"giiku-camp/internal/controller"
 	repository "giiku-camp/internal/infra/firestore"
+	"giiku-camp/internal/middleware"
 	"giiku-camp/internal/usecase"
 	"giiku-camp/pkg/firestore"
 
@@ -24,6 +25,8 @@ func New() (*container.App, error) {
 		usecase.NewUserUsecase,
 
 		controller.NewUserCtrl,
+
+		middleware.NewMiddleware,
 
 		firestore.New,
 		container.NewCtrl,

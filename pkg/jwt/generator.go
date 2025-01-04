@@ -60,31 +60,6 @@ func GenerateRefreshToken(userID string) (string, error) {
 	return token.SignedString([]byte(secret))
 }
 
-func VerifyToken(tokenStr string) (*jwt.Token, error) {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		return nil, errors.New("JWT_SECRET is not set")
-	}
-
-	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
-		// HS256 で来ているかチェック
-		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
-		}
-		return []byte(secret), nil
-	})
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse token: %w", err)
-	}
-
-	if !token.Valid {
-		return nil, errors.New("token is invalid or expired")
-	}
-
-	return token, nil
-}
-
 func RefreshTokens(oldRefreshToken string) (string, string, error) {
 	// 古いリフレッシュトークンを検証
 	token, err := VerifyToken(oldRefreshToken)

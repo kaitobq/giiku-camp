@@ -5,6 +5,7 @@ import (
 	"giiku-camp/internal/app/config"
 	"giiku-camp/internal/controller"
 	"giiku-camp/internal/infra/logging"
+	"giiku-camp/internal/middleware"
 
 	"cloud.google.com/go/firestore"
 	"github.com/gin-gonic/gin"
@@ -21,20 +22,22 @@ func NewCtrl(userCtrl controller.UserCtrl) container {
 }
 
 type App struct {
-	r   *gin.Engine
-	cfg *config.Config
-	db  *firestore.Client
+	r          *gin.Engine
+	cfg        *config.Config
+	db         *firestore.Client
+	middleware *middleware.Middleware
 }
 
-func NewApp(r *gin.Engine, container container, cfg *config.Config, db *firestore.Client) *App {
+func NewApp(r *gin.Engine, container container, cfg *config.Config, db *firestore.Client, middleware *middleware.Middleware) *App {
 	logging.Init()
 
-	controller.SetUpRoutes(r, container.userCtrl)
+	controller.SetUpRoutes(r, container.userCtrl, middleware)
 
 	return &App{
-		r:   r,
-		cfg: cfg,
-		db:  db,
+		r:          r,
+		cfg:        cfg,
+		db:         db,
+		middleware: middleware,
 	}
 }
 

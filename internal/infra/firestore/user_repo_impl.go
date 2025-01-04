@@ -45,3 +45,17 @@ func (r *userRepo) FindByEmail(ctx context.Context, email string) (*entity.User,
 
 	return &user, nil
 }
+
+func (r *userRepo) FindByID(ctx context.Context, id string) (*entity.User, error) {
+	doc, err := r.db.Collection("users").Doc(id).Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var user entity.User
+	if err := doc.DataTo(&user); err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}

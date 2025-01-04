@@ -11,6 +11,7 @@ import (
 	"giiku-camp/internal/app/container"
 	"giiku-camp/internal/controller"
 	"giiku-camp/internal/infra/firestore"
+	"giiku-camp/internal/middleware"
 	"giiku-camp/internal/usecase"
 	"giiku-camp/pkg/firestore"
 	"github.com/gin-gonic/gin"
@@ -26,7 +27,8 @@ func New() (*container.App, error) {
 	userCtrl := controller.NewUserCtrl(userUsecase)
 	containerContainer := container.NewCtrl(userCtrl)
 	configConfig := config.New()
-	app := container.NewApp(engine, containerContainer, configConfig, client)
+	middlewareMiddleware := middleware.NewMiddleware(userRepo)
+	app := container.NewApp(engine, containerContainer, configConfig, client, middlewareMiddleware)
 	return app, nil
 }
 

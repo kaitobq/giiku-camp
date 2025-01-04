@@ -82,3 +82,12 @@ func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.S
 
 	return response.NewSignInRes(user, accessToken, refreshToken)
 }
+
+func (u *UserUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error) {
+	accessToken, refreshToken, err := jwt.RefreshTokens(req.RefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	return response.NewRefreshTokenRes(accessToken, refreshToken)
+}

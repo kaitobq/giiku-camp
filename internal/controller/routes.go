@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"giiku-camp/internal/middleware"
+
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -17,7 +19,7 @@ func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "pong"})
 }
 
-func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl) {
+func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, middleware *middleware.Middleware) {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	r.GET("/ping", Ping)
@@ -26,4 +28,8 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl) {
 	{
 		auth.POST("/signup", userCtrl.SignUp)
 	}
+
+	authenticated := r.Group("/authenticated")
+	authenticated.Use(middleware.API.Authenticate())
+	authenticated.GET("/ping", Ping)
 }

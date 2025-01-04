@@ -60,3 +60,17 @@ func NewSignInRes(user *entity.User, accessToken, refreshToken string) (*SignInR
 	res.Token.RefreshToken = refreshToken
 	return &res, nil
 }
+
+type RefreshTokenRes struct {
+	Token struct {
+		AccessToken  string `json:"access_token"`
+		RefreshToken string `json:"refresh_token"`
+	} `json:"token"`
+}
+
+func NewRefreshTokenRes(accessToken, refreshToken string) (*RefreshTokenRes, error) {
+	res := RefreshTokenRes{}
+	res.Token.AccessToken = accessToken
+	res.Token.RefreshToken = refreshToken
+	return &res, nil
+}

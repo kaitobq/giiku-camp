@@ -9,6 +9,11 @@ definitions:
       status:
         type: integer
     type: object
+  giiku-camp_internal_usecase_request.RefreshTokenReq:
+    properties:
+      refresh_token:
+        type: string
+    type: object
   giiku-camp_internal_usecase_request.SignInReq:
     properties:
       email:
@@ -24,6 +29,16 @@ definitions:
         type: string
       password:
         type: string
+    type: object
+  giiku-camp_internal_usecase_response.RefreshTokenRes:
+    properties:
+      token:
+        properties:
+          access_token:
+            type: string
+          refresh_token:
+            type: string
+        type: object
     type: object
   giiku-camp_internal_usecase_response.SignInRes:
     properties:
@@ -74,6 +89,32 @@ info:
   title: Giiku Camp API
   version: "1.0"
 paths:
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: トークンの更新
+      parameters:
+      - description: Refresh token
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.RefreshTokenReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token refreshed
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.RefreshTokenRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      summary: トークンの更新
+      tags:
+      - User
   /auth/signin:
     post:
       consumes:

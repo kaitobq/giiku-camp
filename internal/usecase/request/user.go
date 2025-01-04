@@ -28,3 +28,15 @@ func NewSignInReq(c *gin.Context) (*SignInReq, error) {
 	}
 	return &req, nil
 }
+
+type RefreshTokenReq struct {
+	RefreshToken string `json:"refresh_token"`
+}
+
+func NewRefreshTokenReq(c *gin.Context) (*RefreshTokenReq, error) {
+	var req RefreshTokenReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}

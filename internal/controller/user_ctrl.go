@@ -51,7 +51,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 		return
 	}
 
-	logging.Infof(c, "SignUp %v", res)
+	logging.Infof(c, "SignUp called by %v", res.User)
 	render.JSON(c, res)
 }
 
@@ -89,6 +89,34 @@ func (ct *UserCtrl) SignIn(c *gin.Context) {
 		return
 	}
 
-	logging.Infof(c, "SignIn %v", res)
+	logging.Infof(c, "SignIn called by %v", res.User)
+	render.JSON(c, res)
+}
+
+// RefreshToken godoc
+// @Summary トークンの更新
+// @Description トークンの更新
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param user body request.RefreshTokenReq true "Refresh token"
+// @Success 200 {object} response.RefreshTokenRes "Token refreshed"
+// @Failure 400 {object} render.Error "Bad request"
+// @Router /auth/refresh [post]
+func (ct *UserCtrl) RefreshToken(c *gin.Context) {
+	req, err := request.NewRefreshTokenReq(c)
+	if err != nil {
+		logging.Errorf(c, "NewRefreshTokenReq %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	res, err := ct.UserUsecase.RefreshToken(c, *req)
+	if err != nil {
+		logging.Errorf(c, "RefreshToken %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
 	render.JSON(c, res)
 }
