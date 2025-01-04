@@ -113,8 +113,17 @@ func (ct *UserCtrl) RefreshToken(c *gin.Context) {
 
 	res, err := ct.UserUsecase.RefreshToken(c, *req)
 	if err != nil {
-		logging.Errorf(c, "RefreshToken %v", err)
-		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		logging.Infof(c, "RefreshToken %v", err)
+		switch err {
+		case entity.ErrTokenInValid:
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeTokenInValid)
+		case entity.ErrFailedToParseClaims:
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeFailedToParseClaims)
+		case entity.ErrTokenVersionMismatch:
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeTokenVersionMismatch)
+		default:
+			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 

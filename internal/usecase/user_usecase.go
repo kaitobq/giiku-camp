@@ -51,7 +51,7 @@ func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 		logging.Errorf(c, "GenerateAccessToken %v", err)
 		return nil, err
 	}
-	refreshToken, err := jwt.GenerateRefreshToken(user.ID)
+	refreshToken, err := jwt.GenerateRefreshToken(user.ID, user.TokenVersion)
 	if err != nil {
 		logging.Errorf(c, "GenerateRefreshToken %v", err)
 		return nil, err
@@ -84,10 +84,14 @@ func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.S
 		logging.Errorf(c, "GenerateAccessToken %v", err)
 		return nil, err
 	}
-
-	refreshToken, err := jwt.GenerateRefreshToken(user.ID)
+	user.IncrementTokenVersion()
+	refreshToken, err := jwt.GenerateRefreshToken(user.ID, user.TokenVersion)
 	if err != nil {
 		logging.Errorf(c, "GenerateRefreshToken %v", err)
+		return nil, err
+	}
+	if err = u.userRepo.Update(ctx, user); err != nil {
+		logging.Errorf(c, "Update %v", err)
 		return nil, err
 	}
 
@@ -95,9 +99,32 @@ func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.S
 }
 
 func (u *UserUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error) {
-	accessToken, refreshToken, err := jwt.RefreshTokens(req.RefreshToken)
+	token, err := jwt.VerifyToken(req.RefreshToken)
+	if err != nil {
+		logging.Errorf(c, "VerifyToken %v", err)
+		return nil, err
+	}
+
+	userID, err := jwt.ExtractUserIDFromToken(token)
+	if err != nil {
+		logging.Errorf(c, "ExtractUserIDFromToken %v", err)
+		return nil, err
+	}
+
+	ctx := c.Request.Context()
+	user, err := u.userRepo.FindByID(ctx, userID)
+	if err != nil {
+		logging.Errorf(c, "FindByID %v", err)
+		return nil, err
+	}
+
+	accessToken, refreshToken, err := jwt.RefreshTokens(*user, req.RefreshToken)
 	if err != nil {
 		logging.Errorf(c, "RefreshTokens %v", err)
+		return nil, err
+	}
+	if err = u.userRepo.Update(ctx, user); err != nil {
+		logging.Errorf(c, "Update %v", err)
 		return nil, err
 	}
 

@@ -10,26 +10,33 @@ import (
 )
 
 type User struct {
-	ID        string
-	Name      string
-	Email     string
-	Password  string
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID           string
+	Name         string
+	Email        string
+	Password     string
+	TokenVersion int
+	CreatedAt    time.Time
+	UpdatedAt    time.Time
 }
 
 var (
-	ErrEmailAlreadyUsed  = errors.New("email is already used")
-	ErrUserNotFound      = errors.New("user not found")
-	ErrEmailInvalid      = errors.New("invalid email")
-	ErrPasswordIncorrect = errors.New("password is incorrect")
+	ErrEmailAlreadyUsed     = errors.New("email is already used")
+	ErrUserNotFound         = errors.New("user not found")
+	ErrEmailInvalid         = errors.New("invalid email")
+	ErrPasswordIncorrect    = errors.New("password is incorrect")
+	ErrTokenVersionMismatch = errors.New("token version mismatch")
+	ErrFailedToParseClaims  = errors.New("failed to parse claims")
+	ErrTokenInValid         = errors.New("token is invalid or expired")
 )
 
 var (
-	CodeEmailAlreadyUsed  = 10000
-	CodeUserNotFound      = 10001
-	CodeEmailInvalid      = 10002
-	CodePasswordIncorrect = 10003
+	CodeEmailAlreadyUsed     = 10000
+	CodeUserNotFound         = 10001
+	CodeEmailInvalid         = 10002
+	CodePasswordIncorrect    = 10003
+	CodeTokenVersionMismatch = 10004
+	CodeFailedToParseClaims  = 10005
+	CodeTokenInValid         = 10006
 )
 
 func NewUser(userName, email, password string) (*User, error) {
@@ -43,10 +50,11 @@ func NewUser(userName, email, password string) (*User, error) {
 	}
 
 	return &User{
-		ID:       genUUID(),
-		Name:     userName,
-		Email:    email,
-		Password: hashedPassword,
+		ID:           genUUID(),
+		Name:         userName,
+		Email:        email,
+		Password:     hashedPassword,
+		TokenVersion: 1,
 	}, nil
 }
 
@@ -74,6 +82,10 @@ func (u *User) HidePassword() User {
 	user := *u
 	user.Password = "***"
 	return user
+}
+
+func (u *User) IncrementTokenVersion() {
+	u.TokenVersion++
 }
 
 func hashPassword(password string) (string, error) {

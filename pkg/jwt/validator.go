@@ -2,7 +2,7 @@ package jwt
 
 import (
 	"errors"
-	"fmt"
+	"giiku-camp/internal/domain/entity"
 	"os"
 	"strings"
 
@@ -19,17 +19,16 @@ func VerifyToken(tokenStr string) (*jwt.Token, error) {
 	token, err := jwt.Parse(tokenStr, func(t *jwt.Token) (interface{}, error) {
 		// HS256 で来ているかチェック
 		if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
+			return nil, errors.New("unexpected signing method")
 		}
 		return []byte(secret), nil
 	})
-
 	if err != nil {
-		return nil, fmt.Errorf("failed to parse token: %w", err)
+		return nil, err
 	}
 
 	if !token.Valid {
-		return nil, errors.New("token is invalid or expired")
+		return nil, entity.ErrTokenInValid
 	}
 
 	return token, nil
@@ -49,7 +48,7 @@ func VerifyReqHeaderToken(c *gin.Context) (bool, error) {
 	return true, nil
 }
 
-func ExtractUserIDFromToken(c *gin.Context) (string, error) {
+func ExtractUserIDFromContext(c *gin.Context) (string, error) {
 	tokenStr, err := getTokenStringFromRequestHeader(c)
 	if err != nil {
 		return "", err
@@ -61,12 +60,26 @@ func ExtractUserIDFromToken(c *gin.Context) (string, error) {
 
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return "", errors.New("failed to parse claims")
+		return "", entity.ErrFailedToParseClaims
 	}
 
 	userID, ok := claims["user_id"].(string)
 	if !ok {
-		return "", errors.New("failed to parse user_id")
+		return "", entity.ErrFailedToParseClaims
+	}
+
+	return userID, nil
+}
+
+func ExtractUserIDFromToken(token *jwt.Token) (string, error) {
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", entity.ErrFailedToParseClaims
+	}
+
+	userID, ok := claims["user_id"].(string)
+	if !ok {
+		return "", entity.ErrFailedToParseClaims
 	}
 
 	return userID, nil

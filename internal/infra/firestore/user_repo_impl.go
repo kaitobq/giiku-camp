@@ -59,3 +59,12 @@ func (r *userRepo) FindByID(ctx context.Context, id string) (*entity.User, error
 
 	return &user, nil
 }
+
+func (r *userRepo) Update(ctx context.Context, user *entity.User) error {
+	user.UpdateUpdatedAt()
+	_, err := r.db.Collection("users").Doc(user.ID).Set(ctx, user)
+	if err != nil {
+		return err
+	}
+	return nil
+}

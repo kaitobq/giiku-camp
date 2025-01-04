@@ -3,6 +3,7 @@ package jwt
 import (
 	"errors"
 	"fmt"
+	"giiku-camp/internal/domain/entity"
 	"os"
 	"strconv"
 	"time"
@@ -35,7 +36,7 @@ func GenerateAccessToken(userID string) (string, error) {
 	return token.SignedString([]byte(secret))
 }
 
-func GenerateRefreshToken(userID string) (string, error) {
+func GenerateRefreshToken(userID string, tokenVersion int) (string, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
 		return "", errors.New("JWT_SECRET is not set")
@@ -51,41 +52,43 @@ func GenerateRefreshToken(userID string) (string, error) {
 	}
 
 	claims := jwt.MapClaims{
-		"user_id": userID,
-		"exp":     time.Now().Add(time.Hour * time.Duration(refreshTokenLife)).Unix(),
-		"iat":     time.Now().Unix(),
+		"user_id":       userID,
+		"token_version": tokenVersion,
+		"exp":           time.Now().Add(time.Hour * time.Duration(refreshTokenLife)).Unix(),
+		"iat":           time.Now().Unix(),
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(secret))
 }
 
-func RefreshTokens(oldRefreshToken string) (string, string, error) {
-	// 古いリフレッシュトークンを検証
-	token, err := VerifyToken(oldRefreshToken)
+func RefreshTokens(user entity.User, tokenStr string) (string, string, error) {
+	token, err := VerifyToken(tokenStr)
 	if err != nil {
-		return "", "", fmt.Errorf("refresh token invalid: %w", err)
+		return "", "", err
 	}
-
 	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok || !token.Valid {
-		return "", "", errors.New("invalid refresh token")
-	}
-
-	userID, ok := claims["user_id"].(string)
 	if !ok {
-		return "", "", errors.New("missing user_id in token claims")
+		return "", "", entity.ErrFailedToParseClaims
+	}
+	tokenVersion, _ := claims["token_version"].(float64)
+	if !ok {
+		return "", "", entity.ErrFailedToParseClaims
 	}
 
-	// 新しいアクセストークンとリフレッシュトークンを発行
-	newAccessToken, err := GenerateAccessToken(userID)
-	if err != nil {
-		return "", "", fmt.Errorf("failed to generate access token: %w", err)
-	}
-	newRefreshToken, err := GenerateRefreshToken(userID)
-	if err != nil {
-		return "", "", fmt.Errorf("failed to generate refresh token: %w", err)
+	if int(tokenVersion) != user.TokenVersion {
+		return "", "", entity.ErrTokenVersionMismatch
 	}
 
-	return newAccessToken, newRefreshToken, nil
+	accessToken, err := GenerateAccessToken(user.ID)
+	if err != nil {
+		return "", "", err
+	}
+	user.IncrementTokenVersion()
+	refreshToken, err := GenerateRefreshToken(user.ID, user.TokenVersion)
+	if err != nil {
+		return "", "", err
+	}
+
+	return accessToken, refreshToken, nil
 }

@@ -27,6 +27,8 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, middleware *middleware.Middle
 	auth := r.Group("/auth")
 	{
 		auth.POST("/signup", userCtrl.SignUp)
+		auth.POST("/signin", userCtrl.SignIn)
+		auth.POST("/refresh", userCtrl.RefreshToken)
 	}
 
 	authenticated := r.Group("/authenticated")
