@@ -70,6 +70,12 @@ func (u *User) VerifyPassword(password string) error {
 	return nil
 }
 
+func (u *User) HidePassword() User {
+	user := *u
+	user.Password = "***"
+	return user
+}
+
 func hashPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
