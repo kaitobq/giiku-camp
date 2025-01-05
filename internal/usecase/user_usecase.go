@@ -22,6 +22,12 @@ func NewUserUsecase(userRepo repository.UserRepo) UserUsecase {
 func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
 	user, err := entity.NewUser(req.Name, req.Email, req.Password)
 	if err != nil {
+		switch err {
+		case entity.ErrEmailInvalid:
+			logging.Infof(c, "NewUser returned ErrEmailInvalid(email: %s)", req.Email)
+		default:
+			logging.Errorf(c, "NewUser %v", err)
+		}
 		return nil, err
 	}
 
