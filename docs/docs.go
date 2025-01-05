@@ -24,7 +24,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/refresh": {
+        "/api/v1/auth/refresh": {
             "post": {
                 "description": "トークンの更新",
                 "consumes": [
@@ -64,7 +64,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/signin": {
+        "/api/v1/auth/signin": {
             "post": {
                 "description": "ユーザー認証",
                 "consumes": [
@@ -104,7 +104,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/signup": {
+        "/api/v1/auth/signup": {
             "post": {
                 "description": "ユーザー登録",
                 "consumes": [

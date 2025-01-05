@@ -22,16 +22,17 @@ func Ping(c *gin.Context) {
 func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, middleware *middleware.Middleware) {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	r.GET("/ping", Ping)
+	v1 := r.Group("/api/v1")
+	v1.GET("/ping", Ping)
 
-	auth := r.Group("/auth")
+	auth := v1.Group("/auth")
 	{
 		auth.POST("/signup", userCtrl.SignUp)
 		auth.POST("/signin", userCtrl.SignIn)
 		auth.POST("/refresh", userCtrl.RefreshToken)
 	}
 
-	authenticated := r.Group("/authenticated")
+	authenticated := v1.Group("/authenticated")
 	authenticated.Use(middleware.API.Authenticate())
 	authenticated.GET("/ping", Ping)
 }

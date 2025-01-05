@@ -29,7 +29,7 @@ func NewUserCtrl(userUsecase usecase.UserUsecase) UserCtrl {
 // @Param user body request.SignUpReq true "User details"
 // @Success 200 {object} response.SignUpRes "User created"
 // @Failure 400 {object} render.Error "Bad request"
-// @Router /auth/signup [post]
+// @Router /api/v1/auth/signup [post]
 func (ct *UserCtrl) SignUp(c *gin.Context) {
 	req, err := request.NewSignUpReq(c)
 	if err != nil {
@@ -64,7 +64,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 // @Param user body request.SignInReq true "User details"
 // @Success 200 {object} response.SignInRes "User authenticated"
 // @Failure 400 {object} render.Error "Bad request"
-// @Router /auth/signin [post]
+// @Router /api/v1/auth/signin [post]
 func (ct *UserCtrl) SignIn(c *gin.Context) {
 	req, err := request.NewSignInReq(c)
 	if err != nil {
@@ -102,7 +102,7 @@ func (ct *UserCtrl) SignIn(c *gin.Context) {
 // @Param user body request.RefreshTokenReq true "Refresh token"
 // @Success 200 {object} response.RefreshTokenRes "Token refreshed"
 // @Failure 400 {object} render.Error "Bad request"
-// @Router /auth/refresh [post]
+// @Router /api/v1/auth/refresh [post]
 func (ct *UserCtrl) RefreshToken(c *gin.Context) {
 	req, err := request.NewRefreshTokenReq(c)
 	if err != nil {

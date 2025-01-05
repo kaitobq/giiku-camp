@@ -89,7 +89,7 @@ info:
   title: Giiku Camp API
   version: "1.0"
 paths:
-  /auth/refresh:
+  /api/v1/auth/refresh:
     post:
       consumes:
       - application/json
@@ -115,7 +115,7 @@ paths:
       summary: トークンの更新
       tags:
       - User
-  /auth/signin:
+  /api/v1/auth/signin:
     post:
       consumes:
       - application/json
@@ -141,7 +141,7 @@ paths:
       summary: ユーザー認証
       tags:
       - User
-  /auth/signup:
+  /api/v1/auth/signup:
     post:
       consumes:
       - application/json
