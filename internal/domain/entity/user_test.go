@@ -3,9 +3,12 @@ package entity
 import (
 	"testing"
 	"time"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 func TestNewUser(t *testing.T) {
+	longPassword := "a" + string(make([]byte, 72))
 	tests := []struct {
 		name     string
 		userName string
@@ -26,6 +29,13 @@ func TestNewUser(t *testing.T) {
 			email:    "invalid-email",
 			password: "password123",
 			wantErr:  ErrEmailInvalid,
+		},
+		{
+			name:     "異常系: パスワードが長すぎる",
+			userName: "test user",
+			email:    "test@example.com",
+			password: longPassword,
+			wantErr:  bcrypt.ErrPasswordTooLong,
 		},
 	}
 

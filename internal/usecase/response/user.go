@@ -21,12 +21,14 @@ func NewUserRes(user *entity.User) (*UserRes, error) {
 	}, nil
 }
 
+type TokenRes struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
 type SignUpRes struct {
-	User  UserRes `json:"user"`
-	Token struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
-	} `json:"token"`
+	User  UserRes  `json:"user"`
+	Token TokenRes `json:"token"`
 }
 
 func NewSignUpRes(user *entity.User, accessToken, refreshToken string) (*SignUpRes, error) {
@@ -42,11 +44,8 @@ func NewSignUpRes(user *entity.User, accessToken, refreshToken string) (*SignUpR
 }
 
 type SignInRes struct {
-	User  UserRes `json:"user"`
-	Token struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
-	} `json:"token"`
+	User  UserRes  `json:"user"`
+	Token TokenRes `json:"token"`
 }
 
 func NewSignInRes(user *entity.User, accessToken, refreshToken string) (*SignInRes, error) {
@@ -62,10 +61,7 @@ func NewSignInRes(user *entity.User, accessToken, refreshToken string) (*SignInR
 }
 
 type RefreshTokenRes struct {
-	Token struct {
-		AccessToken  string `json:"access_token"`
-		RefreshToken string `json:"refresh_token"`
-	} `json:"token"`
+	Token TokenRes `json:"token"`
 }
 
 func NewRefreshTokenRes(accessToken, refreshToken string) (*RefreshTokenRes, error) {

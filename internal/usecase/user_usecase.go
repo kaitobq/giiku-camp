@@ -11,15 +11,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserUsecase struct {
+type userUsecase struct {
 	userRepo repository.UserRepo
 }
 
 func NewUserUsecase(userRepo repository.UserRepo) UserUsecase {
-	return UserUsecase{userRepo: userRepo}
+	return &userUsecase{userRepo: userRepo}
 }
 
-func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
+func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
 	user, err := entity.NewUser(req.Name, req.Email, req.Password)
 	if err != nil {
 		switch err {
@@ -66,7 +66,7 @@ func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 	return response.NewSignUpRes(user, accessToken, refreshToken)
 }
 
-func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error) {
+func (u *userUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error) {
 	ctx := c.Request.Context()
 	user, err := u.userRepo.FindByEmail(ctx, req.Email)
 	if err != nil {
@@ -104,7 +104,7 @@ func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.S
 	return response.NewSignInRes(user, accessToken, refreshToken)
 }
 
-func (u *UserUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error) {
+func (u *userUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error) {
 	token, err := jwt.VerifyToken(req.RefreshToken)
 	if err != nil {
 		logging.Errorf(c, "VerifyToken %v", err)

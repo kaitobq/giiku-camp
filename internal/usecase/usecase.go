@@ -1,0 +1,14 @@
+package usecase
+
+import (
+	"giiku-camp/internal/usecase/request"
+	"giiku-camp/internal/usecase/response"
+
+	"github.com/gin-gonic/gin"
+)
+
+type UserUsecase interface {
+	SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error)
+	SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error)
+	RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error)
+}

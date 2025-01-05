@@ -65,39 +65,41 @@
 				
 				<option value="file4">giiku-camp/internal/app/wire_gen.go (0.0%)</option>
 				
-				<option value="file5">giiku-camp/internal/controller/render/error.go (0.0%)</option>
+				<option value="file5">giiku-camp/internal/controller/render/error.go (75.0%)</option>
 				
-				<option value="file6">giiku-camp/internal/controller/render/json.go (0.0%)</option>
+				<option value="file6">giiku-camp/internal/controller/render/json.go (37.5%)</option>
 				
 				<option value="file7">giiku-camp/internal/controller/routes.go (0.0%)</option>
 				
-				<option value="file8">giiku-camp/internal/controller/user_ctrl.go (0.0%)</option>
+				<option value="file8">giiku-camp/internal/controller/user_ctrl.go (81.2%)</option>
 				
-				<option value="file9">giiku-camp/internal/domain/entity/user.go (87.5%)</option>
+				<option value="file9">giiku-camp/internal/domain/entity/user.go (95.8%)</option>
 				
 				<option value="file10">giiku-camp/internal/domain/xcontext/auth.go (0.0%)</option>
 				
 				<option value="file11">giiku-camp/internal/infra/firestore/user_repo_impl.go (0.0%)</option>
 				
-				<option value="file12">giiku-camp/internal/infra/logging/http.go (0.0%)</option>
+				<option value="file12">giiku-camp/internal/infra/logging/http.go (42.9%)</option>
 				
-				<option value="file13">giiku-camp/internal/infra/logging/logging.go (0.0%)</option>
+				<option value="file13">giiku-camp/internal/infra/logging/logging.go (61.5%)</option>
 				
 				<option value="file14">giiku-camp/internal/middleware/api.go (0.0%)</option>
 				
 				<option value="file15">giiku-camp/internal/middleware/middleware.go (0.0%)</option>
 				
-				<option value="file16">giiku-camp/internal/usecase/request/user.go (0.0%)</option>
+				<option value="file16">giiku-camp/internal/usecase/mock/usecase_mock.go (100.0%)</option>
 				
-				<option value="file17">giiku-camp/internal/usecase/response/user.go (0.0%)</option>
+				<option value="file17">giiku-camp/internal/usecase/request/user.go (75.0%)</option>
 				
-				<option value="file18">giiku-camp/internal/usecase/user_usecase.go (0.0%)</option>
+				<option value="file18">giiku-camp/internal/usecase/response/user.go (0.0%)</option>
 				
-				<option value="file19">giiku-camp/pkg/firestore/firestore.go (0.0%)</option>
+				<option value="file19">giiku-camp/internal/usecase/user_usecase.go (0.0%)</option>
 				
-				<option value="file20">giiku-camp/pkg/jwt/generator.go (0.0%)</option>
+				<option value="file20">giiku-camp/pkg/firestore/firestore.go (0.0%)</option>
 				
-				<option value="file21">giiku-camp/pkg/jwt/validator.go (0.0%)</option>
+				<option value="file21">giiku-camp/pkg/jwt/generator.go (0.0%)</option>
+				
+				<option value="file22">giiku-camp/pkg/jwt/validator.go (0.0%)</option>
 				
 				</select>
 			</div>
@@ -583,7 +585,7 @@ type Error struct {
         Status  int    `json:"status"`
 }
 
-func ErrorJSON(c *gin.Context, err string, status int) <span class="cov0" title="0">{
+func ErrorJSON(c *gin.Context, err string, status int) <span class="cov8" title="1">{
         c.Writer.Header().Set("Content-Type", "application/json")
         c.Writer.WriteHeader(status)
 
@@ -596,7 +598,7 @@ func ErrorJSON(c *gin.Context, err string, status int) <span class="cov0" title=
 }
 
 // エラーコードを返すときに使う
-func ErrorCodeJSON(c *gin.Context, err string, status, code int) <span class="cov0" title="0">{
+func ErrorCodeJSON(c *gin.Context, err string, status, code int) <span class="cov8" title="1">{
         c.Writer.Header().Set("Content-Type", "application/json")
         c.Writer.WriteHeader(status)
 
@@ -620,7 +622,7 @@ import (
         "github.com/gin-gonic/gin"
 )
 
-func JSON(c *gin.Context, res interface{}) <span class="cov0" title="0">{
+func JSON(c *gin.Context, res interface{}) <span class="cov8" title="1">{
         c.Writer.Header().Set("Content-Type", "application/json")
         c.Writer.WriteHeader(http.StatusOK)
         if err := json.NewEncoder(c.Writer).Encode(res); err != nil </span><span class="cov0" title="0">{
@@ -697,7 +699,7 @@ type UserCtrl struct {
         UserUsecase usecase.UserUsecase
 }
 
-func NewUserCtrl(userUsecase usecase.UserUsecase) UserCtrl <span class="cov0" title="0">{
+func NewUserCtrl(userUsecase usecase.UserUsecase) UserCtrl <span class="cov8" title="1">{
         return UserCtrl{UserUsecase: userUsecase}
 }</span>
 
@@ -711,7 +713,7 @@ func NewUserCtrl(userUsecase usecase.UserUsecase) UserCtrl <span class="cov0" ti
 // @Success 200 {object} response.SignUpRes "User created"
 // @Failure 400 {object} render.Error "Bad request"
 // @Router /api/v1/auth/signup [post]
-func (ct *UserCtrl) SignUp(c *gin.Context) <span class="cov0" title="0">{
+func (ct *UserCtrl) SignUp(c *gin.Context) <span class="cov8" title="1">{
         req, err := request.NewSignUpReq(c)
         if err != nil </span><span class="cov0" title="0">{
                 logging.Errorf(c, "NewSignUpReq %v", err)
@@ -719,20 +721,21 @@ func (ct *UserCtrl) SignUp(c *gin.Context) <span class="cov0" title="0">{
                 return
         }</span>
 
-        <span class="cov0" title="0">res, err := ct.UserUsecase.SignUp(c, *req)
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">res, err := ct.UserUsecase.SignUp(c, *req)
+        if err != nil </span><span class="cov8" title="1">{
+                logging.Infof(c, "SignUp %v", err)
                 switch err </span>{
-                case entity.ErrEmailAlreadyUsed:<span class="cov0" title="0">
-                        logging.Infof(c, "SignUp %v", err)
+                case entity.ErrEmailAlreadyUsed:<span class="cov8" title="1">
                         render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeEmailAlreadyUsed)</span>
-                default:<span class="cov0" title="0">
-                        logging.Errorf(c, "SignUp %v", err)
+                case entity.ErrEmailInvalid:<span class="cov8" title="1">
+                        render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeEmailInvalid)</span>
+                default:<span class="cov8" title="1">
                         render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)</span>
                 }
-                <span class="cov0" title="0">return</span>
+                <span class="cov8" title="1">return</span>
         }
 
-        <span class="cov0" title="0">logging.Infof(c, "SignUp called by %v", res.User)
+        <span class="cov8" title="1">logging.Infof(c, "SignUp called by %v", res.User)
         render.JSON(c, res)</span>
 }
 
@@ -746,7 +749,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) <span class="cov0" title="0">{
 // @Success 200 {object} response.SignInRes "User authenticated"
 // @Failure 400 {object} render.Error "Bad request"
 // @Router /api/v1/auth/signin [post]
-func (ct *UserCtrl) SignIn(c *gin.Context) <span class="cov0" title="0">{
+func (ct *UserCtrl) SignIn(c *gin.Context) <span class="cov8" title="1">{
         req, err := request.NewSignInReq(c)
         if err != nil </span><span class="cov0" title="0">{
                 logging.Errorf(c, "NewSignInReq %v", err)
@@ -754,23 +757,23 @@ func (ct *UserCtrl) SignIn(c *gin.Context) <span class="cov0" title="0">{
                 return
         }</span>
 
-        <span class="cov0" title="0">res, err := ct.UserUsecase.SignIn(c, *req)
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">res, err := ct.UserUsecase.SignIn(c, *req)
+        if err != nil </span><span class="cov8" title="1">{
                 switch err </span>{
-                case entity.ErrUserNotFound:<span class="cov0" title="0">
+                case entity.ErrUserNotFound:<span class="cov8" title="1">
                         logging.Infof(c, "SignIn %v", err)
                         render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeUserNotFound)</span>
-                case entity.ErrPasswordIncorrect:<span class="cov0" title="0">
+                case entity.ErrPasswordIncorrect:<span class="cov8" title="1">
                         logging.Infof(c, "SignIn %v", err)
                         render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodePasswordIncorrect)</span>
-                default:<span class="cov0" title="0">
+                default:<span class="cov8" title="1">
                         logging.Errorf(c, "SignIn %v", err)
                         render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)</span>
                 }
-                <span class="cov0" title="0">return</span>
+                <span class="cov8" title="1">return</span>
         }
 
-        <span class="cov0" title="0">logging.Infof(c, "SignIn called by %v", res.User)
+        <span class="cov8" title="1">logging.Infof(c, "SignIn called by %v", res.User)
         render.JSON(c, res)</span>
 }
 
@@ -784,7 +787,7 @@ func (ct *UserCtrl) SignIn(c *gin.Context) <span class="cov0" title="0">{
 // @Success 200 {object} response.RefreshTokenRes "Token refreshed"
 // @Failure 400 {object} render.Error "Bad request"
 // @Router /api/v1/auth/refresh [post]
-func (ct *UserCtrl) RefreshToken(c *gin.Context) <span class="cov0" title="0">{
+func (ct *UserCtrl) RefreshToken(c *gin.Context) <span class="cov8" title="1">{
         req, err := request.NewRefreshTokenReq(c)
         if err != nil </span><span class="cov0" title="0">{
                 logging.Errorf(c, "NewRefreshTokenReq %v", err)
@@ -792,23 +795,23 @@ func (ct *UserCtrl) RefreshToken(c *gin.Context) <span class="cov0" title="0">{
                 return
         }</span>
 
-        <span class="cov0" title="0">res, err := ct.UserUsecase.RefreshToken(c, *req)
-        if err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">res, err := ct.UserUsecase.RefreshToken(c, *req)
+        if err != nil </span><span class="cov8" title="1">{
                 logging.Infof(c, "RefreshToken %v", err)
                 switch err </span>{
-                case entity.ErrTokenInValid:<span class="cov0" title="0">
+                case entity.ErrTokenInValid:<span class="cov8" title="1">
                         render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeTokenInValid)</span>
-                case entity.ErrFailedToParseClaims:<span class="cov0" title="0">
+                case entity.ErrFailedToParseClaims:<span class="cov8" title="1">
                         render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeFailedToParseClaims)</span>
-                case entity.ErrTokenVersionMismatch:<span class="cov0" title="0">
+                case entity.ErrTokenVersionMismatch:<span class="cov8" title="1">
                         render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeTokenVersionMismatch)</span>
-                default:<span class="cov0" title="0">
+                default:<span class="cov8" title="1">
                         render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)</span>
                 }
-                <span class="cov0" title="0">return</span>
+                <span class="cov8" title="1">return</span>
         }
 
-        <span class="cov0" title="0">render.JSON(c, res)</span>
+        <span class="cov8" title="1">render.JSON(c, res)</span>
 }
 </pre>
 		
@@ -859,7 +862,7 @@ func NewUser(userName, email, password string) (*User, error) <span class="cov8"
         }</span>
 
         <span class="cov8" title="1">hashedPassword, err := hashPassword(password)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -906,7 +909,7 @@ func (u *User) IncrementTokenVersion() <span class="cov8" title="1">{
 
 func hashPassword(password string) (string, error) <span class="cov8" title="1">{
         hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return "", err
         }</span>
         <span class="cov8" title="1">return string(hashedPassword), nil</span>
@@ -1029,9 +1032,9 @@ import (
 )
 
 // GCPが発行するTraceIDを取得する
-func GetRequestTraceID(c *gin.Context) string <span class="cov0" title="0">{
+func GetRequestTraceID(c *gin.Context) string <span class="cov8" title="1">{
         header := c.Request.Header.Get("X-Cloud-Trace-Context")
-        if header == "" </span><span class="cov0" title="0">{
+        if header == "" </span><span class="cov8" title="1">{
                 return ""
         }</span>
         <span class="cov0" title="0">parts := strings.Split(header, "/")
@@ -1054,7 +1057,7 @@ import (
 
 var l *slog.Logger
 
-func Init() <span class="cov0" title="0">{
+func Init() <span class="cov8" title="1">{
         handler := slog.NewJSONHandler(os.Stdout, &amp;slog.HandlerOptions{
                 Level: slog.LevelInfo,
         })
@@ -1066,11 +1069,11 @@ func Dubugf(c *gin.Context, format string, args ...interface{}) <span class="cov
         out(c, "DEBUG", format, args...)
 }</span>
 
-func Infof(c *gin.Context, format string, args ...interface{}) <span class="cov0" title="0">{
+func Infof(c *gin.Context, format string, args ...interface{}) <span class="cov8" title="1">{
         out(c, "INFO", format, args...)
 }</span>
 
-func Errorf(c *gin.Context, format string, args ...interface{}) <span class="cov0" title="0">{
+func Errorf(c *gin.Context, format string, args ...interface{}) <span class="cov8" title="1">{
         out(c, "ERROR", format, args...)
 }</span>
 
@@ -1083,7 +1086,7 @@ type Entry struct {
         TraceID string
 }
 
-func out(c *gin.Context, severity, format string, args ...interface{}) <span class="cov0" title="0">{
+func out(c *gin.Context, severity, format string, args ...interface{}) <span class="cov8" title="1">{
 
         e := Entry{
                 Message: fmt.Sprintf(format, args...),
@@ -1091,9 +1094,9 @@ func out(c *gin.Context, severity, format string, args ...interface{}) <span cla
         }
 
         switch severity </span>{
-        case "INFO":<span class="cov0" title="0">
+        case "INFO":<span class="cov8" title="1">
                 l.Info(e.Message, "trace_id", e.TraceID)</span>
-        case "ERROR":<span class="cov0" title="0">
+        case "ERROR":<span class="cov8" title="1">
                 l.Error(e.Message, "trace_id", e.TraceID)</span>
         case "WARN":<span class="cov0" title="0">
                 l.Warn(e.Message, "trace_id", e.TraceID)</span>
@@ -1178,7 +1181,97 @@ func NewMiddleware(userRepo repository.UserRepo) *Middleware <span class="cov0" 
 }</span>
 </pre>
 		
-		<pre class="file" id="file16" style="display: none">package request
+		<pre class="file" id="file16" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: usecase.go
+//
+// Generated by this command:
+//
+//        mockgen -source=usecase.go -destination=./mock/usecase_mock.go -package=usecase
+//
+
+// Package usecase is a generated GoMock package.
+package usecase
+
+import (
+        request "giiku-camp/internal/usecase/request"
+        response "giiku-camp/internal/usecase/response"
+        reflect "reflect"
+
+        gin "github.com/gin-gonic/gin"
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockUserUsecase is a mock of UserUsecase interface.
+type MockUserUsecase struct {
+        ctrl     *gomock.Controller
+        recorder *MockUserUsecaseMockRecorder
+        isgomock struct{}
+}
+
+// MockUserUsecaseMockRecorder is the mock recorder for MockUserUsecase.
+type MockUserUsecaseMockRecorder struct {
+        mock *MockUserUsecase
+}
+
+// NewMockUserUsecase creates a new mock instance.
+func NewMockUserUsecase(ctrl *gomock.Controller) *MockUserUsecase <span class="cov8" title="1">{
+        mock := &amp;MockUserUsecase{ctrl: ctrl}
+        mock.recorder = &amp;MockUserUsecaseMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUserUsecase) EXPECT() *MockUserUsecaseMockRecorder <span class="cov8" title="1">{
+        return m.recorder
+}</span>
+
+// RefreshToken mocks base method.
+func (m *MockUserUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error) <span class="cov8" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "RefreshToken", c, req)
+        ret0, _ := ret[0].(*response.RefreshTokenRes)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// RefreshToken indicates an expected call of RefreshToken.
+func (mr *MockUserUsecaseMockRecorder) RefreshToken(c, req any) *gomock.Call <span class="cov8" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RefreshToken", reflect.TypeOf((*MockUserUsecase)(nil).RefreshToken), c, req)
+}</span>
+
+// SignIn mocks base method.
+func (m *MockUserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error) <span class="cov8" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "SignIn", c, req)
+        ret0, _ := ret[0].(*response.SignInRes)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// SignIn indicates an expected call of SignIn.
+func (mr *MockUserUsecaseMockRecorder) SignIn(c, req any) *gomock.Call <span class="cov8" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SignIn", reflect.TypeOf((*MockUserUsecase)(nil).SignIn), c, req)
+}</span>
+
+// SignUp mocks base method.
+func (m *MockUserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) <span class="cov8" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "SignUp", c, req)
+        ret0, _ := ret[0].(*response.SignUpRes)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// SignUp indicates an expected call of SignUp.
+func (mr *MockUserUsecaseMockRecorder) SignUp(c, req any) *gomock.Call <span class="cov8" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SignUp", reflect.TypeOf((*MockUserUsecase)(nil).SignUp), c, req)
+}</span>
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package request
 
 import "github.com/gin-gonic/gin"
 
@@ -1188,12 +1281,12 @@ type SignUpReq struct {
         Password string `json:"password"`
 }
 
-func NewSignUpReq(c *gin.Context) (*SignUpReq, error) <span class="cov0" title="0">{
+func NewSignUpReq(c *gin.Context) (*SignUpReq, error) <span class="cov8" title="1">{
         var req SignUpReq
         if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov0" title="0">return &amp;req, nil</span>
+        <span class="cov8" title="1">return &amp;req, nil</span>
 }
 
 type SignInReq struct {
@@ -1201,28 +1294,28 @@ type SignInReq struct {
         Password string `json:"password"`
 }
 
-func NewSignInReq(c *gin.Context) (*SignInReq, error) <span class="cov0" title="0">{
+func NewSignInReq(c *gin.Context) (*SignInReq, error) <span class="cov8" title="1">{
         var req SignInReq
         if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov0" title="0">return &amp;req, nil</span>
+        <span class="cov8" title="1">return &amp;req, nil</span>
 }
 
 type RefreshTokenReq struct {
         RefreshToken string `json:"refresh_token"`
 }
 
-func NewRefreshTokenReq(c *gin.Context) (*RefreshTokenReq, error) <span class="cov0" title="0">{
+func NewRefreshTokenReq(c *gin.Context) (*RefreshTokenReq, error) <span class="cov8" title="1">{
         var req RefreshTokenReq
         if err := c.ShouldBindJSON(&amp;req); err != nil </span><span class="cov0" title="0">{
                 return nil, err
         }</span>
-        <span class="cov0" title="0">return &amp;req, nil</span>
+        <span class="cov8" title="1">return &amp;req, nil</span>
 }
 </pre>
 		
-		<pre class="file" id="file17" style="display: none">package response
+		<pre class="file" id="file18" style="display: none">package response
 
 import (
         "giiku-camp/internal/domain/entity"
@@ -1245,12 +1338,14 @@ func NewUserRes(user *entity.User) (*UserRes, error) <span class="cov0" title="0
         }, nil
 }</span>
 
+type TokenRes struct {
+        AccessToken  string `json:"access_token"`
+        RefreshToken string `json:"refresh_token"`
+}
+
 type SignUpRes struct {
-        User  UserRes `json:"user"`
-        Token struct {
-                AccessToken  string `json:"access_token"`
-                RefreshToken string `json:"refresh_token"`
-        } `json:"token"`
+        User  UserRes  `json:"user"`
+        Token TokenRes `json:"token"`
 }
 
 func NewSignUpRes(user *entity.User, accessToken, refreshToken string) (*SignUpRes, error) <span class="cov0" title="0">{
@@ -1266,11 +1361,8 @@ func NewSignUpRes(user *entity.User, accessToken, refreshToken string) (*SignUpR
 }
 
 type SignInRes struct {
-        User  UserRes `json:"user"`
-        Token struct {
-                AccessToken  string `json:"access_token"`
-                RefreshToken string `json:"refresh_token"`
-        } `json:"token"`
+        User  UserRes  `json:"user"`
+        Token TokenRes `json:"token"`
 }
 
 func NewSignInRes(user *entity.User, accessToken, refreshToken string) (*SignInRes, error) <span class="cov0" title="0">{
@@ -1286,10 +1378,7 @@ func NewSignInRes(user *entity.User, accessToken, refreshToken string) (*SignInR
 }
 
 type RefreshTokenRes struct {
-        Token struct {
-                AccessToken  string `json:"access_token"`
-                RefreshToken string `json:"refresh_token"`
-        } `json:"token"`
+        Token TokenRes `json:"token"`
 }
 
 func NewRefreshTokenRes(accessToken, refreshToken string) (*RefreshTokenRes, error) <span class="cov0" title="0">{
@@ -1300,7 +1389,7 @@ func NewRefreshTokenRes(accessToken, refreshToken string) (*RefreshTokenRes, err
 }</span>
 </pre>
 		
-		<pre class="file" id="file18" style="display: none">package usecase
+		<pre class="file" id="file19" style="display: none">package usecase
 
 import (
         "giiku-camp/internal/domain/entity"
@@ -1313,15 +1402,15 @@ import (
         "github.com/gin-gonic/gin"
 )
 
-type UserUsecase struct {
+type userUsecase struct {
         userRepo repository.UserRepo
 }
 
 func NewUserUsecase(userRepo repository.UserRepo) UserUsecase <span class="cov0" title="0">{
-        return UserUsecase{userRepo: userRepo}
+        return &amp;userUsecase{userRepo: userRepo}
 }</span>
 
-func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) <span class="cov0" title="0">{
+func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) <span class="cov0" title="0">{
         user, err := entity.NewUser(req.Name, req.Email, req.Password)
         if err != nil </span><span class="cov0" title="0">{
                 switch err </span>{
@@ -1368,7 +1457,7 @@ func (u *UserUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
         <span class="cov0" title="0">return response.NewSignUpRes(user, accessToken, refreshToken)</span>
 }
 
-func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error) <span class="cov0" title="0">{
+func (u *userUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error) <span class="cov0" title="0">{
         ctx := c.Request.Context()
         user, err := u.userRepo.FindByEmail(ctx, req.Email)
         if err != nil </span><span class="cov0" title="0">{
@@ -1406,7 +1495,7 @@ func (u *UserUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.S
         <span class="cov0" title="0">return response.NewSignInRes(user, accessToken, refreshToken)</span>
 }
 
-func (u *UserUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error) <span class="cov0" title="0">{
+func (u *userUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error) <span class="cov0" title="0">{
         token, err := jwt.VerifyToken(req.RefreshToken)
         if err != nil </span><span class="cov0" title="0">{
                 logging.Errorf(c, "VerifyToken %v", err)
@@ -1440,7 +1529,7 @@ func (u *UserUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) 
 }
 </pre>
 		
-		<pre class="file" id="file19" style="display: none">package firestore
+		<pre class="file" id="file20" style="display: none">package firestore
 
 import (
         "context"
@@ -1483,7 +1572,7 @@ func New() *firestore.Client <span class="cov0" title="0">{
 }
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">package jwt
+		<pre class="file" id="file21" style="display: none">package jwt
 
 import (
         "errors"
@@ -1579,7 +1668,7 @@ func RefreshTokens(user entity.User, tokenStr string) (string, string, error) <s
 }
 </pre>
 		
-		<pre class="file" id="file21" style="display: none">package jwt
+		<pre class="file" id="file22" style="display: none">package jwt
 
 import (
         "errors"
