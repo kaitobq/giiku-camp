@@ -23,19 +23,19 @@ func NewAPI(userRepo repository.UserRepo) *API {
 func (a *API) withUser(c *gin.Context) error {
 	isValid, err := jwt.VerifyReqHeaderToken(c)
 	if err != nil || !isValid {
-		logging.Infof(c, "middleware.API.withUser jwt.VerifyReqHeaderToken %v", err)
+		logging.Infof(c, "VerifyReqHeaderToken %v", err)
 		return err
 	}
 
 	userID, err := jwt.ExtractUserIDFromContext(c)
 	if err != nil {
-		logging.Infof(c, "middleware.API.withUser jwt.ExtractUserIDFromToken %v", err)
+		logging.Infof(c, "ExtractUserIDFromToken %v", err)
 		return err
 	}
 
 	user, err := a.userRepo.FindByID(c, userID)
 	if err != nil {
-		logging.Infof(c, "middleware.API.withUser a.userRepo.FindByID %v", err)
+		logging.Infof(c, "userRepo.FindByID %v", err)
 		return err
 	}
 
