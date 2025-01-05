@@ -10,6 +10,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
+// トークン文字列が有効化検証する
 func VerifyToken(tokenStr string) (*jwt.Token, error) {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
@@ -34,6 +35,7 @@ func VerifyToken(tokenStr string) (*jwt.Token, error) {
 	return token, nil
 }
 
+// リクエストヘッダーからトークン文字列を取得し、検証する
 func VerifyReqHeaderToken(c *gin.Context) (bool, error) {
 	tokenStr, err := getTokenStringFromRequestHeader(c)
 	if err != nil {
@@ -48,6 +50,7 @@ func VerifyReqHeaderToken(c *gin.Context) (bool, error) {
 	return true, nil
 }
 
+// リクエストヘッダーからトークン文字列を取得し、ユーザーIDを取得する
 func ExtractUserIDFromContext(c *gin.Context) (string, error) {
 	tokenStr, err := getTokenStringFromRequestHeader(c)
 	if err != nil {
@@ -71,6 +74,7 @@ func ExtractUserIDFromContext(c *gin.Context) (string, error) {
 	return userID, nil
 }
 
+// トークンからユーザーIDを取得する
 func ExtractUserIDFromToken(token *jwt.Token) (string, error) {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {

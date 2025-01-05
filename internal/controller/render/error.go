@@ -25,6 +25,7 @@ func ErrorJSON(c *gin.Context, err string, status int) {
 	}
 }
 
+// エラーコードを返すときに使う
 func ErrorCodeJSON(c *gin.Context, err string, status, code int) {
 	c.Writer.Header().Set("Content-Type", "application/json")
 	c.Writer.WriteHeader(status)

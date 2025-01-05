@@ -66,6 +66,7 @@ func (u *User) UpdateUpdatedAt() {
 	u.UpdatedAt = time.Now()
 }
 
+// DBのハッシュ化されたパスワードと入力された生のパスワードを比較する
 func (u *User) VerifyPassword(password string) error {
 	if err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password)); err != nil {
 		switch err {
@@ -78,6 +79,7 @@ func (u *User) VerifyPassword(password string) error {
 	return nil
 }
 
+// ログに出力するときにパスワードを隠す
 func (u *User) HidePassword() User {
 	user := *u
 	user.Password = "***"

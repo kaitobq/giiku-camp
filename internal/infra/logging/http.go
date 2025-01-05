@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// GCPが発行するTraceIDを取得する
 func GetRequestTraceID(c *gin.Context) string {
 	header := c.Request.Header.Get("X-Cloud-Trace-Context")
 	if header == "" {

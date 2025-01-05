@@ -43,6 +43,7 @@ func (a *API) withUser(c *gin.Context) error {
 	return nil
 }
 
+// このミドルウェアを使用したエンドポイントはxcontext.User(c)でユーザー情報を取得できることを保証する
 func (a *API) Authenticate() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := a.withUser(c); err != nil {
