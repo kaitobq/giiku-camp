@@ -9,7 +9,7 @@ import (
 	"giiku-camp/internal/controller/render"
 	"giiku-camp/internal/domain/entity"
 	"giiku-camp/internal/infra/logging"
-	usecase "giiku-camp/internal/usecase/mock"
+	"giiku-camp/internal/mock/usecase"
 	"giiku-camp/internal/usecase/request"
 	"giiku-camp/internal/usecase/response"
 	"io"
