@@ -177,6 +177,9 @@
         },
         "giiku-camp_internal_usecase_request.RefreshTokenReq": {
             "type": "object",
+            "required": [
+                "refresh_token"
+            ],
             "properties": {
                 "refresh_token": {
                     "type": "string"
@@ -185,6 +188,10 @@
         },
         "giiku-camp_internal_usecase_request.SignInReq": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -196,6 +203,11 @@
         },
         "giiku-camp_internal_usecase_request.SignUpReq": {
             "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -212,15 +224,7 @@
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "object",
-                    "properties": {
-                        "access_token": {
-                            "type": "string"
-                        },
-                        "refresh_token": {
-                            "type": "string"
-                        }
-                    }
+                    "$ref": "#/definitions/giiku-camp_internal_usecase_response.TokenRes"
                 }
             }
         },
@@ -228,15 +232,7 @@
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "object",
-                    "properties": {
-                        "access_token": {
-                            "type": "string"
-                        },
-                        "refresh_token": {
-                            "type": "string"
-                        }
-                    }
+                    "$ref": "#/definitions/giiku-camp_internal_usecase_response.TokenRes"
                 },
                 "user": {
                     "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserRes"
@@ -247,18 +243,21 @@
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "object",
-                    "properties": {
-                        "access_token": {
-                            "type": "string"
-                        },
-                        "refresh_token": {
-                            "type": "string"
-                        }
-                    }
+                    "$ref": "#/definitions/giiku-camp_internal_usecase_response.TokenRes"
                 },
                 "user": {
                     "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserRes"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.TokenRes": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
@@ -269,6 +268,9 @@
                     "type": "string"
                 },
                 "email": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "name": {

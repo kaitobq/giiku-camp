@@ -13,6 +13,8 @@ definitions:
     properties:
       refresh_token:
         type: string
+    required:
+    - refresh_token
     type: object
   giiku-camp_internal_usecase_request.SignInReq:
     properties:
@@ -20,6 +22,9 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - email
+    - password
     type: object
   giiku-camp_internal_usecase_request.SignUpReq:
     properties:
@@ -29,46 +34,44 @@ definitions:
         type: string
       password:
         type: string
+    required:
+    - email
+    - name
+    - password
     type: object
   giiku-camp_internal_usecase_response.RefreshTokenRes:
     properties:
       token:
-        properties:
-          access_token:
-            type: string
-          refresh_token:
-            type: string
-        type: object
+        $ref: '#/definitions/giiku-camp_internal_usecase_response.TokenRes'
     type: object
   giiku-camp_internal_usecase_response.SignInRes:
     properties:
       token:
-        properties:
-          access_token:
-            type: string
-          refresh_token:
-            type: string
-        type: object
+        $ref: '#/definitions/giiku-camp_internal_usecase_response.TokenRes'
       user:
         $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
     type: object
   giiku-camp_internal_usecase_response.SignUpRes:
     properties:
       token:
-        properties:
-          access_token:
-            type: string
-          refresh_token:
-            type: string
-        type: object
+        $ref: '#/definitions/giiku-camp_internal_usecase_response.TokenRes'
       user:
         $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
+    type: object
+  giiku-camp_internal_usecase_response.TokenRes:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
     type: object
   giiku-camp_internal_usecase_response.UserRes:
     properties:
       created_at:
         type: string
       email:
+        type: string
+      id:
         type: string
       name:
         type: string

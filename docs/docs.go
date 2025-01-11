@@ -183,6 +183,9 @@ const docTemplate = `{
         },
         "giiku-camp_internal_usecase_request.RefreshTokenReq": {
             "type": "object",
+            "required": [
+                "refresh_token"
+            ],
             "properties": {
                 "refresh_token": {
                     "type": "string"
@@ -191,6 +194,10 @@ const docTemplate = `{
         },
         "giiku-camp_internal_usecase_request.SignInReq": {
             "type": "object",
+            "required": [
+                "email",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -202,6 +209,11 @@ const docTemplate = `{
         },
         "giiku-camp_internal_usecase_request.SignUpReq": {
             "type": "object",
+            "required": [
+                "email",
+                "name",
+                "password"
+            ],
             "properties": {
                 "email": {
                     "type": "string"
@@ -218,15 +230,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "object",
-                    "properties": {
-                        "access_token": {
-                            "type": "string"
-                        },
-                        "refresh_token": {
-                            "type": "string"
-                        }
-                    }
+                    "$ref": "#/definitions/giiku-camp_internal_usecase_response.TokenRes"
                 }
             }
         },
@@ -234,15 +238,7 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "object",
-                    "properties": {
-                        "access_token": {
-                            "type": "string"
-                        },
-                        "refresh_token": {
-                            "type": "string"
-                        }
-                    }
+                    "$ref": "#/definitions/giiku-camp_internal_usecase_response.TokenRes"
                 },
                 "user": {
                     "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserRes"
@@ -253,18 +249,21 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "object",
-                    "properties": {
-                        "access_token": {
-                            "type": "string"
-                        },
-                        "refresh_token": {
-                            "type": "string"
-                        }
-                    }
+                    "$ref": "#/definitions/giiku-camp_internal_usecase_response.TokenRes"
                 },
                 "user": {
                     "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserRes"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.TokenRes": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
                 }
             }
         },
@@ -275,6 +274,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "email": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "name": {

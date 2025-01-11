@@ -6,6 +6,7 @@ import (
 )
 
 type UserRes struct {
+	ID        string    `json:"id"`
 	Email     string    `json:"email"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"created_at"`
@@ -14,6 +15,7 @@ type UserRes struct {
 
 func NewUserRes(user *entity.User) (*UserRes, error) {
 	return &UserRes{
+		ID:        user.ID,
 		Email:     user.Email,
 		Name:      user.Name,
 		CreatedAt: user.CreatedAt,
