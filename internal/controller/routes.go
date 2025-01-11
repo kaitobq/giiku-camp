@@ -35,4 +35,9 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, middleware *middleware.Middle
 	authenticated := v1.Group("/authenticated")
 	authenticated.Use(middleware.API.Authenticate())
 	authenticated.GET("/ping", Ping)
+
+	user := authenticated.Group("/user")
+	{
+		user.GET("", userCtrl.GetMe)
+	}
 }

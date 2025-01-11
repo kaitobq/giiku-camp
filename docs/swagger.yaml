@@ -170,6 +170,27 @@ paths:
       summary: ユーザー登録
       tags:
       - User
+  /api/v1/authenticated/user:
+    get:
+      consumes:
+      - application/json
+      description: ユーザー情報取得
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User details
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: ユーザー情報取得
+      tags:
+      - User
   /ping:
     get:
       description: Returns "pong" if server is working

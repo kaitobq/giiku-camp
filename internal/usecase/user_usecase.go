@@ -3,6 +3,7 @@ package usecase
 import (
 	"giiku-camp/internal/domain/entity"
 	"giiku-camp/internal/domain/repository"
+	"giiku-camp/internal/domain/xcontext"
 	"giiku-camp/internal/infra/logging"
 	"giiku-camp/internal/usecase/request"
 	"giiku-camp/internal/usecase/response"
@@ -135,4 +136,9 @@ func (u *userUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) 
 	}
 
 	return response.NewRefreshTokenRes(accessToken, refreshToken)
+}
+
+func (u *userUsecase) GetMe(c *gin.Context) (*response.UserRes, error) {
+	user := xcontext.User(c)
+	return response.NewUserRes(user)
 }

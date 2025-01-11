@@ -9,7 +9,7 @@ import (
 	"giiku-camp/internal/controller/render"
 	"giiku-camp/internal/domain/entity"
 	"giiku-camp/internal/infra/logging"
-	"giiku-camp/internal/mock/usecase"
+	mock_usecase "giiku-camp/internal/mock/usecase"
 	"giiku-camp/internal/usecase/request"
 	"giiku-camp/internal/usecase/response"
 	"io"
@@ -26,7 +26,7 @@ import (
 )
 
 // setupRouter はモックされた usecase を使用して Gin エンジンを設定します。
-func setupRouter(userUsecaseMock *usecase.MockUserUsecase) *gin.Engine {
+func setupRouter(userUsecaseMock *mock_usecase.MockUserUsecase) *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	router := gin.Default()
 
@@ -50,7 +50,7 @@ func TestUserCtrl_SignUp(t *testing.T) {
 	tests := []struct {
 		name               string
 		inputBody          request.SignUpReq
-		mockSetup          func(*usecase.MockUserUsecase)
+		mockSetup          func(*mock_usecase.MockUserUsecase)
 		expectedStatusCode int
 		expectedResponse   interface{}
 	}{
@@ -61,7 +61,7 @@ func TestUserCtrl_SignUp(t *testing.T) {
 				Email:    "test@example.com",
 				Password: "password123",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignUp(gomock.Any(), gomock.Eq(request.SignUpReq{
 						Name:     "Test User",
@@ -102,7 +102,7 @@ func TestUserCtrl_SignUp(t *testing.T) {
 				Email:    "invalid-email",
 				Password: "password",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignUp(gomock.Any(), gomock.Eq(request.SignUpReq{
 						Name:     "Test User",
@@ -121,7 +121,7 @@ func TestUserCtrl_SignUp(t *testing.T) {
 				Email:    "test@example.com",
 				Password: "password123",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignUp(gomock.Any(), gomock.Eq(request.SignUpReq{
 						Name:     "Test User",
@@ -144,7 +144,7 @@ func TestUserCtrl_SignUp(t *testing.T) {
 				Email:    "test@example.com",
 				Password: "password123",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignUp(gomock.Any(), gomock.Eq(request.SignUpReq{
 						Name:     "Test User",
@@ -172,7 +172,7 @@ func TestUserCtrl_SignUp(t *testing.T) {
 			defer ctrl.Finish()
 
 			// モックの生成
-			userUsecaseMock := usecase.NewMockUserUsecase(ctrl)
+			userUsecaseMock := mock_usecase.NewMockUserUsecase(ctrl)
 
 			// モックの設定
 			tc.mockSetup(userUsecaseMock)
@@ -224,7 +224,7 @@ func TestUserCtrl_SignIn(t *testing.T) {
 	tests := []struct {
 		name               string
 		inputBody          request.SignInReq
-		mockSetup          func(*usecase.MockUserUsecase)
+		mockSetup          func(*mock_usecase.MockUserUsecase)
 		expectedStatusCode int
 		expectedResponse   interface{}
 	}{
@@ -234,7 +234,7 @@ func TestUserCtrl_SignIn(t *testing.T) {
 				Email:    "test@example.com",
 				Password: "password",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignIn(gomock.Any(), gomock.Eq(request.SignInReq{
 						Email:    "test@example.com",
@@ -273,7 +273,7 @@ func TestUserCtrl_SignIn(t *testing.T) {
 				Email:    "test@example.com",
 				Password: "password",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignIn(gomock.Any(), gomock.Eq(request.SignInReq{
 						Email:    "test@example.com",
@@ -294,7 +294,7 @@ func TestUserCtrl_SignIn(t *testing.T) {
 				Email:    "test@example.com",
 				Password: "wrongpassword",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignIn(gomock.Any(), gomock.Eq(request.SignInReq{
 						Email:    "test@example.com",
@@ -315,7 +315,7 @@ func TestUserCtrl_SignIn(t *testing.T) {
 				Email:    "test@example.com",
 				Password: "password",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					SignIn(gomock.Any(), gomock.Eq(request.SignInReq{
 						Email:    "test@example.com",
@@ -342,7 +342,7 @@ func TestUserCtrl_SignIn(t *testing.T) {
 			defer ctrl.Finish()
 
 			// モックの生成
-			userUsecaseMock := usecase.NewMockUserUsecase(ctrl)
+			userUsecaseMock := mock_usecase.NewMockUserUsecase(ctrl)
 
 			// モックの設定
 			tc.mockSetup(userUsecaseMock)
@@ -394,7 +394,7 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 	tests := []struct {
 		name               string
 		inputBody          request.RefreshTokenReq
-		mockSetup          func(*usecase.MockUserUsecase)
+		mockSetup          func(*mock_usecase.MockUserUsecase)
 		expectedStatusCode int
 		expectedResponse   interface{}
 	}{
@@ -403,7 +403,7 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 			inputBody: request.RefreshTokenReq{
 				RefreshToken: "refresh-token",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					RefreshToken(gomock.Any(), gomock.Eq(request.RefreshTokenReq{
 						RefreshToken: "refresh-token",
@@ -428,7 +428,7 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 			inputBody: request.RefreshTokenReq{
 				RefreshToken: "invalid-refresh-token",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					RefreshToken(gomock.Any(), gomock.Eq(request.RefreshTokenReq{
 						RefreshToken: "invalid-refresh-token",
@@ -447,7 +447,7 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 			inputBody: request.RefreshTokenReq{
 				RefreshToken: "invalid-refresh-token",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					RefreshToken(gomock.Any(), gomock.Eq(request.RefreshTokenReq{
 						RefreshToken: "invalid-refresh-token",
@@ -466,7 +466,7 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 			inputBody: request.RefreshTokenReq{
 				RefreshToken: "refresh-token",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					RefreshToken(gomock.Any(), gomock.Eq(request.RefreshTokenReq{
 						RefreshToken: "refresh-token",
@@ -485,7 +485,7 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 			inputBody: request.RefreshTokenReq{
 				RefreshToken: "refresh-token",
 			},
-			mockSetup: func(mock *usecase.MockUserUsecase) {
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
 				mock.EXPECT().
 					RefreshToken(gomock.Any(), gomock.Eq(request.RefreshTokenReq{
 						RefreshToken: "refresh-token",
@@ -511,7 +511,7 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 			defer ctrl.Finish()
 
 			// モックの生成
-			userUsecaseMock := usecase.NewMockUserUsecase(ctrl)
+			userUsecaseMock := mock_usecase.NewMockUserUsecase(ctrl)
 
 			// モックの設定
 			tc.mockSetup(userUsecaseMock)

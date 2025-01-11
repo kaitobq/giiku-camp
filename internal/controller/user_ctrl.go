@@ -130,3 +130,24 @@ func (ct *UserCtrl) RefreshToken(c *gin.Context) {
 
 	render.JSON(c, res)
 }
+
+// GetMe godoc
+// @Summary ユーザー情報取得
+// @Description ユーザー情報取得
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} response.UserRes "User details"
+// @Failure 400 {object} render.Error "Bad request"
+// @Router /api/v1/authenticated/user [get]
+func (ct *UserCtrl) GetMe(c *gin.Context) {
+	res, err := ct.UserUsecase.GetMe(c)
+	if err != nil {
+		logging.Errorf(c, "GetMe %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(c, res)
+}
