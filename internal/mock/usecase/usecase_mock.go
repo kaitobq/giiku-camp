@@ -101,3 +101,18 @@ func (mr *MockUserUsecaseMockRecorder) SignUp(c, req any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SignUp", reflect.TypeOf((*MockUserUsecase)(nil).SignUp), c, req)
 }
+
+// UpdateMe mocks base method.
+func (m *MockUserUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateMe", c, req)
+	ret0, _ := ret[0].(*response.UserRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// UpdateMe indicates an expected call of UpdateMe.
+func (mr *MockUserUsecaseMockRecorder) UpdateMe(c, req any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMe", reflect.TypeOf((*MockUserUsecase)(nil).UpdateMe), c, req)
+}

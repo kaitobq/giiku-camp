@@ -1,4 +1,4 @@
-.PHONY: wire, up, down, swag, test, test-coverage
+.PHONY: wire, up, down, swag, test, test-coverage, mock
 wire:
 	cd internal/app && go run -mod=mod github.com/google/wire/cmd/wire
 up:
@@ -19,3 +19,5 @@ cover:
 	go tool cover -html=coverage/coverage.out -o coverage/coverage.html && \
 	go tool cover -func=coverage/coverage.out > coverage/coverage.txt
 	open coverage/coverage.html
+mock:
+	mockgen -source=internal/usecase/usecase.go -destination=internal/mock/usecase/usecase_mock.go

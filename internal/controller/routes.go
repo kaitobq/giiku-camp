@@ -39,5 +39,6 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, middleware *middleware.Middle
 	user := authenticated.Group("/user")
 	{
 		user.GET("", userCtrl.GetMe)
+		user.PUT("", userCtrl.UpdateMe)
 	}
 }

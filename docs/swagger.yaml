@@ -39,6 +39,11 @@ definitions:
     - name
     - password
     type: object
+  giiku-camp_internal_usecase_request.UpdateMeReq:
+    properties:
+      name:
+        type: string
+    type: object
   giiku-camp_internal_usecase_response.RefreshTokenRes:
     properties:
       token:
@@ -189,6 +194,33 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: ユーザー情報取得
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: ユーザー情報更新
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.UpdateMeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User updated
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      security:
+      - ApiKeyAuth: []
+      summary: ユーザー情報更新
       tags:
       - User
   /ping:

@@ -40,3 +40,15 @@ func NewRefreshTokenReq(c *gin.Context) (*RefreshTokenReq, error) {
 	}
 	return &req, nil
 }
+
+type UpdateMeReq struct {
+	Name string `json:"name"`
+}
+
+func NewUpdateMeReq(c *gin.Context) (*UpdateMeReq, error) {
+	var req UpdateMeReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}

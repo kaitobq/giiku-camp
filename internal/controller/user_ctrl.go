@@ -151,3 +151,32 @@ func (ct *UserCtrl) GetMe(c *gin.Context) {
 
 	render.JSON(c, res)
 }
+
+// UpdateMe godoc
+// @Summary ユーザー情報更新
+// @Description ユーザー情報更新
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param user body request.UpdateMeReq true "User details"
+// @Success 200 {object} response.UserRes "User updated"
+// @Failure 400 {object} render.Error "Bad request"
+// @Router /api/v1/authenticated/user [put]
+func (ct *UserCtrl) UpdateMe(c *gin.Context) {
+	req, err := request.NewUpdateMeReq(c)
+	if err != nil {
+		logging.Errorf(c, "NewUpdateMeReq %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	res, err := ct.UserUsecase.UpdateMe(c, *req)
+	if err != nil {
+		logging.Errorf(c, "UpdateMe %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(c, res)
+}

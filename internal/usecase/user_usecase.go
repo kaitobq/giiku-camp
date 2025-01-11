@@ -142,3 +142,16 @@ func (u *userUsecase) GetMe(c *gin.Context) (*response.UserRes, error) {
 	user := xcontext.User(c)
 	return response.NewUserRes(user)
 }
+
+func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error) {
+	user := xcontext.User(c)
+	user.Name = req.Name
+
+	ctx := c.Request.Context()
+	if err := u.userRepo.Update(ctx, user); err != nil {
+		logging.Errorf(c, "Update %v", err)
+		return nil, err
+	}
+
+	return response.NewUserRes(user)
+}
