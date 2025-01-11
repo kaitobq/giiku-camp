@@ -3,9 +3,9 @@ package request
 import "github.com/gin-gonic/gin"
 
 type SignUpReq struct {
-	Email    string `json:"email"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
+	Email    string `json:"email" binding:"required"`
+	Name     string `json:"name" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 func NewSignUpReq(c *gin.Context) (*SignUpReq, error) {
@@ -17,8 +17,8 @@ func NewSignUpReq(c *gin.Context) (*SignUpReq, error) {
 }
 
 type SignInReq struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 func NewSignInReq(c *gin.Context) (*SignInReq, error) {
@@ -30,7 +30,7 @@ func NewSignInReq(c *gin.Context) (*SignInReq, error) {
 }
 
 type RefreshTokenReq struct {
-	RefreshToken string `json:"refresh_token"`
+	RefreshToken string `json:"refresh_token" binding:"required"`
 }
 
 func NewRefreshTokenReq(c *gin.Context) (*RefreshTokenReq, error) {
