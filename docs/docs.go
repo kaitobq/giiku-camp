@@ -295,10 +295,22 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "github_id": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                },
+                "qiita_id": {
+                    "type": "string"
+                },
+                "x_id": {
+                    "type": "string"
+                },
+                "zenn_id": {
                     "type": "string"
                 }
             }
@@ -306,7 +318,19 @@ const docTemplate = `{
         "giiku-camp_internal_usecase_request.UpdateMeReq": {
             "type": "object",
             "properties": {
+                "github_id": {
+                    "type": "string"
+                },
                 "name": {
+                    "type": "string"
+                },
+                "qiita_id": {
+                    "type": "string"
+                },
+                "x_id": {
+                    "type": "string"
+                },
+                "zenn_id": {
                     "type": "string"
                 }
             }
@@ -361,13 +385,25 @@ const docTemplate = `{
                 "email": {
                     "type": "string"
                 },
+                "github_id": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
                 },
+                "qiita_id": {
+                    "type": "string"
+                },
                 "updated_at": {
+                    "type": "string"
+                },
+                "x_id": {
+                    "type": "string"
+                },
+                "zenn_id": {
                     "type": "string"
                 }
             }

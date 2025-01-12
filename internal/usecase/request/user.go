@@ -6,6 +6,10 @@ type SignUpReq struct {
 	Email    string `json:"email" binding:"required"`
 	Name     string `json:"name" binding:"required"`
 	Password string `json:"password" binding:"required"`
+	GitHubID string `json:"github_id" binding:"omitempty"`
+	QiitaID  string `json:"qiita_id" binding:"omitempty"`
+	ZennID   string `json:"zenn_id" binding:"omitempty"`
+	XID      string `json:"x_id" binding:"omitempty"`
 }
 
 func NewSignUpReq(c *gin.Context) (*SignUpReq, error) {
@@ -42,7 +46,11 @@ func NewRefreshTokenReq(c *gin.Context) (*RefreshTokenReq, error) {
 }
 
 type UpdateMeReq struct {
-	Name string `json:"name"`
+	Name     string `json:"name" binding:"omitempty"`
+	GitHubID string `json:"github_id" binding:"omitempty"`
+	QiitaID  string `json:"qiita_id" binding:"omitempty"`
+	ZennID   string `json:"zenn_id" binding:"omitempty"`
+	XID      string `json:"x_id" binding:"omitempty"`
 }
 
 func NewUpdateMeReq(c *gin.Context) (*UpdateMeReq, error) {

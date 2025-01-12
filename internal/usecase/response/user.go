@@ -9,6 +9,10 @@ type UserRes struct {
 	ID        string    `json:"id"`
 	Email     string    `json:"email"`
 	Name      string    `json:"name"`
+	GitHubID  string    `json:"github_id"`
+	QiitaID   string    `json:"qiita_id"`
+	ZennID    string    `json:"zenn_id"`
+	XID       string    `json:"x_id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -18,6 +22,10 @@ func NewUserRes(user *entity.User) (*UserRes, error) {
 		ID:        user.ID,
 		Email:     user.Email,
 		Name:      user.Name,
+		GitHubID:  user.GitHubID,
+		QiitaID:   user.QiitaID,
+		ZennID:    user.ZennID,
+		XID:       user.XID,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}, nil

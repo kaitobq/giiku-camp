@@ -10,17 +10,22 @@ import (
 func TestNewUser(t *testing.T) {
 	longPassword := "a" + string(make([]byte, 72))
 	tests := []struct {
-		name     string
-		userName string
-		email    string
-		password string
-		wantErr  error
+		name                           string
+		userName                       string
+		email                          string
+		password                       string
+		gitHubID, qiitaID, zennID, xID *string
+		wantErr                        error
 	}{
 		{
 			name:     "正常系",
 			userName: "test user",
 			email:    "test@example.com",
 			password: "password123",
+			gitHubID: func(s string) *string { return &s }("hoge"),
+			qiitaID:  func(s string) *string { return &s }("hoge"),
+			zennID:   func(s string) *string { return &s }("hoge"),
+			xID:      func(s string) *string { return &s }("hoge"),
 			wantErr:  nil,
 		},
 		{
@@ -41,7 +46,7 @@ func TestNewUser(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := NewUser(tt.userName, tt.email, tt.password)
+			got, err := NewUser(tt.userName, tt.email, tt.password, tt.gitHubID, tt.qiitaID, tt.zennID, tt.xID)
 			if err != tt.wantErr {
 				t.Errorf("NewUser() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -66,7 +71,7 @@ func TestNewUser(t *testing.T) {
 
 func TestUser_VerifyPassword(t *testing.T) {
 	password := "password123"
-	user, err := NewUser("test user", "test@example.com", password)
+	user, err := NewUser("test user", "test@example.com", password, nil, nil, nil, nil)
 	if err != nil {
 		t.Fatalf("Failed to create test user: %v", err)
 	}
@@ -98,7 +103,7 @@ func TestUser_VerifyPassword(t *testing.T) {
 }
 
 func TestUser_HidePassword(t *testing.T) {
-	user, err := NewUser("test user", "test@example.com", "password123")
+	user, err := NewUser("test user", "test@example.com", "password123", nil, nil, nil, nil)
 	if err != nil {
 		t.Fatalf("Failed to create test user: %v", err)
 	}
@@ -113,7 +118,7 @@ func TestUser_HidePassword(t *testing.T) {
 }
 
 func TestUser_UpdateUpdatedAt(t *testing.T) {
-	user, err := NewUser("test user", "test@example.com", "password123")
+	user, err := NewUser("test user", "test@example.com", "password123", nil, nil, nil, nil)
 	if err != nil {
 		t.Fatalf("Failed to create test user: %v", err)
 	}
@@ -128,7 +133,7 @@ func TestUser_UpdateUpdatedAt(t *testing.T) {
 }
 
 func TestUser_UpdateCreatedAt(t *testing.T) {
-	user, err := NewUser("test user", "test@example.com", "password123")
+	user, err := NewUser("test user", "test@example.com", "password123", nil, nil, nil, nil)
 	if err != nil {
 		t.Fatalf("Failed to create test user: %v", err)
 	}
@@ -143,7 +148,7 @@ func TestUser_UpdateCreatedAt(t *testing.T) {
 }
 
 func TestUser_IncrementTokenVersion(t *testing.T) {
-	user, err := NewUser("test user", "test@example.com", "password123")
+	user, err := NewUser("test user", "test@example.com", "password123", nil, nil, nil, nil)
 	if err != nil {
 		t.Fatalf("Failed to create test user: %v", err)
 	}

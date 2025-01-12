@@ -165,6 +165,7 @@ func (ct *UserCtrl) GetMe(c *gin.Context) {
 // @Router /api/v1/authenticated/user [put]
 func (ct *UserCtrl) UpdateMe(c *gin.Context) {
 	req, err := request.NewUpdateMeReq(c)
+	logging.Infof(c, "UpdateMe %v", req)
 	if err != nil {
 		logging.Errorf(c, "NewUpdateMeReq %v", err)
 		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)

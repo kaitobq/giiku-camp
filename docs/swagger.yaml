@@ -30,9 +30,17 @@ definitions:
     properties:
       email:
         type: string
+      github_id:
+        type: string
       name:
         type: string
       password:
+        type: string
+      qiita_id:
+        type: string
+      x_id:
+        type: string
+      zenn_id:
         type: string
     required:
     - email
@@ -41,7 +49,15 @@ definitions:
     type: object
   giiku-camp_internal_usecase_request.UpdateMeReq:
     properties:
+      github_id:
+        type: string
       name:
+        type: string
+      qiita_id:
+        type: string
+      x_id:
+        type: string
+      zenn_id:
         type: string
     type: object
   giiku-camp_internal_usecase_response.RefreshTokenRes:
@@ -76,11 +92,19 @@ definitions:
         type: string
       email:
         type: string
+      github_id:
+        type: string
       id:
         type: string
       name:
         type: string
+      qiita_id:
+        type: string
       updated_at:
+        type: string
+      x_id:
+        type: string
+      zenn_id:
         type: string
     type: object
 host: localhost:8080

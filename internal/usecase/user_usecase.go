@@ -21,7 +21,7 @@ func NewUserUsecase(userRepo repository.UserRepo) UserUsecase {
 }
 
 func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
-	user, err := entity.NewUser(req.Name, req.Email, req.Password)
+	user, err := entity.NewUser(req.Name, req.Email, req.Password, &req.GitHubID, &req.QiitaID, &req.ZennID, &req.XID)
 	if err != nil {
 		switch err {
 		case entity.ErrEmailInvalid:
@@ -145,7 +145,30 @@ func (u *userUsecase) GetMe(c *gin.Context) (*response.UserRes, error) {
 
 func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error) {
 	user := xcontext.User(c)
-	user.Name = req.Name
+	updates := map[string]*string{
+		"Name":     &req.Name,
+		"GitHubID": &req.GitHubID,
+		"QiitaID":  &req.QiitaID,
+		"ZennID":   &req.ZennID,
+		"XID":      &req.XID,
+	}
+
+	for field, value := range updates {
+		if isChanged(*value) {
+			switch field {
+			case "Name":
+				user.Name = *value
+			case "GitHubID":
+				user.GitHubID = *value
+			case "QiitaID":
+				user.QiitaID = *value
+			case "ZennID":
+				user.ZennID = *value
+			case "XID":
+				user.XID = *value
+			}
+		}
+	}
 
 	ctx := c.Request.Context()
 	if err := u.userRepo.Update(ctx, user); err != nil {
@@ -154,4 +177,8 @@ func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*respon
 	}
 
 	return response.NewUserRes(user)
+}
+
+func isChanged(s string) bool {
+	return s != ""
 }

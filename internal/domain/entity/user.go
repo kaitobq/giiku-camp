@@ -15,6 +15,10 @@ type User struct {
 	Email        string
 	Password     string
 	TokenVersion int
+	GitHubID     string
+	QiitaID      string
+	ZennID       string
+	XID          string
 	CreatedAt    time.Time
 	UpdatedAt    time.Time
 }
@@ -39,7 +43,7 @@ var (
 	CodeTokenInValid         = 10006
 )
 
-func NewUser(userName, email, password string) (*User, error) {
+func NewUser(userName, email, password string, gitHubID, qiitaID, zennID, xID *string) (*User, error) {
 	if !isValidEmail(email) {
 		return nil, ErrEmailInvalid
 	}
@@ -55,6 +59,10 @@ func NewUser(userName, email, password string) (*User, error) {
 		Email:        email,
 		Password:     hashedPassword,
 		TokenVersion: 1,
+		GitHubID:     safeDereference(gitHubID),
+		QiitaID:      safeDereference(qiitaID),
+		ZennID:       safeDereference(zennID),
+		XID:          safeDereference(xID),
 	}, nil
 }
 
@@ -107,4 +115,11 @@ var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-
 
 func isValidEmail(email string) bool {
 	return emailRegex.MatchString(email)
+}
+
+func safeDereference(s *string) string {
+	if s != nil {
+		return *s
+	}
+	return ""
 }
