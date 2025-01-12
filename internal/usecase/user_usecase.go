@@ -131,6 +131,7 @@ func (u *userUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) 
 		logging.Errorf(c, "RefreshTokens %v", err)
 		return nil, err
 	}
+	user.IncrementTokenVersion()
 	if err = u.userRepo.Update(ctx, user); err != nil {
 		logging.Errorf(c, "Update %v", err)
 		return nil, err

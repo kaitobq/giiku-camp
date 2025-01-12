@@ -72,10 +72,6 @@ func RefreshTokens(user entity.User, tokenStr string) (string, string, error) {
 		return "", "", entity.ErrFailedToParseClaims
 	}
 	tokenVersion, _ := claims["token_version"].(float64)
-	if !ok {
-		return "", "", entity.ErrFailedToParseClaims
-	}
-
 	if int(tokenVersion) != user.TokenVersion {
 		return "", "", entity.ErrTokenVersionMismatch
 	}
@@ -84,7 +80,6 @@ func RefreshTokens(user entity.User, tokenStr string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	user.IncrementTokenVersion()
 	refreshToken, err := GenerateRefreshToken(user.ID, user.TokenVersion)
 	if err != nil {
 		return "", "", err
