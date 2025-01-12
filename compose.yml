@@ -11,3 +11,20 @@ services:
       watch:
         - action: rebuild
           path: .
+    depends_on:
+      - datastore
+  datastore:
+    image: "gcr.io/google.com/cloudsdktool/cloud-sdk:latest"
+    platform: linux/amd64
+    environment:
+      - CLOUDSDK_CORE_PROJECT=periodapp
+    volumes:
+      - datastore_data:/opt/datastore/data
+    ports:
+      - 8059:8059
+    command: [
+      "gcloud", "--quiet", "beta", "emulators" ,"datastore", "start", 
+      "--host-port=0.0.0.0:8059", "--data-dir=/opt/datastore/data", "--use-firestore-in-datastore-mode"
+    ]
+volumes:
+  datastore_data:

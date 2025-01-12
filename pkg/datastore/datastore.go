@@ -11,25 +11,23 @@ import (
 func New() *datastore.Client {
 	ctx := context.Background()
 
-	path := os.Getenv("GOOGLE_APPLICATION_CREDENTIALS")
 	projectName := os.Getenv("GOOGLE_CLOUD_PROJECT")
-	var dsClient *datastore.Client
-	var err error
-
-	if path != "" {
-		// ローカル環境や開発環境では JSON を使う
-		sa := option.WithCredentialsFile(path)
-		dsClient, err = datastore.NewClient(ctx, projectName, sa)
-		if err != nil {
-			panic(err)
-		}
-	} else {
-		// 本番環境ではデフォルト認証を使用
-		dsClient, err = datastore.NewClient(ctx, projectName)
-		if err != nil {
-			panic(err)
-		}
+	if projectName == "" {
+		panic("GOOGLE_CLOUD_PROJECT environment variable is not set")
 	}
 
+	opts := []option.ClientOption{}
+	if emulatorHost := os.Getenv("DATASTORE_EMULATOR_HOST"); emulatorHost != "" {
+		// エミュレーターを使用する場合のオプションを追加
+		opts = append(opts,
+			option.WithEndpoint(emulatorHost),
+			option.WithoutAuthentication(), // 認証をパス
+		)
+	}
+
+	dsClient, err := datastore.NewClient(ctx, projectName, opts...)
+	if err != nil {
+		panic(err)
+	}
 	return dsClient
 }
