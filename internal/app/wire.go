@@ -21,10 +21,13 @@ func New() (*container.App, error) {
 		config.New,
 
 		repository.NewUserRepo,
+		repository.NewUserCrossingRepo,
 
 		usecase.NewUserUsecase,
+		usecase.NewUserCrossingUsecase,
 
 		controller.NewUserCtrl,
+		controller.NewUserCrossingCtrl,
 
 		middleware.NewMiddleware,
 
