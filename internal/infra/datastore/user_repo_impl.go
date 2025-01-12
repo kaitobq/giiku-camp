@@ -17,11 +17,6 @@ func NewUserRepo(db *datastore.Client) repository.UserRepo {
 	return &userRepo{db: db}
 }
 
-func (r *userRepo) Create(ctx context.Context, user *entity.User) error {
-
-	return nil
-}
-
 func (r *userRepo) FindByEmail(ctx context.Context, email string) (*entity.User, error) {
 	q := datastore.NewQuery("User").FilterField("Email", "=", email).Limit(1)
 	it := r.db.Run(ctx, q)
