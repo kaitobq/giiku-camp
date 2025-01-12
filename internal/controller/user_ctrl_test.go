@@ -41,6 +41,12 @@ func setupRouter(userUsecaseMock *mock_usecase.MockUserUsecase) *gin.Engine {
 		r.POST("/refresh", userCtrl.RefreshToken)
 	}
 
+	authenticated := router.Group("/api/v1/authenticated")
+	{
+		authenticated.GET("/user", userCtrl.GetMe)
+		authenticated.PUT("/user", userCtrl.UpdateMe)
+	}
+
 	return router
 }
 
@@ -541,6 +547,240 @@ func TestUserCtrl_RefreshToken(t *testing.T) {
 				var res response.RefreshTokenRes
 				err := json.Unmarshal(w.Body.Bytes(), &res)
 				assert.NoError(t, err)
+
+				assert.Equal(t, tc.expectedResponse, res)
+			} else {
+				var res render.Error
+				err := json.Unmarshal(w.Body.Bytes(), &res)
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResponse, res)
+			}
+		})
+	}
+}
+
+func TestUserCtrl_GetMe(t *testing.T) {
+	logging.Init()
+
+	tests := []struct {
+		name               string
+		mockSetup          func(*mock_usecase.MockUserUsecase)
+		expectedStatusCode int
+		expectedResponse   interface{}
+	}{
+		{
+			name: "正常系: ユーザー情報取得成功",
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
+				mock.EXPECT().
+					GetMe(gomock.Any()).
+					Return(&response.UserRes{
+						Name:      "Test User",
+						Email:     "test@example.com",
+						CreatedAt: time.Now(),
+						UpdatedAt: time.Now(),
+					}, nil)
+			},
+			expectedStatusCode: http.StatusOK,
+			expectedResponse: response.UserRes{
+				Name:      "Test User",
+				Email:     "test@example.com",
+				CreatedAt: time.Time{},
+				UpdatedAt: time.Time{},
+			},
+		},
+		{
+			name: "異常系: 内部エラー",
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
+				mock.EXPECT().
+					GetMe(gomock.Any()).
+					Return((*response.UserRes)(nil), errors.New("internal server error"))
+			},
+			expectedStatusCode: http.StatusInternalServerError,
+			expectedResponse: render.Error{
+				Message: "internal server error",
+				Status:  http.StatusInternalServerError,
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// ロガーを手動で設定（テスト用にログ出力を無視）
+			logger := slog.New(slog.NewTextHandler(io.Discard, nil))
+			slog.SetDefault(logger)
+
+			// gomock コントローラの作成
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			// モックの生成
+			userUsecaseMock := mock_usecase.NewMockUserUsecase(ctrl)
+
+			// モックの設定
+			tc.mockSetup(userUsecaseMock)
+
+			// ルーターのセットアップ
+			router := setupRouter(userUsecaseMock)
+
+			// テストリクエストの作成
+			req, err := http.NewRequest(http.MethodGet, "/api/v1/authenticated/user", nil)
+			assert.NoError(t, err)
+
+			// レスポンスの記録
+			w := httptest.NewRecorder()
+
+			// リクエストの実行
+			router.ServeHTTP(w, req)
+
+			// レスポンスの検証
+			assert.Equal(t, tc.expectedStatusCode, w.Code)
+
+			if w.Code == http.StatusOK {
+				var res response.UserRes
+				err := json.Unmarshal(w.Body.Bytes(), &res)
+				assert.NoError(t, err)
+
+				// CreatedAtとUpdatedAtは動的な値なので、比較をスキップ
+				res.CreatedAt = time.Time{}
+				res.UpdatedAt = time.Time{}
+
+				assert.Equal(t, tc.expectedResponse, res)
+			} else {
+				var res render.Error
+				err := json.Unmarshal(w.Body.Bytes(), &res)
+				assert.NoError(t, err)
+				assert.Equal(t, tc.expectedResponse, res)
+			}
+		})
+	}
+}
+
+func TestUserCtrl_UpdateMe(t *testing.T) {
+	logging.Init()
+
+	tests := []struct {
+		name               string
+		inputBody          request.UpdateMeReq
+		mockSetup          func(*mock_usecase.MockUserUsecase)
+		expectedStatusCode int
+		expectedResponse   interface{}
+	}{
+		{
+			name: "正常系: ユーザー情報更新成功",
+			inputBody: request.UpdateMeReq{
+				Name:     "New Name",
+				GitHubID: "new-github-id",
+				QiitaID:  "new-qiita-id",
+				ZennID:   "new-zenn-id",
+				XID:      "new-x-id",
+			},
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
+				mock.EXPECT().
+					UpdateMe(gomock.Any(), gomock.Eq(request.UpdateMeReq{
+						Name:     "New Name",
+						GitHubID: "new-github-id",
+						QiitaID:  "new-qiita-id",
+						ZennID:   "new-zenn-id",
+						XID:      "new-x-id",
+					})).
+					Return(&response.UserRes{
+						ID:        "user-id",
+						Name:      "New Name",
+						Email:     "test@example.com",
+						GitHubID:  "new-github-id",
+						QiitaID:   "new-qiita-id",
+						ZennID:    "new-zenn-id",
+						XID:       "new-x-id",
+						CreatedAt: time.Now(),
+						UpdatedAt: time.Now(),
+					}, nil)
+			},
+			expectedStatusCode: http.StatusOK,
+			expectedResponse: response.UserRes{
+				ID:        "user-id",
+				Name:      "New Name",
+				Email:     "test@example.com",
+				GitHubID:  "new-github-id",
+				QiitaID:   "new-qiita-id",
+				ZennID:    "new-zenn-id",
+				XID:       "new-x-id",
+				CreatedAt: time.Time{},
+				UpdatedAt: time.Time{},
+			},
+		},
+		{
+			name: "異常系: 内部エラー",
+			inputBody: request.UpdateMeReq{
+				Name:     "New Name",
+				GitHubID: "new-github-id",
+				QiitaID:  "new-qiita-id",
+				ZennID:   "new-zenn-id",
+				XID:      "new-x-id",
+			},
+			mockSetup: func(mock *mock_usecase.MockUserUsecase) {
+				mock.EXPECT().
+					UpdateMe(gomock.Any(), gomock.Eq(request.UpdateMeReq{
+						Name:     "New Name",
+						GitHubID: "new-github-id",
+						QiitaID:  "new-qiita-id",
+						ZennID:   "new-zenn-id",
+						XID:      "new-x-id",
+					})).
+					Return((*response.UserRes)(nil), errors.New("internal server error"))
+			},
+			expectedStatusCode: http.StatusInternalServerError,
+			expectedResponse: render.Error{
+				Message: "internal server error",
+				Status:  http.StatusInternalServerError,
+			},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			// ロガーを手動で設定（テスト用にログ出力を無視）
+			logger := slog.New(slog.NewTextHandler(io.Discard, nil))
+			slog.SetDefault(logger)
+
+			// gomock コントローラの作成
+			ctrl := gomock.NewController(t)
+			defer ctrl.Finish()
+
+			// モックの生成
+			userUsecaseMock := mock_usecase.NewMockUserUsecase(ctrl)
+
+			// モックの設定
+			tc.mockSetup(userUsecaseMock)
+
+			// ルーターのセットアップ
+			router := setupRouter(userUsecaseMock)
+
+			// リクエストボディのエンコード
+			bodyBytes, err := json.Marshal(tc.inputBody)
+			assert.NoError(t, err)
+
+			// テストリクエストの作成
+			req, err := http.NewRequest(http.MethodPut, "/api/v1/authenticated/user", bytes.NewBuffer(bodyBytes))
+			assert.NoError(t, err)
+			req.Header.Set("Content-Type", "application/json")
+
+			// レスポンスの記録
+			w := httptest.NewRecorder()
+
+			// リクエストの実行
+			router.ServeHTTP(w, req)
+
+			// レスポンスの検証
+			assert.Equal(t, tc.expectedStatusCode, w.Code)
+
+			if w.Code == http.StatusOK {
+				var res response.UserRes
+				err := json.Unmarshal(w.Body.Bytes(), &res)
+				assert.NoError(t, err)
+
+				// CreatedAtとUpdatedAtは動的な値なので、比較をスキップ
+				res.CreatedAt = time.Time{}
+				res.UpdatedAt = time.Time{}
 
 				assert.Equal(t, tc.expectedResponse, res)
 			} else {
