@@ -19,7 +19,7 @@ func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "pong"})
 }
 
-func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, middleware *middleware.Middleware) {
+func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossingCtrl, middleware *middleware.Middleware) {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := r.Group("/api/v1")
