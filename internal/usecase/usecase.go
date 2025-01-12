@@ -14,3 +14,5 @@ type UserUsecase interface {
 	GetMe(c *gin.Context) (*response.UserRes, error)
 	UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error)
 }
+
+type UserCrossingUsecase interface{}
