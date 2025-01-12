@@ -9,3 +9,5 @@ type UserCrossingCtrl struct {
 func NewUserCrossingCtrl(userCrossingUsecase usecase.UserCrossingUsecase) UserCrossingCtrl {
 	return UserCrossingCtrl{UserCrossingUsecase: userCrossingUsecase}
 }
+
+// TODO: すれ違いAPIを実装する

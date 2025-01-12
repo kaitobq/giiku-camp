@@ -6,6 +6,7 @@ import (
 	"cloud.google.com/go/datastore"
 )
 
+// TODO: repository.UserCrossingRepoを継承する
 type userCrossingRepo struct {
 	db *datastore.Client
 }

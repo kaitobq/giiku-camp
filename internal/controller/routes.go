@@ -41,4 +41,9 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 		user.GET("", userCtrl.GetMe)
 		user.PUT("", userCtrl.UpdateMe)
 	}
+
+	_ = v1.Group("/crossing")
+	{
+		// TODO: すれ違いAPIのエンドポイントを追加する
+	}
 }
