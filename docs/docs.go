@@ -60,6 +60,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
                     }
                 }
             }
@@ -97,6 +103,12 @@ const docTemplate = `{
                     },
                     "400": {
                         "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
                         }
@@ -140,6 +152,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
                     }
                 }
             }
@@ -148,7 +166,7 @@ const docTemplate = `{
             "get": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "ユーザー情報取得",
@@ -174,13 +192,19 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
                     }
                 }
             },
             "put": {
                 "security": [
                     {
-                        "ApiKeyAuth": []
+                        "BearerAuth": []
                     }
                 ],
                 "description": "ユーザー情報更新",
@@ -217,6 +241,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
                         }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
                     }
                 }
             }
@@ -248,13 +278,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 0
                 },
                 "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "error message"
                 },
                 "status": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 400
                 }
             }
         },
@@ -265,7 +298,8 @@ const docTemplate = `{
             ],
             "properties": {
                 "refresh_token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzkyMzIwMzMsImlhdCI6MTczNjY0MDAzMywidG9rZW5fdmVyc2lvbiI6NiwidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.WJCX_65UJKX-DjUpr9TvbtXsE6ZyUH6NyCLNGwcMWR0"
                 }
             }
         },
@@ -277,10 +311,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone@example.com"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "password123"
                 }
             }
         },
@@ -293,25 +329,32 @@ const docTemplate = `{
             ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone@example.com"
                 },
                 "github_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "password123"
                 },
                 "qiita_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "x_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "zenn_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 }
             }
         },
@@ -319,19 +362,24 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "github_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "qiita_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "x_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "zenn_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 }
             }
         },
@@ -369,10 +417,12 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "access_token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzY2NDM2MzMsImlhdCI6MTczNjY0MDAzMywidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.QbduICi7TKkVnRckCJbTCYurvmBnXQlmclSm7BKsLxo"
                 },
                 "refresh_token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzkyMzIwMzMsImlhdCI6MTczNjY0MDAzMywidG9rZW5fdmVyc2lvbiI6NiwidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.WJCX_65UJKX-DjUpr9TvbtXsE6ZyUH6NyCLNGwcMWR0"
                 }
             }
         },
@@ -380,38 +430,49 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "created_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-01-10T16:45:40.876773Z"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone@example.com"
                 },
                 "github_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "3ee03add-bcd2-455f-9994-f7af846ce662"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "qiita_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "updated_at": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-01-12T00:21:57.251469Z"
                 },
                 "x_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 },
                 "zenn_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "someone"
                 }
             }
         }
     },
     "securityDefinitions": {
-        "BasicAuth": {
-            "type": "basic"
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

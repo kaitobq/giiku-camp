@@ -29,6 +29,7 @@ func NewUserCtrl(userUsecase usecase.UserUsecase) UserCtrl {
 // @Param user body request.SignUpReq true "User details"
 // @Success 200 {object} response.SignUpRes "User created"
 // @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
 // @Router /api/v1/auth/signup [post]
 func (ct *UserCtrl) SignUp(c *gin.Context) {
 	req, err := request.NewSignUpReq(c)
@@ -65,6 +66,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 // @Param user body request.SignInReq true "User details"
 // @Success 200 {object} response.SignInRes "User authenticated"
 // @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
 // @Router /api/v1/auth/signin [post]
 func (ct *UserCtrl) SignIn(c *gin.Context) {
 	req, err := request.NewSignInReq(c)
@@ -103,6 +105,7 @@ func (ct *UserCtrl) SignIn(c *gin.Context) {
 // @Param user body request.RefreshTokenReq true "Refresh token"
 // @Success 200 {object} response.RefreshTokenRes "Token refreshed"
 // @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
 // @Router /api/v1/auth/refresh [post]
 func (ct *UserCtrl) RefreshToken(c *gin.Context) {
 	req, err := request.NewRefreshTokenReq(c)
@@ -137,9 +140,10 @@ func (ct *UserCtrl) RefreshToken(c *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
+// @Security BearerAuth
 // @Success 200 {object} response.UserRes "User details"
 // @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
 // @Router /api/v1/authenticated/user [get]
 func (ct *UserCtrl) GetMe(c *gin.Context) {
 	res, err := ct.UserUsecase.GetMe(c)
@@ -158,10 +162,11 @@ func (ct *UserCtrl) GetMe(c *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
+// @Security BearerAuth
 // @Param user body request.UpdateMeReq true "User details"
 // @Success 200 {object} response.UserRes "User updated"
 // @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
 // @Router /api/v1/authenticated/user [put]
 func (ct *UserCtrl) UpdateMe(c *gin.Context) {
 	req, err := request.NewUpdateMeReq(c)

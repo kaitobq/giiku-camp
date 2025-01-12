@@ -6,15 +6,15 @@ import (
 )
 
 type UserRes struct {
-	ID        string    `json:"id"`
-	Email     string    `json:"email"`
-	Name      string    `json:"name"`
-	GitHubID  string    `json:"github_id"`
-	QiitaID   string    `json:"qiita_id"`
-	ZennID    string    `json:"zenn_id"`
-	XID       string    `json:"x_id"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID        string    `json:"id" example:"3ee03add-bcd2-455f-9994-f7af846ce662"`
+	Email     string    `json:"email" example:"someone@example.com"`
+	Name      string    `json:"name" example:"someone"`
+	GitHubID  string    `json:"github_id" example:"someone"`
+	QiitaID   string    `json:"qiita_id" example:"someone"`
+	ZennID    string    `json:"zenn_id" example:"someone"`
+	XID       string    `json:"x_id" example:"someone"`
+	CreatedAt time.Time `json:"created_at" example:"2025-01-10T16:45:40.876773Z"`
+	UpdatedAt time.Time `json:"updated_at" example:"2025-01-12T00:21:57.251469Z"`
 }
 
 func NewUserRes(user *entity.User) (*UserRes, error) {
@@ -32,8 +32,8 @@ func NewUserRes(user *entity.User) (*UserRes, error) {
 }
 
 type TokenRes struct {
-	AccessToken  string `json:"access_token"`
-	RefreshToken string `json:"refresh_token"`
+	AccessToken  string `json:"access_token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzY2NDM2MzMsImlhdCI6MTczNjY0MDAzMywidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.QbduICi7TKkVnRckCJbTCYurvmBnXQlmclSm7BKsLxo"`
+	RefreshToken string `json:"refresh_token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzkyMzIwMzMsImlhdCI6MTczNjY0MDAzMywidG9rZW5fdmVyc2lvbiI6NiwidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.WJCX_65UJKX-DjUpr9TvbtXsE6ZyUH6NyCLNGwcMWR0"`
 }
 
 type SignUpRes struct {

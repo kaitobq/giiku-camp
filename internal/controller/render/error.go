@@ -8,9 +8,9 @@ import (
 )
 
 type Error struct {
-	Message string `json:"message"`
-	Code    int    `json:"code"`
-	Status  int    `json:"status"`
+	Message string `json:"message" example:"error message"`
+	Code    int    `json:"code" example:"0"`
+	Status  int    `json:"status" example:"400"`
 }
 
 func ErrorJSON(c *gin.Context, err string, status int) {

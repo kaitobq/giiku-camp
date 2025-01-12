@@ -3,15 +3,19 @@ definitions:
   giiku-camp_internal_controller_render.Error:
     properties:
       code:
+        example: 0
         type: integer
       message:
+        example: error message
         type: string
       status:
+        example: 400
         type: integer
     type: object
   giiku-camp_internal_usecase_request.RefreshTokenReq:
     properties:
       refresh_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzkyMzIwMzMsImlhdCI6MTczNjY0MDAzMywidG9rZW5fdmVyc2lvbiI6NiwidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.WJCX_65UJKX-DjUpr9TvbtXsE6ZyUH6NyCLNGwcMWR0
         type: string
     required:
     - refresh_token
@@ -19,8 +23,10 @@ definitions:
   giiku-camp_internal_usecase_request.SignInReq:
     properties:
       email:
+        example: someone@example.com
         type: string
       password:
+        example: password123
         type: string
     required:
     - email
@@ -29,18 +35,25 @@ definitions:
   giiku-camp_internal_usecase_request.SignUpReq:
     properties:
       email:
+        example: someone@example.com
         type: string
       github_id:
+        example: someone
         type: string
       name:
+        example: someone
         type: string
       password:
+        example: password123
         type: string
       qiita_id:
+        example: someone
         type: string
       x_id:
+        example: someone
         type: string
       zenn_id:
+        example: someone
         type: string
     required:
     - email
@@ -50,14 +63,19 @@ definitions:
   giiku-camp_internal_usecase_request.UpdateMeReq:
     properties:
       github_id:
+        example: someone
         type: string
       name:
+        example: someone
         type: string
       qiita_id:
+        example: someone
         type: string
       x_id:
+        example: someone
         type: string
       zenn_id:
+        example: someone
         type: string
     type: object
   giiku-camp_internal_usecase_response.RefreshTokenRes:
@@ -82,29 +100,40 @@ definitions:
   giiku-camp_internal_usecase_response.TokenRes:
     properties:
       access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzY2NDM2MzMsImlhdCI6MTczNjY0MDAzMywidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.QbduICi7TKkVnRckCJbTCYurvmBnXQlmclSm7BKsLxo
         type: string
       refresh_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzkyMzIwMzMsImlhdCI6MTczNjY0MDAzMywidG9rZW5fdmVyc2lvbiI6NiwidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.WJCX_65UJKX-DjUpr9TvbtXsE6ZyUH6NyCLNGwcMWR0
         type: string
     type: object
   giiku-camp_internal_usecase_response.UserRes:
     properties:
       created_at:
+        example: "2025-01-10T16:45:40.876773Z"
         type: string
       email:
+        example: someone@example.com
         type: string
       github_id:
+        example: someone
         type: string
       id:
+        example: 3ee03add-bcd2-455f-9994-f7af846ce662
         type: string
       name:
+        example: someone
         type: string
       qiita_id:
+        example: someone
         type: string
       updated_at:
+        example: "2025-01-12T00:21:57.251469Z"
         type: string
       x_id:
+        example: someone
         type: string
       zenn_id:
+        example: someone
         type: string
     type: object
 host: localhost:8080
@@ -144,6 +173,10 @@ paths:
           description: Bad request
           schema:
             $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
       summary: トークンの更新
       tags:
       - User
@@ -168,6 +201,10 @@ paths:
             $ref: '#/definitions/giiku-camp_internal_usecase_response.SignInRes'
         "400":
           description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
           schema:
             $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
       summary: ユーザー認証
@@ -196,6 +233,10 @@ paths:
           description: Bad request
           schema:
             $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
       summary: ユーザー登録
       tags:
       - User
@@ -215,8 +256,12 @@ paths:
           description: Bad request
           schema:
             $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: ユーザー情報取得
       tags:
       - User
@@ -242,8 +287,12 @@ paths:
           description: Bad request
           schema:
             $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
       security:
-      - ApiKeyAuth: []
+      - BearerAuth: []
       summary: ユーザー情報更新
       tags:
       - User
@@ -262,6 +311,8 @@ paths:
       tags:
       - Health
 securityDefinitions:
-  BasicAuth:
-    type: basic
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

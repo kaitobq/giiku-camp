@@ -20,7 +20,9 @@ import (
 // @host localhost:8080
 // @BasePath /
 // @query.collection.format multi
-// @securityDefinitions.basic BasicAuth
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 
 func main() {
 	a, err := app.New()
