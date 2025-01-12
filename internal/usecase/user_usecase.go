@@ -48,8 +48,9 @@ func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 		return nil, entity.ErrEmailAlreadyUsed
 	}
 
-	if err := u.userRepo.Create(ctx, user); err != nil {
-		logging.Errorf(c, "Create %v", err)
+	user.UpdateCreatedAt()
+	if err := u.userRepo.Update(ctx, user); err != nil {
+		logging.Errorf(c, "Update %v", err)
 		return nil, err
 	}
 

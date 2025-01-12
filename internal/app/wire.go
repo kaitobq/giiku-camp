@@ -6,10 +6,10 @@ import (
 	"giiku-camp/internal/app/config"
 	"giiku-camp/internal/app/container"
 	"giiku-camp/internal/controller"
-	repository "giiku-camp/internal/infra/firestore"
+	repository "giiku-camp/internal/infra/datastore"
 	"giiku-camp/internal/middleware"
 	"giiku-camp/internal/usecase"
-	"giiku-camp/pkg/firestore"
+	"giiku-camp/pkg/datastore"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/wire"
@@ -28,7 +28,7 @@ func New() (*container.App, error) {
 
 		middleware.NewMiddleware,
 
-		firestore.New,
+		datastore.New,
 		container.NewCtrl,
 		container.NewApp,
 	)

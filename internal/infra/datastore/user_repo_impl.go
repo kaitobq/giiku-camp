@@ -5,65 +5,50 @@ import (
 	"giiku-camp/internal/domain/entity"
 	"giiku-camp/internal/domain/repository"
 
-	"cloud.google.com/go/firestore"
+	"cloud.google.com/go/datastore"
 	"google.golang.org/api/iterator"
 )
 
 type userRepo struct {
-	db *firestore.Client
+	db *datastore.Client
 }
 
-func NewUserRepo(db *firestore.Client) repository.UserRepo {
+func NewUserRepo(db *datastore.Client) repository.UserRepo {
 	return &userRepo{db: db}
 }
 
 func (r *userRepo) Create(ctx context.Context, user *entity.User) error {
-	user.UpdateCreatedAt()
-	user.UpdateUpdatedAt()
-	_, err := r.db.Collection("users").Doc(user.ID).Set(ctx, user)
-	if err != nil {
-		return err
-	}
+
 	return nil
 }
 
 func (r *userRepo) FindByEmail(ctx context.Context, email string) (*entity.User, error) {
-	iter := r.db.Collection("users").Where("Email", "==", email).Limit(1).Documents(ctx)
-	doc, err := iter.Next()
+	q := datastore.NewQuery("User").FilterField("Email", "=", email).Limit(1)
+	it := r.db.Run(ctx, q)
+	var user entity.User
+	_, err := it.Next(&user)
 	if err == iterator.Done {
-		// ドキュメントが見つからなかった場合
 		return nil, entity.ErrUserNotFound
 	}
 	if err != nil {
 		return nil, err
 	}
-
-	var user entity.User
-	if err := doc.DataTo(&user); err != nil {
-		return nil, err
-	}
-
 	return &user, nil
 }
 
 func (r *userRepo) FindByID(ctx context.Context, id string) (*entity.User, error) {
-	doc, err := r.db.Collection("users").Doc(id).Get(ctx)
-	if err != nil {
-		return nil, err
-	}
-
+	k := datastore.NameKey("User", id, nil)
 	var user entity.User
-	if err := doc.DataTo(&user); err != nil {
+	if err := r.db.Get(ctx, k, &user); err != nil {
 		return nil, err
 	}
-
 	return &user, nil
 }
 
 func (r *userRepo) Update(ctx context.Context, user *entity.User) error {
+	k := datastore.NameKey("User", user.ID, nil)
 	user.UpdateUpdatedAt()
-	_, err := r.db.Collection("users").Doc(user.ID).Set(ctx, user)
-	if err != nil {
+	if _, err := r.db.Put(ctx, k, user); err != nil {
 		return err
 	}
 	return nil
