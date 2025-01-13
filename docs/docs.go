@@ -24,52 +24,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/auth/crossing": {
-            "post": {
-                "description": "すれ違ったユーザの取得",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Crossing"
-                ],
-                "summary": "すれ違ったユーザの取得",
-                "parameters": [
-                    {
-                        "description": "User Crossing Details",
-                        "name": "user",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.RegisterUserCrossingReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "User created",
-                        "schema": {
-                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.RegisterUserCrossingRes"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad request",
-                        "schema": {
-                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/auth/refresh": {
             "post": {
                 "description": "トークンの更新",
@@ -191,6 +145,57 @@ const docTemplate = `{
                         "description": "User created",
                         "schema": {
                             "$ref": "#/definitions/giiku-camp_internal_usecase_response.SignUpRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/authenticated/crossing": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "すれ違ったユーザの取得",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crossing"
+                ],
+                "summary": "すれ違ったユーザの取得",
+                "parameters": [
+                    {
+                        "description": "User Crossing Details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.RegisterUserCrossingReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "UserCrossing created",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.RegisterUserCrossingRes"
                         }
                     },
                     "400": {

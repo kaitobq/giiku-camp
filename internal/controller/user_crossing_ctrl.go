@@ -25,6 +25,7 @@ func NewUserCrossingCtrl(userCrossingUsecase usecase.UserCrossingUsecase) UserCr
 // @Tags Crossing
 // @Accept json
 // @Produce json
+// @Security BearerAuth
 // @Param user body request.RegisterUserCrossingReq true "User Crossing Details"
 // @Success 200 {object} response.RegisterUserCrossingRes "UserCrossing created"
 // @Failure 400 {object} render.Error "Bad request"

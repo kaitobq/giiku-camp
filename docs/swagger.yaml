@@ -166,36 +166,6 @@ info:
   title: Giiku Camp API
   version: "1.0"
 paths:
-  /api/v1/auth/crossing:
-    post:
-      consumes:
-      - application/json
-      description: すれ違ったユーザの取得
-      parameters:
-      - description: User Crossing Details
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/giiku-camp_internal_usecase_request.RegisterUserCrossingReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: User created
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_usecase_response.RegisterUserCrossingRes'
-        "400":
-          description: Bad request
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
-      summary: すれ違ったユーザの取得
-      tags:
-      - Crossing
   /api/v1/auth/refresh:
     post:
       consumes:
@@ -286,6 +256,38 @@ paths:
       summary: ユーザー登録
       tags:
       - User
+  /api/v1/authenticated/crossing:
+    post:
+      consumes:
+      - application/json
+      description: すれ違ったユーザの取得
+      parameters:
+      - description: User Crossing Details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.RegisterUserCrossingReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: UserCrossing created
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.RegisterUserCrossingRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      security:
+      - BearerAuth: []
+      summary: すれ違ったユーザの取得
+      tags:
+      - Crossing
   /api/v1/authenticated/user:
     get:
       consumes:
