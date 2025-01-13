@@ -26,18 +26,23 @@ func (u *userCrossingUsecase) RegisterUserCrossing(c *gin.Context, req request.R
 	var users []entity.User
 	for _, id := range req.UserIDs {
 		userCrossing := entity.NewUserCrossing(user.ID, id)
+
+		userCrossing.UpdateCreatedAt()
 		ctx := c.Request.Context()
 		err := u.userCrossingRepo.Update(ctx, *userCrossing)
 		if err != nil {
 			logging.Errorf(c, "Update %v", err)
 			return nil, err
 		}
+
 		us, err := u.userRepo.FindByID(ctx, id)
 		if err != nil {
 			logging.Errorf(c, "FindByID %v", err)
 			return nil, err
 		}
+
 		users = append(users, *us)
 	}
+
 	return response.NewRegisterUserCrossingRes(users)
 }
