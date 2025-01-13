@@ -20,7 +20,7 @@ func NewUserCrossingRepo(db *datastore.Client) repository.UserCrossingRepo {
 func (r *userCrossingRepo) Update(ctx context.Context, userCrossing entity.UserCrossing) error {
 	k := datastore.NameKey("UserCrossing", userCrossing.ID, nil)
 	userCrossing.UpdateUpdatedAt()
-	if _, err := r.db.Put(ctx, k, userCrossing); err != nil {
+	if _, err := r.db.Put(ctx, k, &userCrossing); err != nil {
 		return err
 	}
 	return nil

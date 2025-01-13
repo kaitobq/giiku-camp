@@ -30,6 +30,7 @@ func (ct *UserCrossingCtrl) RegisterUserCrossing(c *gin.Context) {
 	res, err := ct.UserCrossingUsecase.RegisterUserCrossing(c, *req)
 	if err != nil {
 		logging.Errorf(c, "RegisterUserCrossing %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
