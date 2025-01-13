@@ -14,3 +14,9 @@ type UserUsecase interface {
 	GetMe(c *gin.Context) (*response.UserRes, error)
 	UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error)
 }
+
+// MEMO: このinterfaceをinternal/usecase/user_crossing_usecase.goで継承する
+// TODO: すれ違いAPIを実装するのに必要なユースケース処理を定義する
+type UserCrossingUsecase interface {
+	RegisterUserCrossing(c *gin.Context, req request.RegisterUserCrossingReq) (*response.RegisterUserCrossingRes, error)
+}
