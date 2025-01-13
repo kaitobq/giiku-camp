@@ -7,6 +7,7 @@ type UserCrossing struct {
 	UserID        string
 	CrossedUserID string
 	CreatedAt     time.Time
+	UpdatedAt     time.Time
 }
 
 func NewUserCrossing(userID string, crossedUserID string) *UserCrossing {
@@ -19,4 +20,8 @@ func NewUserCrossing(userID string, crossedUserID string) *UserCrossing {
 
 func (u *UserCrossing) UpdateCreatedAt() {
 	u.CreatedAt = time.Now()
+}
+
+func (u *UserCrossing) UpdateUpdatedAt() {
+	u.UpdatedAt = time.Now()
 }

@@ -42,8 +42,8 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 		user.PUT("", userCtrl.UpdateMe)
 	}
 
-	_ = v1.Group("/crossing")
+	crossing := authenticated.Group("/crossing")
 	{
-		// TODO: すれ違いAPIのエンドポイントを追加する
+		crossing.POST("", userCrossingCtrl.RegisterUserCrossing)
 	}
 }

@@ -17,4 +17,6 @@ type UserUsecase interface {
 
 // MEMO: このinterfaceをinternal/usecase/user_crossing_usecase.goで継承する
 // TODO: すれ違いAPIを実装するのに必要なユースケース処理を定義する
-type UserCrossingUsecase interface{}
+type UserCrossingUsecase interface {
+	RegisterUserCrossing(c *gin.Context, req request.RegisterUserCrossingReq) (*response.RegisterUserCrossingRes, error)
+}

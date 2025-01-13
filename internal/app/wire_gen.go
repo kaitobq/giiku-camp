@@ -26,7 +26,7 @@ func New() (*container.App, error) {
 	userUsecase := usecase.NewUserUsecase(userRepo)
 	userCtrl := controller.NewUserCtrl(userUsecase)
 	userCrossingRepo := repository.NewUserCrossingRepo(client)
-	userCrossingUsecase := usecase.NewUserCrossingUsecase(userCrossingRepo)
+	userCrossingUsecase := usecase.NewUserCrossingUsecase(userCrossingRepo, userRepo)
 	userCrossingCtrl := controller.NewUserCrossingCtrl(userCrossingUsecase)
 	containerContainer := container.NewCtrl(userCtrl, userCrossingCtrl)
 	configConfig := config.New()
