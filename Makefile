@@ -20,4 +20,5 @@ cover:
 	go tool cover -func=coverage/coverage.out > coverage/coverage.txt
 	open coverage/coverage.html
 mock:
-	mockgen -source=internal/usecase/usecase.go -destination=internal/mock/usecase/usecase_mock.go
+	mockgen -source=internal/usecase/usecase.go -destination=internal/mock/usecase/usecase_mock.go -package=mock_usecase && \
+	mockgen -source=internal/domain/repository/user_repo.go -destination=internal/mock/domain/repository/user_repo_mock.go -package=mock_repository && \
