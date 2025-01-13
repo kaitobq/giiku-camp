@@ -24,6 +24,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/auth/crossing": {
+            "post": {
+                "description": "すれ違ったユーザの取得",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crossing"
+                ],
+                "summary": "すれ違ったユーザの取得",
+                "parameters": [
+                    {
+                        "description": "User Crossing Details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.RegisterUserCrossingReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User created",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.RegisterUserCrossingRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/auth/refresh": {
             "post": {
                 "description": "トークンの更新",
@@ -303,6 +349,20 @@ const docTemplate = `{
                 }
             }
         },
+        "giiku-camp_internal_usecase_request.RegisterUserCrossingReq": {
+            "type": "object",
+            "required": [
+                "user_ids"
+            ],
+            "properties": {
+                "user_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "giiku-camp_internal_usecase_request.SignInReq": {
             "type": "object",
             "required": [
@@ -388,6 +448,17 @@ const docTemplate = `{
             "properties": {
                 "token": {
                     "$ref": "#/definitions/giiku-camp_internal_usecase_response.TokenRes"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.RegisterUserCrossingRes": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserRes"
+                    }
                 }
             }
         },

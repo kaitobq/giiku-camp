@@ -5,6 +5,7 @@ import (
 	"giiku-camp/internal/infra/logging"
 	"giiku-camp/internal/usecase"
 	"giiku-camp/internal/usecase/request"
+	_ "giiku-camp/internal/usecase/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -18,7 +19,17 @@ func NewUserCrossingCtrl(userCrossingUsecase usecase.UserCrossingUsecase) UserCr
 	return UserCrossingCtrl{UserCrossingUsecase: userCrossingUsecase}
 }
 
-// TODO: すれ違いAPIを実装する
+// RegisterUserCrossing godoc
+// @Summary すれ違ったユーザの取得
+// @Description すれ違ったユーザの取得
+// @Tags Crossing
+// @Accept json
+// @Produce json
+// @Param user body request.RegisterUserCrossingReq true "User Crossing Details"
+// @Success 200 {object} response.RegisterUserCrossingRes "User created"
+// @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
+// @Router /api/v1/auth/crossing [post]
 func (ct *UserCrossingCtrl) RegisterUserCrossing(c *gin.Context) {
 	req, err := request.NewRegisterUserCrossingReq(c)
 	if err != nil {

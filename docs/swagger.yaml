@@ -20,6 +20,15 @@ definitions:
     required:
     - refresh_token
     type: object
+  giiku-camp_internal_usecase_request.RegisterUserCrossingReq:
+    properties:
+      user_ids:
+        items:
+          type: string
+        type: array
+    required:
+    - user_ids
+    type: object
   giiku-camp_internal_usecase_request.SignInReq:
     properties:
       email:
@@ -82,6 +91,13 @@ definitions:
     properties:
       token:
         $ref: '#/definitions/giiku-camp_internal_usecase_response.TokenRes'
+    type: object
+  giiku-camp_internal_usecase_response.RegisterUserCrossingRes:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
+        type: array
     type: object
   giiku-camp_internal_usecase_response.SignInRes:
     properties:
@@ -150,6 +166,36 @@ info:
   title: Giiku Camp API
   version: "1.0"
 paths:
+  /api/v1/auth/crossing:
+    post:
+      consumes:
+      - application/json
+      description: すれ違ったユーザの取得
+      parameters:
+      - description: User Crossing Details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.RegisterUserCrossingReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User created
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.RegisterUserCrossingRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      summary: すれ違ったユーザの取得
+      tags:
+      - Crossing
   /api/v1/auth/refresh:
     post:
       consumes:
