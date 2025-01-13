@@ -26,10 +26,10 @@ func NewUserCrossingCtrl(userCrossingUsecase usecase.UserCrossingUsecase) UserCr
 // @Accept json
 // @Produce json
 // @Param user body request.RegisterUserCrossingReq true "User Crossing Details"
-// @Success 200 {object} response.RegisterUserCrossingRes "User created"
+// @Success 200 {object} response.RegisterUserCrossingRes "UserCrossing created"
 // @Failure 400 {object} render.Error "Bad request"
 // @Failure 500 {object} render.Error "Internal server error"
-// @Router /api/v1/auth/crossing [post]
+// @Router /api/v1/authenticated/crossing [post]
 func (ct *UserCrossingCtrl) RegisterUserCrossing(c *gin.Context) {
 	req, err := request.NewRegisterUserCrossingReq(c)
 	if err != nil {
