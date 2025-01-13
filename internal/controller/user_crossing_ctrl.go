@@ -48,3 +48,15 @@ func (ct *UserCrossingCtrl) RegisterUserCrossing(c *gin.Context) {
 
 	render.JSON(c, res)
 }
+
+// すれ違った人のリストを取得するAPIを実装する
+func (ct *UserCrossingCtrl) GetUserCrossing(c *gin.Context) {
+	res, err := ct.UserCrossingUsecase.GetUserCrossing(c)
+	if err != nil {
+		logging.Errorf(c, "GetUserCrossing %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(c, res)
+}

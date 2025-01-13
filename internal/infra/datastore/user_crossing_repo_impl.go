@@ -2,13 +2,13 @@ package repository
 
 import (
 	"context"
+	"errors"
 	"giiku-camp/internal/domain/entity"
 	"giiku-camp/internal/domain/repository"
 
 	"cloud.google.com/go/datastore"
 )
 
-// TODO: repository.UserCrossingRepoを継承する
 type userCrossingRepo struct {
 	db *datastore.Client
 }
@@ -24,4 +24,17 @@ func (r *userCrossingRepo) Update(ctx context.Context, userCrossing entity.UserC
 		return err
 	}
 	return nil
+}
+
+func (r *userCrossingRepo) FindByUserID(ctx context.Context) ([]*entity.UserCrossing, error) {
+	id, ok := ctx.Value("user_id").(string)
+	if !ok {
+		return nil, errors.New("user_id not found in context")
+	}
+	k := datastore.NameKey("UserCrossing", id, nil)
+	var userCrossing []entity.UserCrossing
+	if err := r.db.GetAll(ctx, k, &userCrossing); err != nil {
+		return nil, err
+	}
+	return &userCrossing, nil
 }

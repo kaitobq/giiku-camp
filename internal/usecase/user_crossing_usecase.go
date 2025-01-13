@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// TODO: UserCrossingUsecaseを継承する
 type userCrossingUsecase struct {
 	userCrossingRepo repository.UserCrossingRepo
 	userRepo         repository.UserRepo
@@ -45,4 +44,23 @@ func (u *userCrossingUsecase) RegisterUserCrossing(c *gin.Context, req request.R
 	}
 
 	return response.NewRegisterUserCrossingRes(users)
+}
+
+func (u *userCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUserCrossingRes, error) {
+	user := xcontext.User(c)
+	for _, id := range user.UserCrossingIDs {
+		ctx := c.Request.Context()
+		us, err := u.userRepo.FindByID(ctx, id)
+		if err != nil {
+			logging.Errorf(c, "FindByID %v", err)
+			return nil, err
+		}
+		if user == us {
+			continue
+		}
+	res, err := response.NewGetUserCrossingRes([]esntity.User{*user})
+	if err != nil {
+		return nil, err
+	}
+	return res, nil
 }
