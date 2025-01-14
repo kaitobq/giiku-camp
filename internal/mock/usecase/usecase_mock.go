@@ -116,3 +116,42 @@ func (mr *MockUserUsecaseMockRecorder) UpdateMe(c, req any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateMe", reflect.TypeOf((*MockUserUsecase)(nil).UpdateMe), c, req)
 }
+
+// MockUserCrossingUsecase is a mock of UserCrossingUsecase interface.
+type MockUserCrossingUsecase struct {
+	ctrl     *gomock.Controller
+	recorder *MockUserCrossingUsecaseMockRecorder
+	isgomock struct{}
+}
+
+// MockUserCrossingUsecaseMockRecorder is the mock recorder for MockUserCrossingUsecase.
+type MockUserCrossingUsecaseMockRecorder struct {
+	mock *MockUserCrossingUsecase
+}
+
+// NewMockUserCrossingUsecase creates a new mock instance.
+func NewMockUserCrossingUsecase(ctrl *gomock.Controller) *MockUserCrossingUsecase {
+	mock := &MockUserCrossingUsecase{ctrl: ctrl}
+	mock.recorder = &MockUserCrossingUsecaseMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUserCrossingUsecase) EXPECT() *MockUserCrossingUsecaseMockRecorder {
+	return m.recorder
+}
+
+// RegisterUserCrossing mocks base method.
+func (m *MockUserCrossingUsecase) RegisterUserCrossing(c *gin.Context, req request.RegisterUserCrossingReq) (*response.RegisterUserCrossingRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RegisterUserCrossing", c, req)
+	ret0, _ := ret[0].(*response.RegisterUserCrossingRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// RegisterUserCrossing indicates an expected call of RegisterUserCrossing.
+func (mr *MockUserCrossingUsecaseMockRecorder) RegisterUserCrossing(c, req any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterUserCrossing", reflect.TypeOf((*MockUserCrossingUsecase)(nil).RegisterUserCrossing), c, req)
+}
