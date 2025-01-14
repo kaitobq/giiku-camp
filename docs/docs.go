@@ -448,6 +448,29 @@ const docTemplate = `{
                 }
             }
         },
+        "giiku-camp_internal_usecase_response.CrossedUserRes": {
+            "type": "object",
+            "properties": {
+                "github_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "qiita_id": {
+                    "type": "string"
+                },
+                "x_id": {
+                    "type": "string"
+                },
+                "zenn_id": {
+                    "type": "string"
+                }
+            }
+        },
         "giiku-camp_internal_usecase_response.RefreshTokenRes": {
             "type": "object",
             "properties": {
@@ -462,7 +485,7 @@ const docTemplate = `{
                 "users": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserRes"
+                        "$ref": "#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes"
                     }
                 }
             }

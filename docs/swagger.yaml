@@ -87,6 +87,21 @@ definitions:
         example: someone
         type: string
     type: object
+  giiku-camp_internal_usecase_response.CrossedUserRes:
+    properties:
+      github_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      qiita_id:
+        type: string
+      x_id:
+        type: string
+      zenn_id:
+        type: string
+    type: object
   giiku-camp_internal_usecase_response.RefreshTokenRes:
     properties:
       token:
@@ -96,7 +111,7 @@ definitions:
     properties:
       users:
         items:
-          $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
+          $ref: '#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes'
         type: array
     type: object
   giiku-camp_internal_usecase_response.SignInRes:
