@@ -142,7 +142,7 @@ func (u *userUsecase) RefreshToken(c *gin.Context, req request.RefreshTokenReq) 
 
 func (u *userUsecase) GetMe(c *gin.Context) (*response.UserRes, error) {
 	user := xcontext.User(c)
-	return response.NewUserRes(user)
+	return response.NewUserRes(user), nil
 }
 
 func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error) {
@@ -178,7 +178,7 @@ func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*respon
 		return nil, err
 	}
 
-	return response.NewUserRes(user)
+	return response.NewUserRes(user), nil
 }
 
 func isChanged(s string) bool {
