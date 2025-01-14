@@ -2,7 +2,6 @@ package repository
 
 import (
 	"context"
-	"errors"
 	"giiku-camp/internal/domain/entity"
 	"giiku-camp/internal/domain/repository"
 
@@ -26,13 +25,9 @@ func (r *userCrossingRepo) Update(ctx context.Context, userCrossing entity.UserC
 	return nil
 }
 
-func (r *userCrossingRepo) FindByUserID(ctx context.Context) ([]*entity.UserCrossing, error) {
-	id, ok := ctx.Value("user_id").(string)
-	if !ok {
-		return nil, errors.New("user_id not found in context")
-	}
-	k := datastore.NameKey("UserCrossing", id, nil)
-	var userCrossing []entity.UserCrossing
+func (r *userCrossingRepo) FindByUserID(ctx context.Context, userCrossing entity.UserCrossing) ([]*entity.UserCrossing, error) {
+	k := datastore.NameKey("UserCrossing", userCrossing.UserID, nil)
+	// var userCrossing []entity.UserCrossing
 	if err := r.db.GetAll(ctx, k, &userCrossing); err != nil {
 		return nil, err
 	}

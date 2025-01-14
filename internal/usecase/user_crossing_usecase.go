@@ -48,6 +48,7 @@ func (u *userCrossingUsecase) RegisterUserCrossing(c *gin.Context, req request.R
 
 func (u *userCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUserCrossingRes, error) {
 	user := xcontext.User(c)
+	logging.Infof(c, "user: %v", user)
 	for _, id := range user.UserCrossingIDs {
 		ctx := c.Request.Context()
 		us, err := u.userRepo.FindByID(ctx, id)
@@ -58,9 +59,10 @@ func (u *userCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUser
 		if user == us {
 			continue
 		}
-	res, err := response.NewGetUserCrossingRes([]esntity.User{*user})
-	if err != nil {
-		return nil, err
+		res, err := response.NewGetUserCrossingRes([]entity.User{*user})
+		if err != nil {
+			return nil, err
+		}
 	}
 	return res, nil
 }
