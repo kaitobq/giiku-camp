@@ -17,7 +17,7 @@ type UserRes struct {
 	UpdatedAt time.Time `json:"updated_at" example:"2025-01-12T00:21:57.251469Z"`
 }
 
-func NewUserRes(user *entity.User) (*UserRes, error) {
+func NewUserRes(user *entity.User) *UserRes {
 	return &UserRes{
 		ID:        user.ID,
 		Email:     user.Email,
@@ -28,7 +28,7 @@ func NewUserRes(user *entity.User) (*UserRes, error) {
 		XID:       user.XID,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
-	}, nil
+	}
 }
 
 type TokenRes struct {
@@ -43,10 +43,7 @@ type SignUpRes struct {
 
 func NewSignUpRes(user *entity.User, accessToken, refreshToken string) (*SignUpRes, error) {
 	res := SignUpRes{}
-	userRes, err := NewUserRes(user)
-	if err != nil {
-		return nil, err
-	}
+	userRes := NewUserRes(user)
 	res.User = *userRes
 	res.Token.AccessToken = accessToken
 	res.Token.RefreshToken = refreshToken
@@ -60,10 +57,7 @@ type SignInRes struct {
 
 func NewSignInRes(user *entity.User, accessToken, refreshToken string) (*SignInRes, error) {
 	res := SignInRes{}
-	userRes, err := NewUserRes(user)
-	if err != nil {
-		return nil, err
-	}
+	userRes := NewUserRes(user)
 	res.User = *userRes
 	res.Token.AccessToken = accessToken
 	res.Token.RefreshToken = refreshToken
