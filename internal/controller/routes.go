@@ -2,6 +2,7 @@ package controller
 
 import (
 	"giiku-camp/internal/middleware"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -20,7 +21,14 @@ func Ping(c *gin.Context) {
 }
 
 func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossingCtrl, middleware *middleware.Middleware) {
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	var name, password string
+	if name = os.Getenv("BASIC_AUTH_USERNAME"); name == "" {
+		panic("BASIC_AUTH_USERNAME is not set")
+	}
+	if password = os.Getenv("BASIC_AUTH_PASSWORD"); password == "" {
+		panic("BASIC_AUTH_PASSWORD is not set")
+	}
+	r.GET("/swagger/*any", gin.BasicAuth(gin.Accounts{name: password}), ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	v1 := r.Group("/api/v1")
 	v1.GET("/ping", Ping)
