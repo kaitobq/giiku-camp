@@ -163,7 +163,7 @@ const docTemplate = `{
             }
         },
         "/api/v1/authenticated/crossing": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "BearerAuth": []
@@ -180,6 +180,44 @@ const docTemplate = `{
                     "Crossing"
                 ],
                 "summary": "すれ違ったユーザの取得",
+                "responses": {
+                    "200": {
+                        "description": "UserCrossing created",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.GetUserCrossingRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "すれ違ったユーザの登録",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Crossing"
+                ],
+                "summary": "すれ違ったユーザの登録",
                 "parameters": [
                     {
                         "description": "User Crossing Details",
@@ -468,6 +506,17 @@ const docTemplate = `{
                 },
                 "zenn_id": {
                     "type": "string"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.GetUserCrossingRes": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes"
+                    }
                 }
             }
         },

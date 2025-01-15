@@ -102,6 +102,13 @@ definitions:
       zenn_id:
         type: string
     type: object
+  giiku-camp_internal_usecase_response.GetUserCrossingRes:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes'
+        type: array
+    type: object
   giiku-camp_internal_usecase_response.RefreshTokenRes:
     properties:
       token:
@@ -272,10 +279,34 @@ paths:
       tags:
       - User
   /api/v1/authenticated/crossing:
-    post:
+    get:
       consumes:
       - application/json
       description: すれ違ったユーザの取得
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: UserCrossing created
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.GetUserCrossingRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      security:
+      - BearerAuth: []
+      summary: すれ違ったユーザの取得
+      tags:
+      - Crossing
+    post:
+      consumes:
+      - application/json
+      description: すれ違ったユーザの登録
       parameters:
       - description: User Crossing Details
         in: body
@@ -300,7 +331,7 @@ paths:
             $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
       security:
       - BearerAuth: []
-      summary: すれ違ったユーザの取得
+      summary: すれ違ったユーザの登録
       tags:
       - Crossing
   /api/v1/authenticated/user:

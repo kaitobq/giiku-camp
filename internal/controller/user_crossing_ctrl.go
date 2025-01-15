@@ -20,8 +20,8 @@ func NewUserCrossingCtrl(userCrossingUsecase usecase.UserCrossingUsecase) UserCr
 }
 
 // RegisterUserCrossing godoc
-// @Summary すれ違ったユーザの取得
-// @Description すれ違ったユーザの取得
+// @Summary すれ違ったユーザの登録
+// @Description すれ違ったユーザの登録
 // @Tags Crossing
 // @Accept json
 // @Produce json
@@ -49,7 +49,17 @@ func (ct *UserCrossingCtrl) RegisterUserCrossing(c *gin.Context) {
 	render.JSON(c, res)
 }
 
-// すれ違った人のリストを取得するAPIを実装する
+// GetUserCrossing godoc
+// @Summary すれ違ったユーザの取得
+// @Description すれ違ったユーザの取得
+// @Tags Crossing
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} response.GetUserCrossingRes "UserCrossing created"
+// @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
+// @Router /api/v1/authenticated/crossing [get]
 func (ct *UserCrossingCtrl) GetUserCrossing(c *gin.Context) {
 	res, err := ct.UserCrossingUsecase.GetUserCrossing(c)
 	if err != nil {
