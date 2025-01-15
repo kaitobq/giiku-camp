@@ -48,13 +48,13 @@ func (u *userCrossingUsecase) RegisterUserCrossing(c *gin.Context, req request.R
 
 func (u *userCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUserCrossingRes, error) {
 	user := xcontext.User(c)
-	userCrossingIDs, err := u.userCrossingRepo.FindByUserID(c.Request.Context(), user.ID)
+	userCrossings, err := u.userCrossingRepo.FindByUserID(c.Request.Context(), user.ID)
 	if err != nil {
 		logging.Errorf(c, "FindByUserID %v", err)
 		return nil, err
 	}
-	var userCrossings []entity.User
-	for _, userCrossing := range userCrossingIDs {
+	var crossedUsers []entity.User
+	for _, userCrossing := range userCrossings {
 		id := userCrossing.CrossedUserID
 		logging.Infof(c, "FindByID %s", id)
 		us, err := u.userRepo.FindByID(c.Request.Context(), id)
@@ -63,7 +63,7 @@ func (u *userCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUser
 			return nil, err
 		}
 		logging.Infof(c, "FindByID returned user: %v", us.HidePassword())
-		userCrossings = append(userCrossings, *us)
+		crossedUsers = append(crossedUsers, *us)
 	}
-	return response.NewGetUserCrossingRes(userCrossings), nil
+	return response.NewGetUserCrossingRes(crossedUsers), nil
 }
