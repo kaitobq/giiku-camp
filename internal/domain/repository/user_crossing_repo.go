@@ -6,6 +6,6 @@ import (
 )
 
 type UserCrossingRepo interface {
-	FindByUserID(ctx context.Context, userId string) ([]*entity.UserCrossing, error)
+	FindByUserID(ctx context.Context, userId string) ([]string, error)
 	Update(ctx context.Context, userCrossing entity.UserCrossing) error
 }

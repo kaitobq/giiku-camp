@@ -25,15 +25,16 @@ func (r *userCrossingRepo) Update(ctx context.Context, userCrossing entity.UserC
 	return nil
 }
 
-func (r *userCrossingRepo) FindByUserID(ctx context.Context, userId string) ([]*entity.UserCrossing, error) {
-	q := datastore.NewQuery("UserCrossing").FilterField("userid", "=", userId)
+func (r *userCrossingRepo) FindByUserID(ctx context.Context, userId string) ([]string, error) {
+	q := datastore.NewQuery("UserCrossing").FilterField("UserID", "=", userId)
 	var userCrossings []*entity.UserCrossing
 	keys, err := r.db.GetAll(ctx, q, &userCrossings)
 	if err != nil {
 		return nil, err
 	}
-	for i, key := range keys {
-		userCrossings[i].ID = key.Name
+	var userCrossingIDs []string
+	for _, key := range keys {
+		userCrossingIDs = append(userCrossingIDs, key.Name)
 	}
-	return userCrossings, nil
+	return userCrossingIDs, nil
 }
