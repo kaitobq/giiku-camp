@@ -43,13 +43,11 @@ type GetUserCrossingRes struct {
 	Users []CrossedUserRes `json:"users"`
 }
 
-func NewGetUserCrossingRes(users []entity.User) *GetUserCrossingRes {
+func NewGetUserCrossingRes(users []entity.User) (*GetUserCrossingRes, error) {
 	var res []CrossedUserRes
 	for _, user := range users {
 		u := NewCrossedUserRes(user)
 		res = append(res, u)
 	}
-	return &GetUserCrossingRes{
-		Users: res,
-	}
+	return &GetUserCrossingRes{Users: res}, nil
 }

@@ -50,7 +50,6 @@ func (u *userCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUser
 	user := xcontext.User(c)
 	userCrossings, err := u.userCrossingRepo.FindByUserID(c.Request.Context(), user.ID)
 	if err != nil {
-		logging.Errorf(c, "FindByUserID %v", err)
 		return nil, err
 	}
 	var crossedUsers []entity.User
@@ -62,8 +61,7 @@ func (u *userCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUser
 			logging.Errorf(c, "FindByID %v", err)
 			return nil, err
 		}
-		logging.Infof(c, "FindByID returned user: %v", us.HidePassword())
 		crossedUsers = append(crossedUsers, *us)
 	}
-	return response.NewGetUserCrossingRes(crossedUsers), nil
+	return response.NewGetUserCrossingRes(crossedUsers)
 }
