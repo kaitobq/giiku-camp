@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"time"
 
-	"github.com/google/uuid"
+	gonanoid "github.com/matoous/go-nanoid/v2"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -53,8 +53,13 @@ func NewUser(userName, email, password string, gitHubID, qiitaID, zennID, xID *s
 		return nil, err
 	}
 
+	id, err := genID()
+	if err != nil {
+		return nil, err
+	}
+
 	return &User{
-		ID:           genUUID(),
+		ID:           id,
 		Name:         userName,
 		Email:        email,
 		Password:     hashedPassword,
@@ -106,9 +111,13 @@ func hashPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-func genUUID() string {
-	id := uuid.New()
-	return id.String()
+func genID() (string, error) {
+	id, err := gonanoid.New()
+	if err != nil {
+		return "", err
+	}
+
+	return id, nil
 }
 
 var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)

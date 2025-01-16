@@ -10,12 +10,16 @@ type UserCrossing struct {
 	UpdatedAt     time.Time
 }
 
-func NewUserCrossing(userID string, crossedUserID string) *UserCrossing {
+func NewUserCrossing(userID string, crossedUserID string) (*UserCrossing, error) {
+	id, err := genID()
+	if err != nil {
+		return nil, err
+	}
 	return &UserCrossing{
-		ID:            genUUID(),
+		ID:            id,
 		UserID:        userID,
 		CrossedUserID: crossedUserID,
-	}
+	}, nil
 }
 
 func (u *UserCrossing) UpdateCreatedAt() {

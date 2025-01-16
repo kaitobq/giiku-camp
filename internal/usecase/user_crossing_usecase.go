@@ -25,11 +25,15 @@ func (u *userCrossingUsecase) RegisterUserCrossing(c *gin.Context, req request.R
 	user := xcontext.User(c)
 	var users []entity.User
 	for _, id := range req.UserIDs {
-		userCrossing := entity.NewUserCrossing(user.ID, id)
+		userCrossing, err := entity.NewUserCrossing(user.ID, id)
+		if err != nil {
+			logging.Errorf(c, "NewUserCrossing %v", err)
+			return nil, err
+		}
 
 		userCrossing.UpdateCreatedAt()
 		ctx := c.Request.Context()
-		err := u.userCrossingRepo.Update(ctx, *userCrossing)
+		err = u.userCrossingRepo.Update(ctx, *userCrossing)
 		if err != nil {
 			logging.Errorf(c, "Update %v", err)
 			return nil, err
