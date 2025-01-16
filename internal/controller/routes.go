@@ -53,5 +53,6 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 	crossing := authenticated.Group("/crossing")
 	{
 		crossing.POST("", userCrossingCtrl.RegisterUserCrossing)
+		crossing.GET("", userCrossingCtrl.GetUserCrossing)
 	}
 }

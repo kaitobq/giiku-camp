@@ -8,7 +8,6 @@ import (
 	"cloud.google.com/go/datastore"
 )
 
-// TODO: repository.UserCrossingRepoを継承する
 type userCrossingRepo struct {
 	db *datastore.Client
 }
@@ -24,4 +23,14 @@ func (r *userCrossingRepo) Update(ctx context.Context, userCrossing entity.UserC
 		return err
 	}
 	return nil
+}
+
+func (r *userCrossingRepo) FindByUserID(ctx context.Context, userId string) ([]entity.UserCrossing, error) {
+	q := datastore.NewQuery("UserCrossing").FilterField("UserID", "=", userId)
+	var userCrossings []entity.UserCrossing
+	_, err := r.db.GetAll(ctx, q, &userCrossings)
+	if err != nil {
+		return nil, err
+	}
+	return userCrossings, nil
 }
