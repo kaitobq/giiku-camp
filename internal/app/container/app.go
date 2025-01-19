@@ -12,14 +12,16 @@ import (
 )
 
 type container struct {
-	userCtrl         controller.UserCtrl
-	userCrossingCtrl controller.UserCrossingCtrl
+	userCtrl          controller.UserCtrl
+	userCrossingCtrl  controller.UserCrossingCtrl
+	userFrindListCtrl controller.UserFriendListCtrl
 }
 
-func NewCtrl(userCtrl controller.UserCtrl, userCrossingCtrl controller.UserCrossingCtrl) container {
+func NewCtrl(userCtrl controller.UserCtrl, userCrossingCtrl controller.UserCrossingCtrl, userFriendListCtrl controller.UserFriendListCtrl) container {
 	return container{
-		userCtrl:         userCtrl,
-		userCrossingCtrl: userCrossingCtrl,
+		userCtrl:          userCtrl,
+		userCrossingCtrl:  userCrossingCtrl,
+		userFrindListCtrl: userFriendListCtrl,
 	}
 }
 
@@ -33,7 +35,7 @@ type App struct {
 func NewApp(r *gin.Engine, container container, cfg *config.Config, db *datastore.Client, middleware *middleware.Middleware) *App {
 	logging.Init()
 
-	controller.SetUpRoutes(r, container.userCtrl, container.userCrossingCtrl, middleware)
+	controller.SetUpRoutes(r, container.userCtrl, container.userCrossingCtrl, container.userFrindListCtrl, middleware)
 
 	return &App{
 		r:          r,

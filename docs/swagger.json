@@ -245,6 +245,146 @@
                 }
             }
         },
+        "/api/v1/authenticated/friend": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "フレンド情報取得",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friend"
+                ],
+                "summary": "フレンド情報取得",
+                "responses": {
+                    "200": {
+                        "description": "Friend details",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.UserFriendListRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "フレンド依頼送信",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friend"
+                ],
+                "summary": "フレンド依頼送信",
+                "parameters": [
+                    {
+                        "description": "Friend details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.SendRequestReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Friend details",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.SendRequestRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/authenticated/friend/accept": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "フレンド依頼許可",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friend"
+                ],
+                "summary": "フレンド依頼許可",
+                "parameters": [
+                    {
+                        "description": "Friend details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.AcceptRequestReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Friend details",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.AcceptRequestRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/authenticated/user": {
             "get": {
                 "security": [
@@ -374,6 +514,39 @@
                 }
             }
         },
+        "giiku-camp_internal_domain_entity.FriendEntry": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "friendID": {
+                    "type": "string"
+                }
+            }
+        },
+        "giiku-camp_internal_domain_entity.FriendRequestEntry": {
+            "type": "object",
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "requesterID": {
+                    "type": "string"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_request.AcceptRequestReq": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "giiku-camp_internal_usecase_request.RefreshTokenReq": {
             "type": "object",
             "required": [
@@ -397,6 +570,17 @@
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_request.SendRequestReq": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
@@ -480,6 +664,14 @@
                 }
             }
         },
+        "giiku-camp_internal_usecase_response.AcceptRequestRes": {
+            "type": "object",
+            "properties": {
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
         "giiku-camp_internal_usecase_response.CrossedUserRes": {
             "type": "object",
             "properties": {
@@ -533,6 +725,14 @@
                 }
             }
         },
+        "giiku-camp_internal_usecase_response.SendRequestRes": {
+            "type": "object",
+            "properties": {
+                "ok": {
+                    "type": "boolean"
+                }
+            }
+        },
         "giiku-camp_internal_usecase_response.SignInRes": {
             "type": "object",
             "properties": {
@@ -565,6 +765,29 @@
                 "refresh_token": {
                     "type": "string",
                     "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzkyMzIwMzMsImlhdCI6MTczNjY0MDAzMywidG9rZW5fdmVyc2lvbiI6NiwidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.WJCX_65UJKX-DjUpr9TvbtXsE6ZyUH6NyCLNGwcMWR0"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.UserFriendListRes": {
+            "type": "object",
+            "properties": {
+                "friend_requests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/giiku-camp_internal_domain_entity.FriendRequestEntry"
+                    }
+                },
+                "friends": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/giiku-camp_internal_domain_entity.FriendEntry"
+                    }
+                },
+                "sent_requests": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/giiku-camp_internal_domain_entity.FriendRequestEntry"
+                    }
                 }
             }
         },
