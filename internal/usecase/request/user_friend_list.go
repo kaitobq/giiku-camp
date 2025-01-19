@@ -13,3 +13,15 @@ func NewSendRequestReq(c *gin.Context) (*SendRequestReq, error) {
 	}
 	return &req, nil
 }
+
+type AcceptRequestReq struct {
+	UserID string `json:"user_id" binding:"required"`
+}
+
+func NewAcceptRequestReq(c *gin.Context) (*AcceptRequestReq, error) {
+	var req AcceptRequestReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}

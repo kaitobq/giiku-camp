@@ -23,3 +23,11 @@ type SendRequestRes struct {
 func NewSendRequestRes() (*SendRequestRes, error) {
 	return &SendRequestRes{Ok: true}, nil
 }
+
+type AcceptRequestRes struct {
+	Ok bool `json:"ok"`
+}
+
+func NewAcceptRequestRes() (*AcceptRequestRes, error) {
+	return &AcceptRequestRes{Ok: true}, nil
+}

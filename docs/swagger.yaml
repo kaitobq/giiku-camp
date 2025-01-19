@@ -26,6 +26,13 @@ definitions:
       requesterID:
         type: string
     type: object
+  giiku-camp_internal_usecase_request.AcceptRequestReq:
+    properties:
+      user_id:
+        type: string
+    required:
+    - user_id
+    type: object
   giiku-camp_internal_usecase_request.RefreshTokenReq:
     properties:
       refresh_token:
@@ -107,6 +114,11 @@ definitions:
       zenn_id:
         example: someone
         type: string
+    type: object
+  giiku-camp_internal_usecase_response.AcceptRequestRes:
+    properties:
+      ok:
+        type: boolean
     type: object
   giiku-camp_internal_usecase_response.CrossedUserRes:
     properties:
@@ -429,6 +441,38 @@ paths:
       security:
       - BearerAuth: []
       summary: フレンド依頼送信
+      tags:
+      - Friend
+  /api/v1/authenticated/friend/accept:
+    post:
+      consumes:
+      - application/json
+      description: フレンド依頼許可
+      parameters:
+      - description: Friend details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.AcceptRequestReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Friend details
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.AcceptRequestRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      security:
+      - BearerAuth: []
+      summary: フレンド依頼許可
       tags:
       - Friend
   /api/v1/authenticated/user:

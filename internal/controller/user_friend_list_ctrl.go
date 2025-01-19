@@ -66,3 +66,31 @@ func (ct *UserFriendListCtrl) SendRequest(c *gin.Context) {
 
 	render.JSON(c, res)
 }
+
+// AcceptRequest godoc
+// @Summary フレンド依頼許可
+// @Description フレンド依頼許可
+// @Tags Friend
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param user body request.AcceptRequestReq true "Friend details"
+// @Success 200 {object} response.AcceptRequestRes "Friend details"
+// @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
+// @Router /api/v1/authenticated/friend/accept [post]
+func (ct *UserFriendListCtrl) AcceptRequest(c *gin.Context) {
+	req, err := request.NewAcceptRequestReq(c)
+	if err != nil {
+		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	res, err := ct.UserFriendListUseCase.AcceptRequest(c, *req)
+	if err != nil {
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(c, res)
+}

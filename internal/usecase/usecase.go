@@ -23,4 +23,5 @@ type UserCrossingUsecase interface {
 type UserFriendListUsecase interface {
 	GetUserFriendList(c *gin.Context) (*response.UserFriendListRes, error)
 	SendRequest(c *gin.Context, req request.SendRequestReq) (*response.SendRequestRes, error)
+	AcceptRequest(c *gin.Context, req request.AcceptRequestReq) (*response.AcceptRequestRes, error)
 }

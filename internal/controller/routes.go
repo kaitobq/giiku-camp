@@ -60,5 +60,6 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 	{
 		friendList.GET("", userFriendListCtrl.GetFriendList)
 		friendList.POST("", userFriendListCtrl.SendRequest)
+		friendList.POST("/accept", userFriendListCtrl.AcceptRequest)
 	}
 }

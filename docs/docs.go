@@ -340,6 +340,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/authenticated/friend/accept": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "フレンド依頼許可",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friend"
+                ],
+                "summary": "フレンド依頼許可",
+                "parameters": [
+                    {
+                        "description": "Friend details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.AcceptRequestReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Friend details",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.AcceptRequestRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/authenticated/user": {
             "get": {
                 "security": [
@@ -491,6 +542,17 @@ const docTemplate = `{
                 }
             }
         },
+        "giiku-camp_internal_usecase_request.AcceptRequestReq": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "giiku-camp_internal_usecase_request.RefreshTokenReq": {
             "type": "object",
             "required": [
@@ -605,6 +667,14 @@ const docTemplate = `{
                 "zenn_id": {
                     "type": "string",
                     "example": "someone"
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.AcceptRequestRes": {
+            "type": "object",
+            "properties": {
+                "ok": {
+                    "type": "boolean"
                 }
             }
         },

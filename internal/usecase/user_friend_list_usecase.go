@@ -62,8 +62,8 @@ func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequ
 		}
 	}
 
-	senderEnt.AddSentRequest(req.UserID)
-	receiverEnt.AddFriendRequest(req.UserID)
+	senderEnt.AddSentRequest(receiverEnt.UserID)
+	receiverEnt.AddFriendRequest(senderEnt.UserID)
 
 	// 送信者、受信者の整合性を担保する
 	_, err = u.db.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
@@ -81,4 +81,49 @@ func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequ
 	}
 
 	return response.NewSendRequestRes()
+}
+
+func (u *userFriendListUsecase) AcceptRequest(c *gin.Context, req request.AcceptRequestReq) (*response.AcceptRequestRes, error) {
+	accepter := xcontext.User(c)
+	ctx := c.Request.Context()
+	accepterEnt, err := u.userFriendListRepo.FindByUserID(ctx, accepter.ID)
+	if err != nil {
+		return nil, err
+	}
+	senderEnt, err := u.userFriendListRepo.FindByUserID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	// if accepterEnt.HasFriend(req.UserID) {
+	// 	return nil, entity.ErrAlreadyFriend
+	// }
+	if !accepterEnt.HasFriendRequest(req.UserID) {
+		return nil, entity.ErrFriendRequestNotFound
+	}
+	if !senderEnt.HasSentRequest(accepter.ID) {
+		return nil, entity.ErrSentRequestNotFound
+	}
+
+	accepterEnt.AddFriend(senderEnt.UserID)
+	accepterEnt.RemoveFriendRequest(senderEnt.UserID)
+	senderEnt.AddFriend(accepterEnt.UserID)
+	senderEnt.RemoveSentRequest(accepterEnt.UserID)
+
+	// 送信者、受信者の整合性を担保する
+	_, err = u.db.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
+		if err := u.userFriendListRepo.UpdateWithTransaction(tx, accepterEnt); err != nil {
+			return err
+		}
+		if err := u.userFriendListRepo.UpdateWithTransaction(tx, senderEnt); err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return response.NewAcceptRequestRes()
 }
