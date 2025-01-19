@@ -20,7 +20,7 @@ func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "pong"})
 }
 
-func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossingCtrl, middleware *middleware.Middleware) {
+func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossingCtrl, userFriendListCtrl UserFriendListCtrl, middleware *middleware.Middleware) {
 	var name, password string
 	if name = os.Getenv("BASIC_AUTH_USERNAME"); name == "" {
 		panic("BASIC_AUTH_USERNAME is not set")

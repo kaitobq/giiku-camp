@@ -26,9 +26,11 @@ func New() (*container.App, error) {
 
 		usecase.NewUserUsecase,
 		usecase.NewUserCrossingUsecase,
+		usecase.NewUserFriendListUsecase,
 
 		controller.NewUserCtrl,
 		controller.NewUserCrossingCtrl,
+		controller.NewUserFriendListCtrl,
 
 		middleware.NewMiddleware,
 

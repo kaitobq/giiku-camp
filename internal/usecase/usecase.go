@@ -19,3 +19,6 @@ type UserCrossingUsecase interface {
 	RegisterUserCrossing(c *gin.Context, req request.RegisterUserCrossingReq) (*response.RegisterUserCrossingRes, error)
 	GetUserCrossing(c *gin.Context) (*response.GetUserCrossingRes, error)
 }
+
+type UserFriendListUsecase interface {
+}
