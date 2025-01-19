@@ -289,6 +289,55 @@ const docTemplate = `{
                         }
                     }
                 }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "フレンド依頼送信",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friend"
+                ],
+                "summary": "フレンド依頼送信",
+                "parameters": [
+                    {
+                        "description": "Friend details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.SendRequestReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Friend details",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.SendRequestRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/authenticated/user": {
@@ -468,6 +517,17 @@ const docTemplate = `{
                 }
             }
         },
+        "giiku-camp_internal_usecase_request.SendRequestReq": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "giiku-camp_internal_usecase_request.SignInReq": {
             "type": "object",
             "required": [
@@ -598,6 +658,14 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes"
                     }
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.SendRequestRes": {
+            "type": "object",
+            "properties": {
+                "ok": {
+                    "type": "boolean"
                 }
             }
         },

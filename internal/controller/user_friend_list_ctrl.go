@@ -2,8 +2,8 @@ package controller
 
 import (
 	"giiku-camp/internal/controller/render"
-	"giiku-camp/internal/domain/xcontext"
 	"giiku-camp/internal/usecase"
+	"giiku-camp/internal/usecase/request"
 	_ "giiku-camp/internal/usecase/response"
 	"net/http"
 
@@ -30,9 +30,35 @@ func NewUserFriendListCtrl(userFriendListUseCase usecase.UserFriendListUsecase) 
 // @Failure 500 {object} render.Error "Internal server error"
 // @Router /api/v1/authenticated/friend [get]
 func (ct *UserFriendListCtrl) GetFriendList(c *gin.Context) {
-	user := xcontext.User(c)
+	res, err := ct.UserFriendListUseCase.GetUserFriendList(c)
+	if err != nil {
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
-	res, err := ct.UserFriendListUseCase.GetUserFriendList(c, user.ID)
+	render.JSON(c, res)
+}
+
+// SendRequest godoc
+// @Summary フレンド依頼送信
+// @Description フレンド依頼送信
+// @Tags Friend
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param user body request.SendRequestReq true "Friend details"
+// @Success 200 {object} response.SendRequestRes "Friend details"
+// @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
+// @Router /api/v1/authenticated/friend [post]
+func (ct *UserFriendListCtrl) SendRequest(c *gin.Context) {
+	req, err := request.NewSendRequestReq(c)
+	if err != nil {
+		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	res, err := ct.UserFriendListUseCase.SendRequest(c, *req)
 	if err != nil {
 		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		return

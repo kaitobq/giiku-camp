@@ -35,3 +35,11 @@ func (r *userFriendListRepo) Update(ctx context.Context, userFriendList *entity.
 	}
 	return nil
 }
+
+func (r *userFriendListRepo) UpdateWithTransaction(tx *datastore.Transaction, userFriendList *entity.UserFriendList) error {
+	k := datastore.NameKey("UserFriendList", userFriendList.UserID, nil)
+	if _, err := tx.Put(k, userFriendList); err != nil {
+		return err
+	}
+	return nil
+}

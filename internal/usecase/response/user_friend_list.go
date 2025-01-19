@@ -15,3 +15,11 @@ func NewUserFriendListRes(friendList entity.UserFriendList) *UserFriendListRes {
 		SentRequests:   friendList.SentRequests,
 	}
 }
+
+type SendRequestRes struct {
+	Ok bool `json:"ok"`
+}
+
+func NewSendRequestRes() (*SendRequestRes, error) {
+	return &SendRequestRes{Ok: true}, nil
+}

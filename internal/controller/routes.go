@@ -59,5 +59,6 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 	friendList := authenticated.Group("/friend")
 	{
 		friendList.GET("", userFriendListCtrl.GetFriendList)
+		friendList.POST("", userFriendListCtrl.SendRequest)
 	}
 }

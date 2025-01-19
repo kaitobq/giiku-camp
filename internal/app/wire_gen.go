@@ -29,7 +29,7 @@ func New() (*container.App, error) {
 	userCrossingRepo := repository.NewUserCrossingRepo(client)
 	userCrossingUsecase := usecase.NewUserCrossingUsecase(userCrossingRepo, userRepo)
 	userCrossingCtrl := controller.NewUserCrossingCtrl(userCrossingUsecase)
-	userFriendListUsecase := usecase.NewUserFriendListUsecase(userFriendListRepo)
+	userFriendListUsecase := usecase.NewUserFriendListUsecase(userFriendListRepo, client)
 	userFriendListCtrl := controller.NewUserFriendListCtrl(userFriendListUsecase)
 	containerContainer := container.NewCtrl(userCtrl, userCrossingCtrl, userFriendListCtrl)
 	configConfig := config.New()
