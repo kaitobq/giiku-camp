@@ -522,6 +522,9 @@
                 },
                 "friendID": {
                     "type": "string"
+                },
+                "friendName": {
+                    "type": "string"
                 }
             }
         },
@@ -532,6 +535,9 @@
                     "type": "string"
                 },
                 "requesterID": {
+                    "type": "string"
+                },
+                "requesterName": {
                     "type": "string"
                 }
             }

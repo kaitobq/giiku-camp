@@ -2,18 +2,19 @@ package entity
 
 import (
 	"errors"
-	"fmt"
 	"time"
 )
 
 type FriendEntry struct {
-	FriendID  string    `datastore:"friend_id"`
-	CreatedAt time.Time `datastore:"created_at"`
+	FriendID   string    `datastore:"friend_id"`
+	FriendName string    `datastore:"friend_name"`
+	CreatedAt  time.Time `datastore:"created_at"`
 }
 
 type FriendRequestEntry struct {
-	RequesterID string    `datastore:"requester_id"`
-	CreatedAt   time.Time `datastore:"created_at"`
+	RequesterID   string    `datastore:"requester_id"`
+	RequesterName string    `datastore:"requester_name"`
+	CreatedAt     time.Time `datastore:"created_at"`
 }
 
 type UserFriendList struct {
@@ -40,76 +41,78 @@ func NewUserFriendList(userID string) *UserFriendList {
 	}
 }
 
-func (u *UserFriendList) AddFriend(friendID string) {
+func (u *UserFriendList) AddFriend(friend *User) {
 	u.Friends = append(u.Friends, FriendEntry{
-		FriendID:  friendID,
-		CreatedAt: time.Now(),
+		FriendID:   friend.ID,
+		FriendName: friend.Name,
+		CreatedAt:  time.Now(),
 	})
 }
 
-func (u *UserFriendList) AddFriendRequest(requesterID string) {
+func (u *UserFriendList) AddFriendRequest(requester *User) {
 	u.FriendRequests = append(u.FriendRequests, FriendRequestEntry{
-		RequesterID: requesterID,
-		CreatedAt:   time.Now(),
+		RequesterID:   requester.ID,
+		RequesterName: requester.Name,
+		CreatedAt:     time.Now(),
 	})
 }
 
-func (u *UserFriendList) AddSentRequest(requesterID string) {
+func (u *UserFriendList) AddSentRequest(requester *User) {
 	u.SentRequests = append(u.SentRequests, FriendRequestEntry{
-		RequesterID: requesterID,
-		CreatedAt:   time.Now(),
+		RequesterID:   requester.ID,
+		RequesterName: requester.Name,
+		CreatedAt:     time.Now(),
 	})
 }
 
-func (u *UserFriendList) RemoveFriend(friendID string) {
-	for i, friend := range u.Friends {
-		if friend.FriendID == friendID {
+func (u *UserFriendList) RemoveFriend(friend *User) {
+	for i, fr := range u.Friends {
+		if fr.FriendID == friend.ID {
 			u.Friends = append(u.Friends[:i], u.Friends[i+1:]...)
 			return
 		}
 	}
 }
 
-func (u *UserFriendList) RemoveFriendRequest(requesterID string) {
+func (u *UserFriendList) RemoveFriendRequest(requester *User) {
 	for i, request := range u.FriendRequests {
-		if request.RequesterID == requesterID {
+		if request.RequesterID == requester.ID {
 			u.FriendRequests = append(u.FriendRequests[:i], u.FriendRequests[i+1:]...)
 			return
 		}
 	}
 }
 
-func (u *UserFriendList) RemoveSentRequest(requesterID string) {
+func (u *UserFriendList) RemoveSentRequest(requester *User) {
 	for i, request := range u.SentRequests {
-		if request.RequesterID == requesterID {
+		if request.RequesterID == requester.ID {
 			u.SentRequests = append(u.SentRequests[:i], u.SentRequests[i+1:]...)
 			return
 		}
 	}
 }
 
-func (u *UserFriendList) HasFriend(friendID string) bool {
-	for _, friend := range u.Friends {
-		if friend.FriendID == friendID {
+func (u *UserFriendList) HasFriend(friend *User) bool {
+	for _, fr := range u.Friends {
+		if fr.FriendID == friend.ID {
 			return true
 		}
 	}
 	return false
 }
 
-func (u *UserFriendList) HasFriendRequest(requesterID string) bool {
-	fmt.Println("u.FriendRequests", u.FriendRequests, "requesterID", requesterID)
+func (u *UserFriendList) HasFriendRequest(requester *User) bool {
 	for _, request := range u.FriendRequests {
-		if request.RequesterID == requesterID {
+		if request.RequesterID == requester.ID {
 			return true
 		}
 	}
 	return false
 }
 
-func (u *UserFriendList) HasSentRequest(requesterID string) bool {
+func (u *UserFriendList) HasSentRequest(requester *User) bool {
 	for _, request := range u.SentRequests {
-		if request.RequesterID == requesterID {
+		if request.RequesterID == requester.ID {
 			return true
 		}
 	}

@@ -528,6 +528,9 @@ const docTemplate = `{
                 },
                 "friendID": {
                     "type": "string"
+                },
+                "friendName": {
+                    "type": "string"
                 }
             }
         },
@@ -538,6 +541,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "requesterID": {
+                    "type": "string"
+                },
+                "requesterName": {
                     "type": "string"
                 }
             }

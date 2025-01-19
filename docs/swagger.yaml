@@ -18,12 +18,16 @@ definitions:
         type: string
       friendID:
         type: string
+      friendName:
+        type: string
     type: object
   giiku-camp_internal_domain_entity.FriendRequestEntry:
     properties:
       createdAt:
         type: string
       requesterID:
+        type: string
+      requesterName:
         type: string
     type: object
   giiku-camp_internal_usecase_request.AcceptRequestReq:

@@ -13,6 +13,7 @@ import (
 
 type userFriendListUsecase struct {
 	userFriendListRepo repository.UserFriendListRepo
+	userRepo           repository.UserRepo
 	db                 *datastore.Client
 }
 
@@ -39,6 +40,11 @@ func (u *userFriendListUsecase) GetUserFriendList(c *gin.Context) (*response.Use
 func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequestReq) (*response.SendRequestRes, error) {
 	sender := xcontext.User(c)
 	ctx := c.Request.Context()
+	receiver, err := u.userRepo.FindByID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
 	senderEnt, err := u.userFriendListRepo.FindByUserID(ctx, sender.ID)
 	if err != nil {
 		if err == entity.ErrUserFriendListNotFound {
@@ -62,8 +68,8 @@ func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequ
 		}
 	}
 
-	senderEnt.AddSentRequest(receiverEnt.UserID)
-	receiverEnt.AddFriendRequest(senderEnt.UserID)
+	senderEnt.AddSentRequest(receiver)
+	receiverEnt.AddFriendRequest(sender)
 
 	// 送信者、受信者の整合性を担保する
 	_, err = u.db.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
@@ -86,6 +92,11 @@ func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequ
 func (u *userFriendListUsecase) AcceptRequest(c *gin.Context, req request.AcceptRequestReq) (*response.AcceptRequestRes, error) {
 	accepter := xcontext.User(c)
 	ctx := c.Request.Context()
+	sender, err := u.userRepo.FindByID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
 	accepterEnt, err := u.userFriendListRepo.FindByUserID(ctx, accepter.ID)
 	if err != nil {
 		return nil, err
@@ -98,17 +109,17 @@ func (u *userFriendListUsecase) AcceptRequest(c *gin.Context, req request.Accept
 	// if accepterEnt.HasFriend(req.UserID) {
 	// 	return nil, entity.ErrAlreadyFriend
 	// }
-	if !accepterEnt.HasFriendRequest(req.UserID) {
+	if !accepterEnt.HasFriendRequest(sender) {
 		return nil, entity.ErrFriendRequestNotFound
 	}
-	if !senderEnt.HasSentRequest(accepter.ID) {
+	if !senderEnt.HasSentRequest(accepter) {
 		return nil, entity.ErrSentRequestNotFound
 	}
 
-	accepterEnt.AddFriend(senderEnt.UserID)
-	accepterEnt.RemoveFriendRequest(senderEnt.UserID)
-	senderEnt.AddFriend(accepterEnt.UserID)
-	senderEnt.RemoveSentRequest(accepterEnt.UserID)
+	accepterEnt.AddFriend(sender)
+	accepterEnt.RemoveFriendRequest(sender)
+	senderEnt.AddFriend(accepter)
+	senderEnt.RemoveSentRequest(accepter)
 
 	// 送信者、受信者の整合性を担保する
 	_, err = u.db.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
