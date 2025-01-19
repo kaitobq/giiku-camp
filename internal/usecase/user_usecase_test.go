@@ -22,7 +22,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// TODO: fix
 func TestUserUsecase_SignUp(t *testing.T) {
 	logging.Init()
 
@@ -38,7 +37,7 @@ func TestUserUsecase_SignUp(t *testing.T) {
 	tests := []struct {
 		name             string
 		input            request.SignUpReq
-		mockSetup        func(*mock_repository.MockUserRepo)
+		mockSetup        func(*mock_repository.MockUserRepo, *mock_repository.MockUserFriendListRepo)
 		expectedResponse response.SignUpRes
 		wantErr          bool
 		expectedError    error
@@ -50,12 +49,15 @@ func TestUserUsecase_SignUp(t *testing.T) {
 				Name:     "test",
 				Password: "password123",
 			},
-			mockSetup: func(mock *mock_repository.MockUserRepo) {
+			mockSetup: func(mock *mock_repository.MockUserRepo, friendMock *mock_repository.MockUserFriendListRepo) {
 				mock.EXPECT().
 					FindByEmail(gomock.Any(), "test@example.com").
 					Return(nil, entity.ErrUserNotFound)
 				mock.EXPECT().
 					Update(gomock.Any(), gomock.AssignableToTypeOf(&entity.User{})).
+					Return(nil)
+				friendMock.EXPECT().
+					Update(gomock.Any(), gomock.Any()).
 					Return(nil)
 			},
 			expectedResponse: response.SignUpRes{
@@ -85,7 +87,7 @@ func TestUserUsecase_SignUp(t *testing.T) {
 				Name:     "test",
 				Password: "password123",
 			},
-			mockSetup:        func(mock *mock_repository.MockUserRepo) {},
+			mockSetup:        func(mock *mock_repository.MockUserRepo, friendMock *mock_repository.MockUserFriendListRepo) {},
 			expectedResponse: response.SignUpRes{},
 			wantErr:          true,
 			expectedError:    entity.ErrEmailInvalid,
@@ -97,7 +99,7 @@ func TestUserUsecase_SignUp(t *testing.T) {
 				Name:     "test",
 				Password: "password123",
 			},
-			mockSetup: func(mock *mock_repository.MockUserRepo) {
+			mockSetup: func(mock *mock_repository.MockUserRepo, friendMock *mock_repository.MockUserFriendListRepo) {
 				mock.EXPECT().
 					FindByEmail(gomock.Any(), "test@example.com").
 					Return(&entity.User{}, nil)
@@ -113,7 +115,7 @@ func TestUserUsecase_SignUp(t *testing.T) {
 				Name:     "test",
 				Password: "password123",
 			},
-			mockSetup: func(mock *mock_repository.MockUserRepo) {
+			mockSetup: func(mock *mock_repository.MockUserRepo, friendMock *mock_repository.MockUserFriendListRepo) {
 				mock.EXPECT().
 					FindByEmail(gomock.Any(), "test@example.com").
 					Return(nil, errors.New("unexpected error"))
@@ -129,7 +131,7 @@ func TestUserUsecase_SignUp(t *testing.T) {
 				Name:     "test",
 				Password: "password123",
 			},
-			mockSetup: func(mock *mock_repository.MockUserRepo) {
+			mockSetup: func(mock *mock_repository.MockUserRepo, friendMock *mock_repository.MockUserFriendListRepo) {
 				mock.EXPECT().
 					FindByEmail(gomock.Any(), "test@example.com").
 					Return(nil, entity.ErrUserNotFound)
@@ -152,9 +154,10 @@ func TestUserUsecase_SignUp(t *testing.T) {
 			defer ctrl.Finish()
 
 			userRepo := mock_repository.NewMockUserRepo(ctrl)
-			uc := NewUserUsecase(userRepo)
+			friendListRepo := mock_repository.NewMockUserFriendListRepo(ctrl)
+			uc := NewUserUsecase(userRepo, friendListRepo)
 
-			tc.mockSetup(userRepo)
+			tc.mockSetup(userRepo, friendListRepo)
 
 			ctx := context.Background()
 			c, _ := gin.CreateTestContext(nil)
@@ -304,7 +307,8 @@ func TestUserUsecase_SignIn(t *testing.T) {
 			defer ctrl.Finish()
 
 			userRepo := mock_repository.NewMockUserRepo(ctrl)
-			uc := NewUserUsecase(userRepo)
+			friendListRepo := mock_repository.NewMockUserFriendListRepo(ctrl)
+			uc := NewUserUsecase(userRepo, friendListRepo)
 
 			tc.mockSetup(userRepo)
 
@@ -463,7 +467,8 @@ func TestUserUsecase_RefreshToken(t *testing.T) {
 			defer ctrl.Finish()
 
 			userRepo := mock_repository.NewMockUserRepo(ctrl)
-			uc := NewUserUsecase(userRepo)
+			friendListRepo := mock_repository.NewMockUserFriendListRepo(ctrl)
+			uc := NewUserUsecase(userRepo, friendListRepo)
 
 			tc.mockSetup(userRepo)
 
@@ -591,7 +596,8 @@ func TestUserUsecase_UpdateMe(t *testing.T) {
 			defer ctrl.Finish()
 
 			userRepo := mock_repository.NewMockUserRepo(ctrl)
-			uc := NewUserUsecase(userRepo)
+			friendListRepo := mock_repository.NewMockUserFriendListRepo(ctrl)
+			uc := NewUserUsecase(userRepo, friendListRepo)
 
 			tc.mockSetup(userRepo)
 

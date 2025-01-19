@@ -141,6 +141,21 @@ func (m *MockUserCrossingUsecase) EXPECT() *MockUserCrossingUsecaseMockRecorder 
 	return m.recorder
 }
 
+// GetUserCrossing mocks base method.
+func (m *MockUserCrossingUsecase) GetUserCrossing(c *gin.Context) (*response.GetUserCrossingRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserCrossing", c)
+	ret0, _ := ret[0].(*response.GetUserCrossingRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserCrossing indicates an expected call of GetUserCrossing.
+func (mr *MockUserCrossingUsecaseMockRecorder) GetUserCrossing(c any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserCrossing", reflect.TypeOf((*MockUserCrossingUsecase)(nil).GetUserCrossing), c)
+}
+
 // RegisterUserCrossing mocks base method.
 func (m *MockUserCrossingUsecase) RegisterUserCrossing(c *gin.Context, req request.RegisterUserCrossingReq) (*response.RegisterUserCrossingRes, error) {
 	m.ctrl.T.Helper()
@@ -154,4 +169,73 @@ func (m *MockUserCrossingUsecase) RegisterUserCrossing(c *gin.Context, req reque
 func (mr *MockUserCrossingUsecaseMockRecorder) RegisterUserCrossing(c, req any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterUserCrossing", reflect.TypeOf((*MockUserCrossingUsecase)(nil).RegisterUserCrossing), c, req)
+}
+
+// MockUserFriendListUsecase is a mock of UserFriendListUsecase interface.
+type MockUserFriendListUsecase struct {
+	ctrl     *gomock.Controller
+	recorder *MockUserFriendListUsecaseMockRecorder
+	isgomock struct{}
+}
+
+// MockUserFriendListUsecaseMockRecorder is the mock recorder for MockUserFriendListUsecase.
+type MockUserFriendListUsecaseMockRecorder struct {
+	mock *MockUserFriendListUsecase
+}
+
+// NewMockUserFriendListUsecase creates a new mock instance.
+func NewMockUserFriendListUsecase(ctrl *gomock.Controller) *MockUserFriendListUsecase {
+	mock := &MockUserFriendListUsecase{ctrl: ctrl}
+	mock.recorder = &MockUserFriendListUsecaseMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUserFriendListUsecase) EXPECT() *MockUserFriendListUsecaseMockRecorder {
+	return m.recorder
+}
+
+// AcceptRequest mocks base method.
+func (m *MockUserFriendListUsecase) AcceptRequest(c *gin.Context, req request.AcceptRequestReq) (*response.AcceptRequestRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AcceptRequest", c, req)
+	ret0, _ := ret[0].(*response.AcceptRequestRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// AcceptRequest indicates an expected call of AcceptRequest.
+func (mr *MockUserFriendListUsecaseMockRecorder) AcceptRequest(c, req any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AcceptRequest", reflect.TypeOf((*MockUserFriendListUsecase)(nil).AcceptRequest), c, req)
+}
+
+// GetUserFriendList mocks base method.
+func (m *MockUserFriendListUsecase) GetUserFriendList(c *gin.Context) (*response.UserFriendListRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserFriendList", c)
+	ret0, _ := ret[0].(*response.UserFriendListRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserFriendList indicates an expected call of GetUserFriendList.
+func (mr *MockUserFriendListUsecaseMockRecorder) GetUserFriendList(c any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserFriendList", reflect.TypeOf((*MockUserFriendListUsecase)(nil).GetUserFriendList), c)
+}
+
+// SendRequest mocks base method.
+func (m *MockUserFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequestReq) (*response.SendRequestRes, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendRequest", c, req)
+	ret0, _ := ret[0].(*response.SendRequestRes)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// SendRequest indicates an expected call of SendRequest.
+func (mr *MockUserFriendListUsecaseMockRecorder) SendRequest(c, req any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendRequest", reflect.TypeOf((*MockUserFriendListUsecase)(nil).SendRequest), c, req)
 }
