@@ -22,6 +22,7 @@ func New() (*container.App, error) {
 
 		repository.NewUserRepo,
 		repository.NewUserCrossingRepo,
+		repository.NewUserFriendListRepo,
 
 		usecase.NewUserUsecase,
 		usecase.NewUserCrossingUsecase,

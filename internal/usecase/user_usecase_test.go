@@ -22,6 +22,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// TODO: fix
 func TestUserUsecase_SignUp(t *testing.T) {
 	logging.Init()
 
