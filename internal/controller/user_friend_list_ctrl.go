@@ -2,6 +2,8 @@ package controller
 
 import (
 	"giiku-camp/internal/controller/render"
+	"giiku-camp/internal/domain/entity"
+	"giiku-camp/internal/infra/logging"
 	"giiku-camp/internal/usecase"
 	"giiku-camp/internal/usecase/request"
 	_ "giiku-camp/internal/usecase/response"
@@ -32,6 +34,7 @@ func NewUserFriendListCtrl(userFriendListUseCase usecase.UserFriendListUsecase) 
 func (ct *UserFriendListCtrl) GetFriendList(c *gin.Context) {
 	res, err := ct.UserFriendListUseCase.GetUserFriendList(c)
 	if err != nil {
+		logging.Errorf(c, "GetUserFriendList %v", err)
 		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -54,12 +57,14 @@ func (ct *UserFriendListCtrl) GetFriendList(c *gin.Context) {
 func (ct *UserFriendListCtrl) SendRequest(c *gin.Context) {
 	req, err := request.NewSendRequestReq(c)
 	if err != nil {
+		logging.Errorf(c, "NewSendRequestReq %v", err)
 		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	res, err := ct.UserFriendListUseCase.SendRequest(c, *req)
 	if err != nil {
+		logging.Errorf(c, "SendRequest %v", err)
 		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -82,13 +87,22 @@ func (ct *UserFriendListCtrl) SendRequest(c *gin.Context) {
 func (ct *UserFriendListCtrl) AcceptRequest(c *gin.Context) {
 	req, err := request.NewAcceptRequestReq(c)
 	if err != nil {
+		logging.Errorf(c, "NewAcceptRequestReq %v", err)
 		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	res, err := ct.UserFriendListUseCase.AcceptRequest(c, *req)
 	if err != nil {
-		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		logging.Errorf(c, "AcceptRequest %v", err)
+		switch err {
+		case entity.ErrFriendRequestNotFound:
+			render.ErrorCodeJSON(c, err.Error(), entity.CodeFriendRequestNotFound, http.StatusInternalServerError)
+		case entity.ErrSentRequestNotFound:
+			render.ErrorCodeJSON(c, err.Error(), entity.CodeSentRequestNotFound, http.StatusInternalServerError)
+		default:
+			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 
