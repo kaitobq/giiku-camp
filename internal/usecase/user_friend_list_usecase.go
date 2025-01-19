@@ -17,8 +17,8 @@ type userFriendListUsecase struct {
 	db                 *datastore.Client
 }
 
-func NewUserFriendListUsecase(userFriendListRepo repository.UserFriendListRepo, db *datastore.Client) UserFriendListUsecase {
-	return &userFriendListUsecase{userFriendListRepo: userFriendListRepo, db: db}
+func NewUserFriendListUsecase(userFriendListRepo repository.UserFriendListRepo, userRepo repository.UserRepo, db *datastore.Client) UserFriendListUsecase {
+	return &userFriendListUsecase{userFriendListRepo: userFriendListRepo, userRepo: userRepo, db: db}
 }
 
 func (u *userFriendListUsecase) GetUserFriendList(c *gin.Context) (*response.UserFriendListRes, error) {
