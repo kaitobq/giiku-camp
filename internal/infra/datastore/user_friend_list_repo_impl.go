@@ -16,14 +16,16 @@ func NewUserFriendListRepo(db *datastore.Client) repository.UserFriendListRepo {
 	return &userFriendListRepo{db: db}
 }
 
-func (r *userFriendListRepo) FindByUserID(ctx context.Context, userId string) ([]entity.UserFriendList, error) {
-	q := datastore.NewQuery("UserFriendList").FilterField("UserID", "=", userId)
-	var userFriendLists []entity.UserFriendList
-	_, err := r.db.GetAll(ctx, q, &userFriendLists)
-	if err != nil {
+func (r *userFriendListRepo) FindByUserID(ctx context.Context, userId string) (*entity.UserFriendList, error) {
+	k := datastore.NameKey("UserFriendList", userId, nil)
+	var userFriendList entity.UserFriendList
+	if err := r.db.Get(ctx, k, &userFriendList); err != nil {
+		if err == datastore.ErrNoSuchEntity {
+			return nil, entity.ErrUserFriendListNotFound
+		}
 		return nil, err
 	}
-	return userFriendLists, nil
+	return &userFriendList, nil
 }
 
 func (r *userFriendListRepo) Update(ctx context.Context, userFriendList *entity.UserFriendList) error {

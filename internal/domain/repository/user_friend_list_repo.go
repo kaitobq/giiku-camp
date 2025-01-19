@@ -6,6 +6,6 @@ import (
 )
 
 type UserFriendListRepo interface {
-	FindByUserID(ctx context.Context, userId string) ([]entity.UserFriendList, error)
+	FindByUserID(ctx context.Context, userId string) (*entity.UserFriendList, error)
 	Update(ctx context.Context, userFriendList *entity.UserFriendList) error
 }

@@ -21,4 +21,5 @@ type UserCrossingUsecase interface {
 }
 
 type UserFriendListUsecase interface {
+	GetUserFriendList(c *gin.Context, userID string) (*response.UserFriendListRes, error)
 }

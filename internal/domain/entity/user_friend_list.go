@@ -1,6 +1,9 @@
 package entity
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type FriendEntry struct {
 	FriendID  string    `datastore:"friend_id"`
@@ -18,6 +21,10 @@ type UserFriendList struct {
 	FriendRequests []FriendRequestEntry `datastore:"friend_requests,noindex"`
 	SentRequests   []FriendRequestEntry `datastore:"sent_requests,noindex"`
 }
+
+var (
+	ErrUserFriendListNotFound = errors.New("user friend list not found")
+)
 
 func NewUserFriendList(userID string) *UserFriendList {
 	return &UserFriendList{
