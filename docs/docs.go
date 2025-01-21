@@ -523,13 +523,13 @@ const docTemplate = `{
         "giiku-camp_internal_domain_entity.FriendEntry": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
-                "friendID": {
+                "friend_id": {
                     "type": "string"
                 },
-                "friendName": {
+                "friend_name": {
                     "type": "string"
                 }
             }
@@ -537,13 +537,13 @@ const docTemplate = `{
         "giiku-camp_internal_domain_entity.FriendRequestEntry": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
-                "requesterID": {
+                "requester_id": {
                     "type": "string"
                 },
-                "requesterName": {
+                "requester_name": {
                     "type": "string"
                 }
             }

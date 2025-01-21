@@ -6,22 +6,22 @@ import (
 )
 
 type FriendEntry struct {
-	FriendID   string    `datastore:"friend_id"`
-	FriendName string    `datastore:"friend_name"`
-	CreatedAt  time.Time `datastore:"created_at"`
+	FriendID   string    `datastore:"friend_id" json:"friend_id"`
+	FriendName string    `datastore:"friend_name" json:"friend_name"`
+	CreatedAt  time.Time `datastore:"created_at" json:"created_at"`
 }
 
 type FriendRequestEntry struct {
-	RequesterID   string    `datastore:"requester_id"`
-	RequesterName string    `datastore:"requester_name"`
-	CreatedAt     time.Time `datastore:"created_at"`
+	RequesterID   string    `datastore:"requester_id" json:"requester_id"`
+	RequesterName string    `datastore:"requester_name" json:"requester_name"`
+	CreatedAt     time.Time `datastore:"created_at" json:"created_at"`
 }
 
 type UserFriendList struct {
-	UserID         string               `datastore:"user_id"`
-	Friends        []FriendEntry        `datastore:"friends,noindex"`
-	FriendRequests []FriendRequestEntry `datastore:"friend_requests,noindex"`
-	SentRequests   []FriendRequestEntry `datastore:"sent_requests,noindex"`
+	UserID         string               `datastore:"user_id" json:"user_id"`
+	Friends        []FriendEntry        `datastore:"friends,noindex" json:"friends"`
+	FriendRequests []FriendRequestEntry `datastore:"friend_requests,noindex" json:"friend_requests"`
+	SentRequests   []FriendRequestEntry `datastore:"sent_requests,noindex" json:"sent_requests"`
 }
 
 var (
