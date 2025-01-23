@@ -25,7 +25,7 @@ func (u *userFriendListUsecase) GetUserFriendList(c *gin.Context) (*response.Use
 	user := xcontext.User(c)
 	userFriendList, err := u.userFriendListRepo.FindByUserID(c.Request.Context(), user.ID)
 	if err != nil {
-		if err == entity.ErrUserFriendListNotFound {
+		if err == entity.ErrUserFriendListNotFound { // TODO: 全データ削除するタイミングで消す
 			ent := entity.NewUserFriendList(user.ID)
 			if err := u.userFriendListRepo.Update(c.Request.Context(), ent); err != nil {
 				return nil, err
@@ -47,7 +47,7 @@ func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequ
 
 	senderEnt, err := u.userFriendListRepo.FindByUserID(ctx, sender.ID)
 	if err != nil {
-		if err == entity.ErrUserFriendListNotFound {
+		if err == entity.ErrUserFriendListNotFound { // TODO: 全データ削除するタイミングで消す
 			senderEnt = entity.NewUserFriendList(sender.ID)
 			if err := u.userFriendListRepo.Update(ctx, senderEnt); err != nil {
 				return nil, err
@@ -58,7 +58,7 @@ func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequ
 	}
 	receiverEnt, err := u.userFriendListRepo.FindByUserID(ctx, req.UserID)
 	if err != nil {
-		if err == entity.ErrUserFriendListNotFound {
+		if err == entity.ErrUserFriendListNotFound { // TODO: 全データ削除するタイミングで消す
 			receiverEnt = entity.NewUserFriendList(req.UserID)
 			if err := u.userFriendListRepo.Update(ctx, receiverEnt); err != nil {
 				return nil, err
@@ -66,6 +66,21 @@ func (u *userFriendListUsecase) SendRequest(c *gin.Context, req request.SendRequ
 		} else {
 			return nil, err
 		}
+	}
+
+	// senderが既にリクエストを送っている
+	if senderEnt.HasSentRequest(receiver) || receiverEnt.HasFriendRequest(sender) {
+		return nil, entity.ErrFriendRequestAlreadySent
+	}
+
+	// receiverから既にリクエストを受けている
+	if senderEnt.HasFriendRequest(receiver) || receiverEnt.HasSentRequest(sender) {
+		return nil, entity.ErrFriendRequestAlreadyReceived
+	}
+
+	// 既にフレンド
+	if senderEnt.HasFriend(receiver) || receiverEnt.HasFriend(sender) {
+		return nil, entity.ErrAlreadyFriend
 	}
 
 	senderEnt.AddSentRequest(receiver)
