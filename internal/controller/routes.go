@@ -40,11 +40,16 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 		auth.POST("/refresh", userCtrl.RefreshToken)
 	}
 
+	user := v1.Group("/user")
+	{
+		user.GET("/:id", userCtrl.GetUser)
+	}
+
 	authenticated := v1.Group("/authenticated")
 	authenticated.Use(middleware.API.Authenticate())
 	authenticated.GET("/ping", Ping)
 
-	user := authenticated.Group("/user")
+	user = authenticated.Group("/user")
 	{
 		user.GET("", userCtrl.GetMe)
 		user.PUT("", userCtrl.UpdateMe)

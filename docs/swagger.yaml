@@ -535,6 +535,35 @@ paths:
       summary: ユーザー情報更新
       tags:
       - User
+  /api/v1/user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: ユーザー情報取得
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User details
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      summary: ユーザー情報取得
+      tags:
+      - User
   /ping:
     get:
       description: Returns "pong" if server is working

@@ -152,6 +152,18 @@ func (u *userUsecase) GetMe(c *gin.Context) (*response.UserRes, error) {
 	return response.NewUserRes(user), nil
 }
 
+func (u *userUsecase) GetUser(c *gin.Context, userID string) (*response.CrossedUserRes, error) {
+	ctx := c.Request.Context()
+	user, err := u.userRepo.FindByID(ctx, userID)
+	if err != nil {
+		logging.Errorf(c, "FindByID %v", err)
+		return nil, err
+	}
+
+	res := response.NewCrossedUserRes(*user)
+	return &res, nil
+}
+
 func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error) {
 	user := xcontext.User(c)
 	updates := map[string]*string{

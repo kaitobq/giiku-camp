@@ -12,6 +12,7 @@ type UserUsecase interface {
 	SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error)
 	RefreshToken(c *gin.Context, req request.RefreshTokenReq) (*response.RefreshTokenRes, error)
 	GetMe(c *gin.Context) (*response.UserRes, error)
+	GetUser(c *gin.Context, userID string) (*response.CrossedUserRes, error)
 	UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error)
 }
 

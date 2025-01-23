@@ -35,6 +35,9 @@ func (r *userRepo) FindByID(ctx context.Context, id string) (*entity.User, error
 	k := datastore.NameKey("User", id, nil)
 	var user entity.User
 	if err := r.db.Get(ctx, k, &user); err != nil {
+		// if err == datastore.ErrNoSuchEntity {
+		// 	return nil, entity.ErrUserNotFound
+		// }
 		return nil, err
 	}
 	return &user, nil
