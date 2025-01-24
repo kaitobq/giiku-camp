@@ -25,14 +25,21 @@ type UserFriendList struct {
 }
 
 var (
-	ErrUserFriendListNotFound = errors.New("user friend list not found")
-	ErrFriendRequestNotFound  = errors.New("friend request not found")
-	ErrSentRequestNotFound    = errors.New("sent request not found")
+	ErrUserFriendListNotFound       = errors.New("user friend list not found")
+	ErrFriendRequestNotFound        = errors.New("friend request not found")
+	ErrSentRequestNotFound          = errors.New("sent request not found")
+	ErrFriendRequestAlreadySent     = errors.New("friend request already sent")
+	ErrFriendRequestAlreadyReceived = errors.New("friend request already received")
+	ErrAlreadyFriend                = errors.New("already friend")
 )
 
 var (
-	CodeFriendRequestNotFound = 30000
-	CodeSentRequestNotFound   = 30001
+	CodeFriendRequestNotFound        = 30000
+	CodeSentRequestNotFound          = 30001
+	CodeFriendRequestAlreadyExists   = 30002
+	CodeFriendRequestAlreadySent     = 30003
+	CodeFriendRequestAlreadyReceived = 30004
+	CodeAlreadyFriend                = 30005
 )
 
 func NewUserFriendList(userID string) *UserFriendList {

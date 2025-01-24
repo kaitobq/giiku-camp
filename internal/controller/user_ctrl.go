@@ -149,6 +149,29 @@ func (ct *UserCtrl) GetMe(c *gin.Context) {
 	render.JSON(c, res)
 }
 
+// GetUser godoc
+// @Summary ユーザー情報取得
+// @Description ユーザー情報取得
+// @Tags User
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} response.CrossedUserRes "User details"
+// @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
+// @Router /api/v1/user/{id} [get]
+func (ct *UserCtrl) GetUser(c *gin.Context) {
+	param := c.Param("id")
+	res, err := ct.UserUsecase.GetUser(c, param)
+	if err != nil {
+		logging.Errorf(c, "GetUser %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(c, res)
+}
+
 // UpdateMe godoc
 // @Summary ユーザー情報更新
 // @Description ユーザー情報更新

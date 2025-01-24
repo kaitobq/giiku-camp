@@ -65,7 +65,16 @@ func (ct *UserFriendListCtrl) SendRequest(c *gin.Context) {
 	res, err := ct.UserFriendListUseCase.SendRequest(c, *req)
 	if err != nil {
 		logging.Errorf(c, "SendRequest %v", err)
-		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		switch err {
+		case entity.ErrFriendRequestAlreadySent:
+			render.ErrorCodeJSON(c, err.Error(), entity.CodeFriendRequestAlreadySent, http.StatusBadRequest)
+		case entity.ErrFriendRequestAlreadyReceived:
+			render.ErrorCodeJSON(c, err.Error(), entity.CodeFriendRequestAlreadyReceived, http.StatusBadRequest)
+		case entity.ErrAlreadyFriend:
+			render.ErrorCodeJSON(c, err.Error(), entity.CodeAlreadyFriend, http.StatusBadRequest)
+		default:
+			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		}
 		return
 	}
 
