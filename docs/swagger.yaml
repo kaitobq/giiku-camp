@@ -63,29 +63,29 @@ definitions:
     type: object
   giiku-camp_internal_usecase_request.SignInReq:
     properties:
-      email:
-        example: someone@example.com
+      auth_provider:
+        example: apple
         type: string
-      password:
-        example: password123
+      authorization_code:
+        example: authorization_code
         type: string
     required:
-    - email
-    - password
+    - auth_provider
+    - authorization_code
     type: object
   giiku-camp_internal_usecase_request.SignUpReq:
     properties:
-      email:
-        example: someone@example.com
+      auth_provider:
+        example: apple
+        type: string
+      authorization_code:
+        example: authorization_code
         type: string
       github_id:
         example: someone
         type: string
       name:
         example: someone
-        type: string
-      password:
-        example: password123
         type: string
       qiita_id:
         example: someone
@@ -97,9 +97,9 @@ definitions:
         example: someone
         type: string
     required:
-    - email
+    - auth_provider
+    - authorization_code
     - name
-    - password
     type: object
   giiku-camp_internal_usecase_request.UpdateMeReq:
     properties:
@@ -205,9 +205,6 @@ definitions:
     properties:
       created_at:
         example: "2025-01-10T16:45:40.876773Z"
-        type: string
-      email:
-        example: someone@example.com
         type: string
       github_id:
         example: someone
