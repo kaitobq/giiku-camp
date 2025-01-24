@@ -10,6 +10,7 @@ import (
 	"giiku-camp/internal/app/config"
 	"giiku-camp/internal/app/container"
 	"giiku-camp/internal/controller"
+	"giiku-camp/internal/infra/apple"
 	"giiku-camp/internal/infra/datastore"
 	"giiku-camp/internal/middleware"
 	"giiku-camp/internal/usecase"
@@ -24,7 +25,11 @@ func New() (*container.App, error) {
 	client := datastore.New()
 	userRepo := repository.NewUserRepo(client)
 	userFriendListRepo := repository.NewUserFriendListRepo(client)
-	userUsecase := usecase.NewUserUsecase(userRepo, userFriendListRepo)
+	appleClient, err := apple.New()
+	if err != nil {
+		return nil, err
+	}
+	userUsecase := usecase.NewUserUsecase(userRepo, userFriendListRepo, appleClient)
 	userCtrl := controller.NewUserCtrl(userUsecase)
 	userCrossingRepo := repository.NewUserCrossingRepo(client)
 	userCrossingUsecase := usecase.NewUserCrossingUsecase(userCrossingRepo, userRepo)

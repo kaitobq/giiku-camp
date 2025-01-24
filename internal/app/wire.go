@@ -6,6 +6,7 @@ import (
 	"giiku-camp/internal/app/config"
 	"giiku-camp/internal/app/container"
 	"giiku-camp/internal/controller"
+	"giiku-camp/internal/infra/apple"
 	repository "giiku-camp/internal/infra/datastore"
 	"giiku-camp/internal/middleware"
 	"giiku-camp/internal/usecase"
@@ -33,6 +34,8 @@ func New() (*container.App, error) {
 		controller.NewUserFriendListCtrl,
 
 		middleware.NewMiddleware,
+
+		apple.New,
 
 		datastore.New,
 		container.NewCtrl,
