@@ -7,7 +7,6 @@ import (
 
 type UserRes struct {
 	ID        string    `json:"id" example:"3ee03add-bcd2-455f-9994-f7af846ce662"`
-	Email     string    `json:"email" example:"someone@example.com"`
 	Name      string    `json:"name" example:"someone"`
 	GitHubID  string    `json:"github_id" example:"someone"`
 	QiitaID   string    `json:"qiita_id" example:"someone"`
@@ -20,7 +19,6 @@ type UserRes struct {
 func NewUserRes(user *entity.User) *UserRes {
 	return &UserRes{
 		ID:        user.ID,
-		Email:     user.Email,
 		Name:      user.Name,
 		GitHubID:  user.GitHubID,
 		QiitaID:   user.QiitaID,

@@ -3,13 +3,17 @@ package request
 import "github.com/gin-gonic/gin"
 
 type SignUpReq struct {
-	Email    string `json:"email" binding:"required" example:"someone@example.com"`
-	Name     string `json:"name" binding:"required" example:"someone"`
-	Password string `json:"password" binding:"required" example:"password123"`
-	GitHubID string `json:"github_id" binding:"omitempty" example:"someone"`
-	QiitaID  string `json:"qiita_id" binding:"omitempty" example:"someone"`
-	ZennID   string `json:"zenn_id" binding:"omitempty" example:"someone"`
-	XID      string `json:"x_id" binding:"omitempty" example:"someone"`
+	Name              string `json:"name" binding:"required" example:"someone"`
+	AuthProvider      string `json:"auth_provider" binding:"required" example:"apple"`
+	AuthorizationCode string `json:"authorization_code" binding:"required" example:"authorization_code"`
+	GitHubID          string `json:"github_id" binding:"omitempty" example:"someone"`
+	QiitaID           string `json:"qiita_id" binding:"omitempty" example:"someone"`
+	ZennID            string `json:"zenn_id" binding:"omitempty" example:"someone"`
+	XID               string `json:"x_id" binding:"omitempty" example:"someone"`
+}
+
+func (r *SignUpReq) IsProviderApple() bool {
+	return r.AuthProvider != "apple"
 }
 
 func NewSignUpReq(c *gin.Context) (*SignUpReq, error) {
@@ -21,8 +25,12 @@ func NewSignUpReq(c *gin.Context) (*SignUpReq, error) {
 }
 
 type SignInReq struct {
-	Email    string `json:"email" binding:"required" example:"someone@example.com"`
-	Password string `json:"password" binding:"required" example:"password123"`
+	AuthProvider      string `json:"auth_provider" binding:"required" example:"apple"`
+	AuthorizationCode string `json:"authorization_code" binding:"required" example:"authorization_code"`
+}
+
+func (r *SignInReq) IsProviderApple() bool {
+	return r.AuthorizationCode != ""
 }
 
 func NewSignInReq(c *gin.Context) (*SignInReq, error) {
