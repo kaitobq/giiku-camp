@@ -1,0 +1,25 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["koukigomi.GiikuCamp2025"],
+        "components": [
+          {
+            "/": "/appclip/",
+            "?": {
+              "userID": ""
+            },
+            "comment": "App Clip を起動し、userID パラメータを受け取る"
+          },
+          {
+            "/": "/*",
+            "comment": "その他のパスは通常のアプリで処理"
+          }
+        ]
+      }
+    ]
+   },
+    "appclips": {
+        "apps": ["koukigomi.GiikuCamp2025"]
+    }
+}

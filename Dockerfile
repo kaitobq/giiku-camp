@@ -12,6 +12,7 @@ FROM alpine:latest AS final
 WORKDIR /root/
 
 COPY --from=builder /bin/server /bin/
+COPY --from=builder /app/static /root/static
 
 EXPOSE 8080
 ENTRYPOINT [ "/bin/server" ]
