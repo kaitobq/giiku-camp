@@ -29,7 +29,7 @@ func New() (*container.App, error) {
 	if err != nil {
 		return nil, err
 	}
-	userUsecase := usecase.NewUserUsecase(userRepo, userFriendListRepo, appleClient)
+	userUsecase := usecase.NewUserUsecase(userRepo, userFriendListRepo, appleClient, client)
 	userCtrl := controller.NewUserCtrl(userUsecase)
 	userCrossingRepo := repository.NewUserCrossingRepo(client)
 	userCrossingUsecase := usecase.NewUserCrossingUsecase(userCrossingRepo, userRepo)

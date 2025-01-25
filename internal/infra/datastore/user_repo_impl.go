@@ -38,6 +38,15 @@ func (r *userRepo) Update(ctx context.Context, user *entity.User) error {
 	return nil
 }
 
+func (r *userRepo) UpdateWithTransaction(tx *datastore.Transaction, user *entity.User) error {
+	k := datastore.NameKey("User", user.ID, nil)
+	user.UpdateUpdatedAt()
+	if _, err := tx.Put(k, user); err != nil {
+		return err
+	}
+	return nil
+}
+
 func (r *userRepo) FindByAppleID(ctx context.Context, appleID string) (*entity.User, error) {
 	q := datastore.NewQuery("User").FilterField("AppleID", "=", appleID).Limit(1)
 	it := r.db.Run(ctx, q)
