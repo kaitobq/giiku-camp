@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["koukigomi.GiikuCamp2025"],
+        "appIDs": ["F62Z5CJCVQ.koukigomi.GiikuCamp2025"],
         "components": [
           {
             "/": "/appclip/",
@@ -18,8 +18,8 @@
         ]
       }
     ]
-   },
-    "appclips": {
-        "apps": ["koukigomi.GiikuCamp2025"]
-    }
+  },
+  "appclips": {
+      "apps": ["F62Z5CJCVQ.koukigomi.GiikuCamp2025.Clip"]
+  }
 }
