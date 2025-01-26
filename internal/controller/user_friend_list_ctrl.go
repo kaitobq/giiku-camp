@@ -67,11 +67,11 @@ func (ct *UserFriendListCtrl) SendRequest(c *gin.Context) {
 		logging.Errorf(c, "SendRequest %v", err)
 		switch err {
 		case entity.ErrFriendRequestAlreadySent:
-			render.ErrorCodeJSON(c, err.Error(), entity.CodeFriendRequestAlreadySent, http.StatusBadRequest)
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeFriendRequestAlreadySent)
 		case entity.ErrFriendRequestAlreadyReceived:
-			render.ErrorCodeJSON(c, err.Error(), entity.CodeFriendRequestAlreadyReceived, http.StatusBadRequest)
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeFriendRequestAlreadyReceived)
 		case entity.ErrAlreadyFriend:
-			render.ErrorCodeJSON(c, err.Error(), entity.CodeAlreadyFriend, http.StatusBadRequest)
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeAlreadyFriend)
 		default:
 			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		}
@@ -106,9 +106,9 @@ func (ct *UserFriendListCtrl) AcceptRequest(c *gin.Context) {
 		logging.Errorf(c, "AcceptRequest %v", err)
 		switch err {
 		case entity.ErrFriendRequestNotFound:
-			render.ErrorCodeJSON(c, err.Error(), entity.CodeFriendRequestNotFound, http.StatusInternalServerError)
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeFriendRequestNotFound)
 		case entity.ErrSentRequestNotFound:
-			render.ErrorCodeJSON(c, err.Error(), entity.CodeSentRequestNotFound, http.StatusInternalServerError)
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeSentRequestNotFound)
 		default:
 			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		}
