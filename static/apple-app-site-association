@@ -6,7 +6,7 @@
         "components": [
           {
             "/": "/appclip/",
-            "?": { "userID": "????" },
+            "?": { "userID": "*" },
             "comment": "App Clip を起動し、userID パラメータを受け取る"
           },
           {
