@@ -391,6 +391,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/authenticated/friend/reject": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "フレンド依頼拒否",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Friend"
+                ],
+                "summary": "フレンド依頼拒否",
+                "parameters": [
+                    {
+                        "description": "Friend details",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_request.RejectRequestReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Friend details",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_usecase_response.RejectRequestRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/giiku-camp_internal_controller_render.Error"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/authenticated/user": {
             "get": {
                 "security": [
@@ -629,6 +680,17 @@ const docTemplate = `{
                 }
             }
         },
+        "giiku-camp_internal_usecase_request.RejectRequestReq": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
         "giiku-camp_internal_usecase_request.SendRequestReq": {
             "type": "object",
             "required": [
@@ -778,6 +840,14 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes"
                     }
+                }
+            }
+        },
+        "giiku-camp_internal_usecase_response.RejectRequestRes": {
+            "type": "object",
+            "properties": {
+                "ok": {
+                    "type": "boolean"
                 }
             }
         },

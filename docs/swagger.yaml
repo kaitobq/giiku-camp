@@ -54,6 +54,13 @@ definitions:
     required:
     - user_ids
     type: object
+  giiku-camp_internal_usecase_request.RejectRequestReq:
+    properties:
+      user_id:
+        type: string
+    required:
+    - user_id
+    type: object
   giiku-camp_internal_usecase_request.SendRequestReq:
     properties:
       user_id:
@@ -157,6 +164,11 @@ definitions:
         items:
           $ref: '#/definitions/giiku-camp_internal_usecase_response.CrossedUserRes'
         type: array
+    type: object
+  giiku-camp_internal_usecase_response.RejectRequestRes:
+    properties:
+      ok:
+        type: boolean
     type: object
   giiku-camp_internal_usecase_response.SendRequestRes:
     properties:
@@ -477,6 +489,38 @@ paths:
       security:
       - BearerAuth: []
       summary: フレンド依頼許可
+      tags:
+      - Friend
+  /api/v1/authenticated/friend/reject:
+    post:
+      consumes:
+      - application/json
+      description: フレンド依頼拒否
+      parameters:
+      - description: Friend details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/giiku-camp_internal_usecase_request.RejectRequestReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Friend details
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.RejectRequestRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      security:
+      - BearerAuth: []
+      summary: フレンド依頼拒否
       tags:
       - Friend
   /api/v1/authenticated/user:
