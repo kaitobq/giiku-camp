@@ -25,3 +25,15 @@ func NewAcceptRequestReq(c *gin.Context) (*AcceptRequestReq, error) {
 	}
 	return &req, nil
 }
+
+type RejectRequestReq struct {
+	UserID string `json:"user_id" binding:"required"`
+}
+
+func NewRejectRequestReq(c *gin.Context) (*RejectRequestReq, error) {
+	var req RejectRequestReq
+	if err := c.ShouldBindJSON(&req); err != nil {
+		return nil, err
+	}
+	return &req, nil
+}

@@ -25,4 +25,5 @@ type UserFriendListUsecase interface {
 	GetUserFriendList(c *gin.Context) (*response.UserFriendListRes, error)
 	SendRequest(c *gin.Context, req request.SendRequestReq) (*response.SendRequestRes, error)
 	AcceptRequest(c *gin.Context, req request.AcceptRequestReq) (*response.AcceptRequestRes, error)
+	RejectRequest(c *gin.Context, req request.RejectRequestReq) (*response.RejectRequestRes, error)
 }

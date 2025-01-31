@@ -153,3 +153,51 @@ func (u *userFriendListUsecase) AcceptRequest(c *gin.Context, req request.Accept
 
 	return response.NewAcceptRequestRes()
 }
+
+func (u *userFriendListUsecase) RejectRequest(c *gin.Context, req request.RejectRequestReq) (*response.RejectRequestRes, error) {
+	rejecter := xcontext.User(c)
+	ctx := c.Request.Context()
+	sender, err := u.userRepo.FindByID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	rejecterEnt, err := u.userFriendListRepo.FindByUserID(ctx, rejecter.ID)
+	if err != nil {
+		return nil, err
+	}
+	senderEnt, err := u.userFriendListRepo.FindByUserID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+
+	// if rejecterEnt.HasFriend(req.UserID) {
+	// 	return nil, entity.ErrAlreadyFriend
+	// }
+	if !rejecterEnt.HasFriendRequest(sender) {
+		return nil, entity.ErrFriendRequestNotFound
+	}
+	if !senderEnt.HasSentRequest(rejecter) {
+		return nil, entity.ErrSentRequestNotFound
+	}
+
+	rejecterEnt.RemoveFriendRequest(sender)
+	senderEnt.RemoveSentRequest(rejecter)
+
+	// 送信者、受信者の整合性を担保する
+	_, err = u.db.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
+		if err := u.userFriendListRepo.UpdateWithTransaction(tx, rejecterEnt); err != nil {
+			return err
+		}
+		if err := u.userFriendListRepo.UpdateWithTransaction(tx, senderEnt); err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return response.NewRejectRequestRes()
+}

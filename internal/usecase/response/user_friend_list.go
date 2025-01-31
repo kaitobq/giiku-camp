@@ -31,3 +31,11 @@ type AcceptRequestRes struct {
 func NewAcceptRequestRes() (*AcceptRequestRes, error) {
 	return &AcceptRequestRes{Ok: true}, nil
 }
+
+type RejectRequestRes struct {
+	Ok bool `json:"ok"`
+}
+
+func NewRejectRequestRes() (*RejectRequestRes, error) {
+	return &RejectRequestRes{Ok: true}, nil
+}

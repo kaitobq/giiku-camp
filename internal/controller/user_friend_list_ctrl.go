@@ -117,3 +117,40 @@ func (ct *UserFriendListCtrl) AcceptRequest(c *gin.Context) {
 
 	render.JSON(c, res)
 }
+
+// RejectRequest godoc
+// @Summary フレンド依頼拒否
+// @Description フレンド依頼拒否
+// @Tags Friend
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param user body request.RejectRequestReq true "Friend details"
+// @Success 200 {object} response.RejectRequestRes "Friend details"
+// @Failure 400 {object} render.Error "Bad request"
+// @Failure 500 {object} render.Error "Internal server error"
+// @Router /api/v1/authenticated/friend/reject [post]
+func (ct *UserFriendListCtrl) RejectRequest(c *gin.Context) {
+	req, err := request.NewRejectRequestReq(c)
+	if err != nil {
+		logging.Errorf(c, "NewRejectRequestReq %v", err)
+		render.ErrorJSON(c, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	res, err := ct.UserFriendListUseCase.RejectRequest(c, *req)
+	if err != nil {
+		logging.Errorf(c, "RejectRequest %v", err)
+		switch err {
+		case entity.ErrFriendRequestNotFound:
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeFriendRequestNotFound)
+		case entity.ErrSentRequestNotFound:
+			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeSentRequestNotFound)
+		default:
+			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	render.JSON(c, res)
+}
