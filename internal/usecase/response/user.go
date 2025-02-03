@@ -6,28 +6,30 @@ import (
 )
 
 type UserRes struct {
-	ID        string    `json:"id" example:"3ee03add-bcd2-455f-9994-f7af846ce662"`
-	Email     string    `json:"email" example:"someone@example.com"`
-	Name      string    `json:"name" example:"someone"`
-	GitHubID  string    `json:"github_id" example:"someone"`
-	QiitaID   string    `json:"qiita_id" example:"someone"`
-	ZennID    string    `json:"zenn_id" example:"someone"`
-	XID       string    `json:"x_id" example:"someone"`
-	CreatedAt time.Time `json:"created_at" example:"2025-01-10T16:45:40.876773Z"`
-	UpdatedAt time.Time `json:"updated_at" example:"2025-01-12T00:21:57.251469Z"`
+	ID          string    `json:"id" example:"3ee03add-bcd2-455f-9994-f7af846ce662"`
+	Email       string    `json:"email" example:"someone@example.com"`
+	Name        string    `json:"name" example:"someone"`
+	Description string    `json:"description" example:"I'm someone"`
+	GitHubID    string    `json:"github_id" example:"someone"`
+	QiitaID     string    `json:"qiita_id" example:"someone"`
+	ZennID      string    `json:"zenn_id" example:"someone"`
+	XID         string    `json:"x_id" example:"someone"`
+	CreatedAt   time.Time `json:"created_at" example:"2025-01-10T16:45:40.876773Z"`
+	UpdatedAt   time.Time `json:"updated_at" example:"2025-01-12T00:21:57.251469Z"`
 }
 
 func NewUserRes(user *entity.User) *UserRes {
 	return &UserRes{
-		ID:        user.ID,
-		Email:     user.Email,
-		Name:      user.Name,
-		GitHubID:  user.GitHubID,
-		QiitaID:   user.QiitaID,
-		ZennID:    user.ZennID,
-		XID:       user.XID,
-		CreatedAt: user.CreatedAt,
-		UpdatedAt: user.UpdatedAt,
+		ID:          user.ID,
+		Email:       user.Email,
+		Name:        user.Name,
+		Description: user.Description,
+		GitHubID:    user.GitHubID,
+		QiitaID:     user.QiitaID,
+		ZennID:      user.ZennID,
+		XID:         user.XID,
+		CreatedAt:   user.CreatedAt,
+		UpdatedAt:   user.UpdatedAt,
 	}
 }
 

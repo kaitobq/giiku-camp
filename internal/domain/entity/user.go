@@ -15,6 +15,7 @@ type User struct {
 	Email        string
 	Password     string
 	TokenVersion int
+	Description  string
 	GitHubID     string
 	QiitaID      string
 	ZennID       string
