@@ -6,6 +6,7 @@ import (
 	"giiku-camp/internal/infra/logging"
 	"giiku-camp/internal/usecase"
 	"giiku-camp/internal/usecase/request"
+	_ "giiku-camp/internal/usecase/response"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -93,7 +94,7 @@ func (ct *UserFriendCtrl) SendRequest(c *gin.Context) {
 // @Success 200 {object} response.AcceptRequestRes "Friend details"
 // @Failure 400 {object} render.Error "Bad request"
 // @Failure 500 {object} render.Error "Internal server error"
-// @Router /api/v1/authenticated/friend/{user_id}/accept [patch]
+// @Router /api/v1/authenticated/friend/{user_id} [patch]
 func (ct *UserFriendCtrl) AcceptRequest(c *gin.Context) {
 	req, err := request.NewAcceptRequestReq(c)
 	if err != nil {
@@ -127,7 +128,7 @@ func (ct *UserFriendCtrl) AcceptRequest(c *gin.Context) {
 // @Success 200 {object} response.RejectRequestRes "Friend details"
 // @Failure 400 {object} render.Error "Bad request"
 // @Failure 500 {object} render.Error "Internal server error"
-// @Router /api/v1/authenticated/friend/{user_id}/reject [delete]
+// @Router /api/v1/authenticated/friend/{user_id} [delete]
 func (ct *UserFriendCtrl) RejectRequest(c *gin.Context) {
 	req, err := request.NewRejectRequestReq(c)
 	if err != nil {
