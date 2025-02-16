@@ -15,14 +15,13 @@ import (
 )
 
 type userUsecase struct {
-	userRepo           repository.UserRepo
-	userFriendListRepo repository.UserFriendListRepo
-	appleClient        apple.Client
-	db                 *datastore.Client
+	userRepo    repository.UserRepo
+	appleClient apple.Client
+	db          *datastore.Client
 }
 
-func NewUserUsecase(userRepo repository.UserRepo, userFriendListRepo repository.UserFriendListRepo, appleClient apple.Client, db *datastore.Client) UserUsecase {
-	return &userUsecase{userRepo: userRepo, userFriendListRepo: userFriendListRepo, appleClient: appleClient, db: db}
+func NewUserUsecase(userRepo repository.UserRepo, appleClient apple.Client, db *datastore.Client) UserUsecase {
+	return &userUsecase{userRepo: userRepo, appleClient: appleClient, db: db}
 }
 
 func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
@@ -49,25 +48,6 @@ func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 		user.SetAppleID(res.UserID)
 	default:
 		logging.Errorf(c, "FindByAppleID %v", err)
-		return nil, err
-	}
-
-	_, err = u.db.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
-		user.UpdateCreatedAt()
-		if err := u.userRepo.UpdateWithTransaction(tx, user); err != nil {
-			logging.Errorf(c, "Update %v", err)
-			return err
-		}
-		friendList := entity.NewUserFriendList(user.ID)
-		if err := u.userFriendListRepo.UpdateWithTransaction(tx, friendList); err != nil {
-			logging.Errorf(c, "Update %v", err)
-			return err
-		}
-
-		return nil
-	})
-	if err != nil {
-		logging.Errorf(c, "RunInTransaction %v", err)
 		return nil, err
 	}
 

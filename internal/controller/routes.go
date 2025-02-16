@@ -20,7 +20,7 @@ func Ping(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "pong"})
 }
 
-func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossingCtrl, userFriendListCtrl UserFriendListCtrl, middleware *middleware.Middleware) {
+func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossingCtrl, userFriendCtrl UserFriendCtrl, middleware *middleware.Middleware) {
 	var name, password string
 	if name = os.Getenv("BASIC_AUTH_USERNAME"); name == "" {
 		panic("BASIC_AUTH_USERNAME is not set")
@@ -66,10 +66,11 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 		crossing.GET("", userCrossingCtrl.GetUserCrossing)
 	}
 
-	friendList := authenticated.Group("/friend")
+	friend := authenticated.Group("/friend")
 	{
-		friendList.GET("", userFriendListCtrl.GetFriendList)
-		friendList.POST("", userFriendListCtrl.SendRequest)
-		friendList.POST("/accept", userFriendListCtrl.AcceptRequest)
+		friend.GET("", userFriendCtrl.GetUserFriend)
+		friend.POST("", userFriendCtrl.SendRequest)
+		friend.PATCH("/:user_id", userFriendCtrl.AcceptRequest)
+		friend.DELETE("/:user_id", userFriendCtrl.RejectRequest)
 	}
 }
