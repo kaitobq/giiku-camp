@@ -712,6 +712,10 @@ const docTemplate = `{
         "giiku-camp_internal_usecase_request.UpdateMeReq": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "I'm someone"
+                },
                 "github_id": {
                     "type": "string",
                     "example": "someone"
@@ -875,6 +879,10 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string",
                     "example": "2025-01-10T16:45:40.876773Z"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "I'm someone"
                 },
                 "email": {
                     "type": "string",

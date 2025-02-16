@@ -57,7 +57,7 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 	user = authenticated.Group("/user")
 	{
 		user.GET("", userCtrl.GetMe)
-		user.PUT("", userCtrl.UpdateMe)
+		user.PATCH("", userCtrl.UpdateMe)
 	}
 
 	crossing := authenticated.Group("/crossing")
