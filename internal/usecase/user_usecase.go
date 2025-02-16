@@ -167,11 +167,12 @@ func (u *userUsecase) GetUser(c *gin.Context, userID string) (*response.CrossedU
 func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*response.UserRes, error) {
 	user := xcontext.User(c)
 	updates := map[string]*string{
-		"Name":     &req.Name,
-		"GitHubID": &req.GitHubID,
-		"QiitaID":  &req.QiitaID,
-		"ZennID":   &req.ZennID,
-		"XID":      &req.XID,
+		"Name":        &req.Name,
+		"Description": &req.Description,
+		"GitHubID":    &req.GitHubID,
+		"QiitaID":     &req.QiitaID,
+		"ZennID":      &req.ZennID,
+		"XID":         &req.XID,
 	}
 
 	for field, value := range updates {
@@ -179,6 +180,8 @@ func (u *userUsecase) UpdateMe(c *gin.Context, req request.UpdateMeReq) (*respon
 			switch field {
 			case "Name":
 				user.Name = *value
+			case "Description":
+				user.Description = *value
 			case "GitHubID":
 				user.GitHubID = *value
 			case "QiitaID":
