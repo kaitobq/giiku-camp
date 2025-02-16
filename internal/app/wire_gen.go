@@ -10,10 +10,12 @@ import (
 	"giiku-camp/internal/app/config"
 	"giiku-camp/internal/app/container"
 	"giiku-camp/internal/controller"
-	"giiku-camp/internal/infra/datastore"
+	"giiku-camp/internal/infra/apple"
+	repository "giiku-camp/internal/infra/datastore"
 	"giiku-camp/internal/middleware"
 	"giiku-camp/internal/usecase"
 	"giiku-camp/pkg/datastore"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,7 +25,11 @@ func New() (*container.App, error) {
 	engine := provideGinEngine()
 	client := datastore.New()
 	userRepo := repository.NewUserRepo(client)
-	userUsecase := usecase.NewUserUsecase(userRepo)
+	appleClient, err := apple.New()
+	if err != nil {
+		return nil, err
+	}
+	userUsecase := usecase.NewUserUsecase(userRepo, appleClient)
 	userCtrl := controller.NewUserCtrl(userUsecase)
 	userCrossingRepo := repository.NewUserCrossingRepo(client)
 	userCrossingUsecase := usecase.NewUserCrossingUsecase(userCrossingRepo, userRepo)

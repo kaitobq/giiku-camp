@@ -657,31 +657,35 @@ const docTemplate = `{
         "giiku-camp_internal_usecase_request.SignInReq": {
             "type": "object",
             "required": [
-                "email",
-                "password"
+                "auth_provider",
+                "authorization_code"
             ],
             "properties": {
-                "email": {
+                "auth_provider": {
                     "type": "string",
-                    "example": "someone@example.com"
+                    "example": "apple"
                 },
-                "password": {
+                "authorization_code": {
                     "type": "string",
-                    "example": "password123"
+                    "example": "authorization_code"
                 }
             }
         },
         "giiku-camp_internal_usecase_request.SignUpReq": {
             "type": "object",
             "required": [
-                "email",
-                "name",
-                "password"
+                "auth_provider",
+                "authorization_code",
+                "name"
             ],
             "properties": {
-                "email": {
+                "auth_provider": {
                     "type": "string",
-                    "example": "someone@example.com"
+                    "example": "apple"
+                },
+                "authorization_code": {
+                    "type": "string",
+                    "example": "authorization_code"
                 },
                 "github_id": {
                     "type": "string",
@@ -690,10 +694,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "example": "someone"
-                },
-                "password": {
-                    "type": "string",
-                    "example": "password123"
                 },
                 "qiita_id": {
                     "type": "string",
@@ -879,14 +879,6 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string",
                     "example": "2025-01-10T16:45:40.876773Z"
-                },
-                "description": {
-                    "type": "string",
-                    "example": "I'm someone"
-                },
-                "email": {
-                    "type": "string",
-                    "example": "someone@example.com"
                 },
                 "github_id": {
                     "type": "string",
