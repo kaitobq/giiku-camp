@@ -22,15 +22,15 @@ func New() (*container.App, error) {
 
 		repository.NewUserRepo,
 		repository.NewUserCrossingRepo,
-		repository.NewUserFriendListRepo,
+		repository.NewUserFriendRepo,
 
 		usecase.NewUserUsecase,
 		usecase.NewUserCrossingUsecase,
-		usecase.NewUserFriendListUsecase,
+		usecase.NewUserFriendUsecase,
 
 		controller.NewUserCtrl,
 		controller.NewUserCrossingCtrl,
-		controller.NewUserFriendListCtrl,
+		controller.NewUserFriendCtrl,
 
 		middleware.NewMiddleware,
 

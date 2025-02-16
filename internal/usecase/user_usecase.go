@@ -13,12 +13,11 @@ import (
 )
 
 type userUsecase struct {
-	userRepo           repository.UserRepo
-	userFriendListRepo repository.UserFriendListRepo
+	userRepo repository.UserRepo
 }
 
-func NewUserUsecase(userRepo repository.UserRepo, userFriendListRepo repository.UserFriendListRepo) UserUsecase {
-	return &userUsecase{userRepo: userRepo, userFriendListRepo: userFriendListRepo}
+func NewUserUsecase(userRepo repository.UserRepo) UserUsecase {
+	return &userUsecase{userRepo: userRepo}
 }
 
 func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
@@ -63,12 +62,6 @@ func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 	refreshToken, err := jwt.GenerateRefreshToken(user.ID, user.TokenVersion)
 	if err != nil {
 		logging.Errorf(c, "GenerateRefreshToken %v", err)
-		return nil, err
-	}
-
-	friendList := entity.NewUserFriendList(user.ID)
-	if err := u.userFriendListRepo.Update(ctx, friendList); err != nil { // TODO: Tx
-		logging.Errorf(c, "Update %v", err)
 		return nil, err
 	}
 

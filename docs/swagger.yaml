@@ -12,30 +12,15 @@ definitions:
         example: 400
         type: integer
     type: object
-  giiku-camp_internal_domain_entity.FriendEntry:
-    properties:
-      created_at:
-        type: string
-      friend_id:
-        type: string
-      friend_name:
-        type: string
-    type: object
-  giiku-camp_internal_domain_entity.FriendRequestEntry:
-    properties:
-      created_at:
-        type: string
-      requester_id:
-        type: string
-      requester_name:
-        type: string
-    type: object
   giiku-camp_internal_usecase_request.AcceptRequestReq:
     properties:
-      user_id:
+      type:
+        type: string
+      userID:
+        description: param
         type: string
     required:
-    - user_id
+    - type
     type: object
   giiku-camp_internal_usecase_request.RefreshTokenReq:
     properties:
@@ -53,13 +38,6 @@ definitions:
         type: array
     required:
     - user_ids
-    type: object
-  giiku-camp_internal_usecase_request.RejectRequestReq:
-    properties:
-      user_id:
-        type: string
-    required:
-    - user_id
     type: object
   giiku-camp_internal_usecase_request.SendRequestReq:
     properties:
@@ -198,19 +176,19 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzkyMzIwMzMsImlhdCI6MTczNjY0MDAzMywidG9rZW5fdmVyc2lvbiI6NiwidXNlcl9pZCI6IjNlZTAzYWRkLWJjZDItNDU1Zi05OTk0LWY3YWY4NDZjZTY2MiJ9.WJCX_65UJKX-DjUpr9TvbtXsE6ZyUH6NyCLNGwcMWR0
         type: string
     type: object
-  giiku-camp_internal_usecase_response.UserFriendListRes:
+  giiku-camp_internal_usecase_response.UserFriendRes:
     properties:
-      friend_requests:
-        items:
-          $ref: '#/definitions/giiku-camp_internal_domain_entity.FriendRequestEntry'
-        type: array
       friends:
         items:
-          $ref: '#/definitions/giiku-camp_internal_domain_entity.FriendEntry'
+          $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
+        type: array
+      received_requests:
+        items:
+          $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
         type: array
       sent_requests:
         items:
-          $ref: '#/definitions/giiku-camp_internal_domain_entity.FriendRequestEntry'
+          $ref: '#/definitions/giiku-camp_internal_usecase_response.UserRes'
         type: array
     type: object
   giiku-camp_internal_usecase_response.UserRes:
@@ -414,7 +392,7 @@ paths:
         "200":
           description: Friend details
           schema:
-            $ref: '#/definitions/giiku-camp_internal_usecase_response.UserFriendListRes'
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.UserFriendRes'
         "400":
           description: Bad request
           schema:
@@ -459,8 +437,32 @@ paths:
       summary: フレンド依頼送信
       tags:
       - Friend
-  /api/v1/authenticated/friend/accept:
-    post:
+  /api/v1/authenticated/friend/{user_id}:
+    delete:
+      consumes:
+      - application/json
+      description: フレンド依頼拒否
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Friend details
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_usecase_response.RejectRequestRes'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
+      security:
+      - BearerAuth: []
+      summary: フレンド依頼拒否
+      tags:
+      - Friend
+    patch:
       consumes:
       - application/json
       description: フレンド依頼許可
@@ -489,38 +491,6 @@ paths:
       security:
       - BearerAuth: []
       summary: フレンド依頼許可
-      tags:
-      - Friend
-  /api/v1/authenticated/friend/reject:
-    post:
-      consumes:
-      - application/json
-      description: フレンド依頼拒否
-      parameters:
-      - description: Friend details
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/giiku-camp_internal_usecase_request.RejectRequestReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Friend details
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_usecase_response.RejectRequestRes'
-        "400":
-          description: Bad request
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
-        "500":
-          description: Internal server error
-          schema:
-            $ref: '#/definitions/giiku-camp_internal_controller_render.Error'
-      security:
-      - BearerAuth: []
-      summary: フレンド依頼拒否
       tags:
       - Friend
   /api/v1/authenticated/user:
