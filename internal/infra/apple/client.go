@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/Timothylock/go-signin-with-apple/apple"
 )
@@ -25,6 +26,9 @@ func New() (Client, error) {
 		clientID   = os.Getenv("APPLE_CLIENT_ID")
 		keyID      = os.Getenv("APPLE_KEY_ID")
 	)
+
+	// signingKey がリテラルの "\n" を含む場合、実際の改行に変換する
+	signingKey = strings.Replace(signingKey, "\\n", "\n", -1)
 
 	clientSecret, err := apple.GenerateClientSecret(signingKey, teamID, clientID, keyID)
 	if err != nil {
