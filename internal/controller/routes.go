@@ -29,6 +29,11 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 		panic("BASIC_AUTH_PASSWORD is not set")
 	}
 	r.GET("/swagger/*any", gin.BasicAuth(gin.Accounts{name: password}), ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/.well-known/apple-app-site-association", func(c *gin.Context) {
+		c.Header("Content-Type", "application/json")
+		c.Header("Cache-Control", "public, max-age=86400") // 1日キャッシュ
+		c.File("./static/apple-app-site-association")
+	})
 
 	v1 := r.Group("/api/v1")
 	v1.GET("/ping", Ping)
@@ -52,7 +57,7 @@ func SetUpRoutes(r *gin.Engine, userCtrl UserCtrl, userCrossingCtrl UserCrossing
 	user = authenticated.Group("/user")
 	{
 		user.GET("", userCtrl.GetMe)
-		user.PUT("", userCtrl.UpdateMe)
+		user.PATCH("", userCtrl.UpdateMe)
 	}
 
 	crossing := authenticated.Group("/crossing")

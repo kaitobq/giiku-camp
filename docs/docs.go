@@ -698,6 +698,10 @@ const docTemplate = `{
         "giiku-camp_internal_usecase_request.UpdateMeReq": {
             "type": "object",
             "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "I'm someone"
+                },
                 "github_id": {
                     "type": "string",
                     "example": "someone"

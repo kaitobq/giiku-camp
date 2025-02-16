@@ -103,6 +103,9 @@ definitions:
     type: object
   giiku-camp_internal_usecase_request.UpdateMeReq:
     properties:
+      description:
+        example: I'm someone
+        type: string
       github_id:
         example: someone
         type: string

@@ -12,6 +12,7 @@ type User struct {
 	AppleID      string
 	Name         string
 	TokenVersion int
+	Description  string
 	GitHubID     string
 	QiitaID      string
 	ZennID       string

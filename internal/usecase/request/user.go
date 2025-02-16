@@ -54,11 +54,12 @@ func NewRefreshTokenReq(c *gin.Context) (*RefreshTokenReq, error) {
 }
 
 type UpdateMeReq struct {
-	Name     string `json:"name" binding:"omitempty" example:"someone"`
-	GitHubID string `json:"github_id" binding:"omitempty" example:"someone"`
-	QiitaID  string `json:"qiita_id" binding:"omitempty" example:"someone"`
-	ZennID   string `json:"zenn_id" binding:"omitempty" example:"someone"`
-	XID      string `json:"x_id" binding:"omitempty" example:"someone"`
+	Name        string `json:"name" binding:"omitempty" example:"someone"`
+	Description string `json:"description" binding:"omitempty" example:"I'm someone"`
+	GitHubID    string `json:"github_id" binding:"omitempty" example:"someone"`
+	QiitaID     string `json:"qiita_id" binding:"omitempty" example:"someone"`
+	ZennID      string `json:"zenn_id" binding:"omitempty" example:"someone"`
+	XID         string `json:"x_id" binding:"omitempty" example:"someone"`
 }
 
 func NewUpdateMeReq(c *gin.Context) (*UpdateMeReq, error) {
