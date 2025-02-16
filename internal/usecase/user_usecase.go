@@ -4,54 +4,70 @@ import (
 	"giiku-camp/internal/domain/entity"
 	"giiku-camp/internal/domain/repository"
 	"giiku-camp/internal/domain/xcontext"
+	"giiku-camp/internal/infra/apple"
 	"giiku-camp/internal/infra/logging"
 	"giiku-camp/internal/usecase/request"
 	"giiku-camp/internal/usecase/response"
 	"giiku-camp/pkg/jwt"
 
+	"cloud.google.com/go/datastore"
 	"github.com/gin-gonic/gin"
 )
 
 type userUsecase struct {
 	userRepo           repository.UserRepo
 	userFriendListRepo repository.UserFriendListRepo
+	appleClient        apple.Client
+	db                 *datastore.Client
 }
 
-func NewUserUsecase(userRepo repository.UserRepo, userFriendListRepo repository.UserFriendListRepo) UserUsecase {
-	return &userUsecase{userRepo: userRepo, userFriendListRepo: userFriendListRepo}
+func NewUserUsecase(userRepo repository.UserRepo, userFriendListRepo repository.UserFriendListRepo, appleClient apple.Client, db *datastore.Client) UserUsecase {
+	return &userUsecase{userRepo: userRepo, userFriendListRepo: userFriendListRepo, appleClient: appleClient, db: db}
 }
 
 func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.SignUpRes, error) {
-	user, err := entity.NewUser(req.Name, req.Email, req.Password, &req.GitHubID, &req.QiitaID, &req.ZennID, &req.XID)
+	user, err := entity.NewUser(req.Name, &req.GitHubID, &req.QiitaID, &req.ZennID, &req.XID)
 	if err != nil {
-		switch err {
-		case entity.ErrEmailInvalid:
-			logging.Infof(c, "NewUser returned ErrEmailInvalid(email: %s)", req.Email)
-		default:
-			logging.Errorf(c, "NewUser %v", err)
-		}
+		logging.Errorf(c, "NewUser %v", err)
 		return nil, err
 	}
 
 	ctx := c.Request.Context()
-	existingUser, err := u.userRepo.FindByEmail(ctx, user.Email)
+	res, err := u.appleClient.VerifyAuthorizationCode(ctx, req.AuthorizationCode)
 	if err != nil {
-		switch err {
-		case entity.ErrUserNotFound:
-			// ユーザーが見つからなかった場合はそのまま処理を続ける
-		default:
-			logging.Errorf(c, "FindByEmail %v", err)
-			return nil, err
-		}
+		logging.Errorf(c, "VerifyAuthorizationCode %v", err)
+		return nil, err
 	}
-	if existingUser != nil {
-		logging.Infof(c, "FindByEmail returned ErrEmailAlreadyUsed(user: %v)", existingUser.HidePassword())
-		return nil, entity.ErrEmailAlreadyUsed
+	exist, err := u.userRepo.FindByAppleID(ctx, res.UserID)
+	switch err {
+	case nil:
+		if exist != nil {
+			logging.Infof(c, "FindByAppleID returned ErrAppleIDAlreadyUsed(user: %v)", exist)
+			return nil, entity.ErrAppleIDAlreadyUsed
+		}
+	case entity.ErrUserNotFound:
+		user.SetAppleID(res.UserID)
+	default:
+		logging.Errorf(c, "FindByAppleID %v", err)
+		return nil, err
 	}
 
-	user.UpdateCreatedAt()
-	if err := u.userRepo.Update(ctx, user); err != nil {
-		logging.Errorf(c, "Update %v", err)
+	_, err = u.db.RunInTransaction(ctx, func(tx *datastore.Transaction) error {
+		user.UpdateCreatedAt()
+		if err := u.userRepo.UpdateWithTransaction(tx, user); err != nil {
+			logging.Errorf(c, "Update %v", err)
+			return err
+		}
+		friendList := entity.NewUserFriendList(user.ID)
+		if err := u.userFriendListRepo.UpdateWithTransaction(tx, friendList); err != nil {
+			logging.Errorf(c, "Update %v", err)
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		logging.Errorf(c, "RunInTransaction %v", err)
 		return nil, err
 	}
 
@@ -66,30 +82,25 @@ func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 		return nil, err
 	}
 
-	friendList := entity.NewUserFriendList(user.ID)
-	if err := u.userFriendListRepo.Update(ctx, friendList); err != nil { // TODO: Tx
-		logging.Errorf(c, "Update %v", err)
-		return nil, err
-	}
-
 	return response.NewSignUpRes(user, accessToken, refreshToken)
 }
 
 func (u *userUsecase) SignIn(c *gin.Context, req request.SignInReq) (*response.SignInRes, error) {
 	ctx := c.Request.Context()
-	user, err := u.userRepo.FindByEmail(ctx, req.Email)
+
+	res, err := u.appleClient.VerifyAuthorizationCode(ctx, req.AuthorizationCode)
 	if err != nil {
-		logging.Errorf(c, "FindByEmail %v", err)
+		logging.Errorf(c, "VerifyAuthorizationCode %v", err)
 		return nil, err
 	}
-
-	if err := user.VerifyPassword(req.Password); err != nil {
+	user, err := u.userRepo.FindByAppleID(ctx, res.UserID)
+	if err != nil {
 		switch err {
-		case entity.ErrPasswordIncorrect:
-			logging.Infof(c, "VerifyPassword returned ErrPasswordIncorrect(user: %v)", user.HidePassword())
-			return nil, entity.ErrPasswordIncorrect
+		case entity.ErrUserNotFound:
+			logging.Infof(c, "FindByAppleID returned ErrUserNotFound(appleID: %s)", res.UserID)
+			return nil, entity.ErrUserNotFound
 		default:
-			logging.Errorf(c, "VerifyPassword %v", err)
+			logging.Errorf(c, "FindByAppleID %v", err)
 			return nil, err
 		}
 	}

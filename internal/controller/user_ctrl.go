@@ -42,14 +42,7 @@ func (ct *UserCtrl) SignUp(c *gin.Context) {
 	res, err := ct.UserUsecase.SignUp(c, *req)
 	if err != nil {
 		logging.Infof(c, "SignUp %v", err)
-		switch err {
-		case entity.ErrEmailAlreadyUsed:
-			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeEmailAlreadyUsed)
-		case entity.ErrEmailInvalid:
-			render.ErrorCodeJSON(c, err.Error(), http.StatusBadRequest, entity.CodeEmailInvalid)
-		default:
-			render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
-		}
+		render.ErrorJSON(c, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
