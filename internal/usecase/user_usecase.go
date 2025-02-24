@@ -51,6 +51,11 @@ func (u *userUsecase) SignUp(c *gin.Context, req request.SignUpReq) (*response.S
 		return nil, err
 	}
 
+	if err := u.userRepo.Update(ctx, user); err != nil {
+		logging.Errorf(c, "Update %v", err)
+		return nil, err
+	}
+
 	accessToken, err := jwt.GenerateAccessToken(user.ID)
 	if err != nil {
 		logging.Errorf(c, "GenerateAccessToken %v", err)
